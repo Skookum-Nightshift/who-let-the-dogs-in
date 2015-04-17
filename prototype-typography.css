@@ -1,0 +1,28 @@
+*
+{
+    font-family: 'Arial', sans-serif;
+}
+
+a
+{
+    text-decoration: none;
+}
+
+h1
+{
+    font-size: 1.25rem;
+}
+
+a[href='prototype.html'],
+a[href='profile.html']
+{
+    font-size: 0.75rem;
+}
+
+body.explore h1,
+body.explore #categories
+{
+/*
+    text-transform: uppercase;
+*/
+}

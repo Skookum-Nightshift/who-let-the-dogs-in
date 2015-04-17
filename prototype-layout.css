@@ -1,0 +1,165 @@
+*
+{
+    font-size: 100%;
+    margin: 0;
+    border: 0;
+    padding: 0;
+}
+
+ul
+{
+    list-style: none;
+}
+
+a
+{
+    display: block;
+}
+
+body
+{
+    max-width: 20rem;
+}
+
+header,
+body.explore #categories
+{
+    line-height: 3rem;
+}
+
+h1,
+#views,
+body:not(.explore) #categories
+{
+    margin-left: 2rem;
+}
+
+body.explore #categories span.symbol,
+#list span.category
+{
+    width: 2rem;
+    text-align: center;
+}
+
+#list li
+{
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+}
+
+#views a
+{
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+}
+
+a[href='profile.html'],
+#list span.distance
+{
+    margin-right: 0.5rem;
+}
+
+header
+{
+    display: flex;
+    border-width: 3px;
+    border-bottom: solid;
+}
+
+body:not(.explore) h1,
+body:not(.explore):not(.list) #list,
+body:not(.explore):not(.map) #map,
+body.explore #views,
+body.explore #map
+{
+    display: none;
+}
+
+#views
+{
+    display: flex;
+    width: 50%;
+}
+
+#views li
+{
+    width: 50%;
+}
+
+#views a
+{
+    line-height: 1.5rem;
+    border-width: 1px;
+    border-style: solid;
+}
+
+#categories li
+{
+    border-width: 1px;
+}
+
+body.explore #categories li
+{
+    border-bottom-style: solid;
+}
+
+body.explore #categories li
+{
+    display: flex;
+}
+
+body:not(.explore) #categories
+{
+    display: flex;
+    align-items: center;
+}
+
+body:not(.explore) #categories li
+{
+    box-sizing: border-box;
+    width: 25%;
+    line-height: 1.5rem;
+    text-align: center;
+    border-style: solid;
+}
+
+body:not(.explore) #categories a
+{
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+#map
+{
+    width: 100%;
+    height: 500px;
+}
+
+#list li
+{
+    display: flex;
+    align-items: flex-start;
+}
+
+#list span.category
+{
+    flex-shrink: 0;
+}
+
+#list div
+{
+    flex-shrink: 1;
+}
+
+#list span.name,
+#list span.address
+{
+    display: block;
+}
+
+#list span.distance
+{
+    flex-shrink: 0;
+    margin-left: auto;
+}
