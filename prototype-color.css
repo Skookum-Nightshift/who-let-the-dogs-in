@@ -1,16 +1,3 @@
-a[aria-selected='true']
-{
-    color: white;
-    background-color: #0a5a83;
-    border-color: #0a5a83;
-}
-
-header,
-#categories
-{
-    color: #0a5a83;
-}
-
 a
 {
     color: inherit;
