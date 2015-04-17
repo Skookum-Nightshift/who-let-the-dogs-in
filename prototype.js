@@ -1,63 +1,60 @@
-var $body = $("body"),
-    $list = $("#list"),
-    toggle = function (booleanString) {
-        return booleanString === 'true' ? 'false' : 'true';
-    },
+document.addEventListener('DOMContentLoaded', function () {
+
+var categories = [{
+            key: 'bars',
+            text: 'Bars',
+            symbol: 'glass'
+        }, {
+            key: 'restaurants',
+            text: 'Restaurants',
+            symbol: 'cutlery'
+        }, {
+            key: 'parks',
+            text: 'Parks',
+            symbol: 'compass'
+        }, {
+            key: 'events',
+            text: 'Events',
+            symbol: 'calendar'
+        }],
 
     idsOrdered = Object.keys(items).sort(function (idA, idB) {
         return items[idA].distance - items[idB].distance;
     }),
 
-    categories = [{
-            className: 'bars',
-            text: 'Bars',
-            symbol: 'glass'
-        }, {
-            className: 'restaurants',
-            text: 'Restaurants',
-            symbol: 'cutlery'
-        }, {
-            className: 'parks',
-            text: 'Parks',
-            symbol: 'compass'
-        }, {
-            className: 'events',
-            text: 'Events',
-            symbol: 'calendar'
-        }],
-    categoriesSelected = {},
-    matches = function (item) {
-        return typeof item === 'Object' && categoriesSelected[item.category] === true;
-    },
-    filter = function (items, idsOrdered, matches) {
-        var idsFiltered = [];
-
-        items.forEach(function (id) {
-            if (matches(items[id])) {
-                idsFiltered.push(id);
-            }
-        });
-        return idsFiltered;
-    },
-
     CategoryItem = React.createClass({
+        propTypes: {
+            category: React.PropTypes.object,
+            selected: React.PropTypes.bool,
+            onCategorySelected: React.PropTypes.func
+        },
+        onClick: function () {
+            this.props.onCategorySelected(this.props.category);
+        },
         render: function () {
             var category = this.props.category,
                 classSymbol = 'fa fa-' + category.symbol;
 
             return (
-                <li>
+                <li aria-selected={this.props.selected} onClick={this.onClick}>
                     <span className='symbol'>{'\uf000'}</span>
                     <span className='text'>{category.text}</span>
                 </li>
             );
         }
     }),
+
     CategoryList = React.createClass({
+        propTypes: {
+            categories: React.PropTypes.array,
+            categoriesSelected: React.PropTypes.object,
+            onCategorySelected: React.PropTypes.func
+        },
         render: function () {
-            var //categoriesSelected = this.props.categoriesSelected,
+            var categoriesSelected = this.props.categoriesSelected,
+                onCategorySelected = this.props.onCategorySelected,
                 categoryItems = this.props.categories.map(function (category) {
-                    return <CategoryItem category={category} />;
+                    return <CategoryItem category={category} selected={categoriesSelected[category.key]} onCategorySelected={onCategorySelected} />;
                 });
 
             return (
@@ -67,6 +64,9 @@ var $body = $("body"),
     }),
 
     ResultItem = React.createClass({
+        propTypes: {
+            item: React.PropTypes.object
+        },
         render: function () {
             var item = this.props.item,
                 distance = item.distance + 'mi';
@@ -83,10 +83,15 @@ var $body = $("body"),
             );
         }
     }),
+
     ResultList = React.createClass({
+        propTypes: {
+            items: React.PropTypes.object,
+            idsFiltered: React.PropTypes.array
+        },
         render: function () {
             var items = this.props.items,
-                resultItems = this.props.idsOrdered.map(function (id) {
+                resultItems = this.props.idsFiltered.map(function (id) {
                         return (
                             <ResultItem item={items[id]} />
                         );
@@ -95,7 +100,7 @@ var $body = $("body"),
             return (
                 <ul id='list'>{resultItems}</ul>
             );
-        }
+        },
     }),
 
     ResultPage = React.createClass({
@@ -105,54 +110,59 @@ var $body = $("body"),
             idsOrdered: React.PropTypes.array
         },
         getInitialState: function () {
-            var initialState = {
+            var items = this.props.items,
+                categoriesSelected = {};
+
+            this.props.categories.forEach(function (category) {
+                categoriesSelected[category.key] = false; // all false means unfiltered
+            });
+
+            return {
                 initial: true,
-                nSelected: 0
+                categoriesSelected: categoriesSelected,
+                idsFiltered: this.props.idsOrdered.concat() // copy
             };
-            console.log(this.props.categories);
-            return initialState;
         },
-        render () {
+        onCategorySelected: function (category) {
+            var categoriesSelected = Object.create(this.state.categoriesSelected),
+                key = category.key,
+                noneSelected = true,
+                items = this.props.items,
+                idsFiltered = [];
+
+console.dir(categoriesSelected);
+            categoriesSelected[key] = !categoriesSelected[key];
+console.dir(categoriesSelected);
+            this.props.categories.forEach(function (category) {
+                noneSelected = noneSelected && !categoriesSelected[category.key];
+            });
+
+            this.props.idsOrdered.forEach(function (id) {
+                if (noneSelected || categoriesSelected[items[id].category] === true) {
+                    idsFiltered.push(id);
+                }
+            });
+
+            this.setState({
+                initial: false,
+                categoriesSelected: categoriesSelected,
+                idsFiltered: idsFiltered
+            });
+        },
+        render: function () {
             // TODO: Header class?
-            // TODO: idsFiltered from idsOrdered and categoriesSelected
             return (
                 <div>
                     <header>
                         <h1>Dogs-in</h1>
                     </header>
-                    <CategoryList categories={this.props.categories}/>
-                    <ResultList items={items} idsOrdered={idsOrdered}/>
+                    <CategoryList categories={this.props.categories} categoriesSelected={this.state.categoriesSelected} onCategorySelected={this.onCategorySelected} />
+                    <ResultList items={this.props.items} idsFiltered={this.state.idsFiltered} />
                 </div>
             );
         }
     });
 
-categories.forEach(function (category) {
-    categoriesSelected[category.className] = true;
-});
+React.render(<ResultPage categories={categories} items={items} idsOrdered={idsOrdered}/>, document.getElementsByTagName('body')[0]);
 
-//React.render(<CategoryList categories={categories} categoriesSelected={categoriesSelected} />, document.getElementById('categories'));
-
-//React.render(<ResultList items={items} idsOrdered={idsOrdered} />, document.getElementById('list'));
-
-React.render(<ResultPage categories={categories} items={items} idsOrdered={idsOrdered}/>, document.getElementById('page'));
-
-$("#views a").click(function (event) {
-    var a = event.currentTarget,
-        $a = $(a);
-
-    $body.removeClass('explore').toggleClass(a.className);
-    $a.attr('aria-selected', toggle($a.attr('aria-selected')));
-    event.preventDefault();
-});
-
-$("#categories a").click(function (event) {
-    var a = event.currentTarget,
-        $a = $(a);
-
-    $a.attr('aria-selected', toggle($a.attr('aria-selected')));
-    $list.toggleClass(a.className);
-    $body.removeClass('explore');
-    console.log($body.get(0).className);
-    event.preventDefault();
 });
