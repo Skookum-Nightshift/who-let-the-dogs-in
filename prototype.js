@@ -1,106 +1,54 @@
 document.addEventListener('DOMContentLoaded', function () {
 
-var categories = [{
-            key: 'bars',
-            text: 'Bars',
-            symbol: 'glass'
-        }, {
-            key: 'restaurants',
-            text: 'Restaurants',
-            symbol: 'cutlery'
-        }, {
-            key: 'parks',
-            text: 'Parks',
-            symbol: 'compass'
-        }, {
-            key: 'events',
-            text: 'Events',
-            symbol: 'calendar'
-        }],
-
-    idsOrdered = Object.keys(items).sort(function (idA, idB) {
-        return items[idA].distance - items[idB].distance;
-    }),
-
-    CategoryItem = React.createClass({
-        propTypes: {
-            category: React.PropTypes.object,
-            selected: React.PropTypes.bool,
-            onCategorySelected: React.PropTypes.func
-        },
-        onClick: function () {
-            this.props.onCategorySelected(this.props.category);
-        },
-        render: function () {
-            var category = this.props.category,
-                classSymbol = 'fa fa-' + category.symbol;
-
-            return (
-                <li aria-selected={this.props.selected} onClick={this.onClick}>
-                    <span className='symbol'>{'\uf000'}</span>
-                    <span className='text'>{category.text}</span>
-                </li>
-            );
-        }
-    }),
-
-    CategoryList = React.createClass({
+var DogsApp = React.createClass({
         propTypes: {
             categories: React.PropTypes.array,
-            categoriesSelected: React.PropTypes.object,
-            onCategorySelected: React.PropTypes.func
+            items: React.PropTypes.object
+        },
+        getDefaultProps: function () {
+            return {
+                categories: [{ 
+                    key: 'bars',
+                    text: 'Bars',
+                    symbol: 'glass'
+                }, {
+                    key: 'restaurants',
+                    text: 'Restaurants',
+                    symbol: 'cutlery'
+                }, {
+                    key: 'parks',
+                    text: 'Parks',
+                    symbol: 'compass'
+                }, {
+                    key: 'events',
+                    text: 'Events',
+                    symbol: 'calendar'
+                }]
+            };
+        },
+        getInitialState: function () {
+            var items = this.props.items;
+
+            return {
+                idSelected: null,
+                idsOrdered: Object.keys(items).sort(function (idA, idB) {
+                    return items[idA].distance - items[idB].distance;
+                })
+            };
         },
         render: function () {
-            var categoriesSelected = this.props.categoriesSelected,
-                onCategorySelected = this.props.onCategorySelected,
-                categoryItems = this.props.categories.map(function (category) {
-                    return <CategoryItem category={category} selected={categoriesSelected[category.key]} onCategorySelected={onCategorySelected} />;
-                });
-
-            return (
-                <ul id='categories'>{categoryItems}</ul>
-            );
+            if (this.state.idSelected) {
+                // TODO: DirectionsPage?
+                //return (
+                    // TODO: DetailsPage
+                //);
+            } else {
+                // TO DO: LocationPage?
+                return (
+                    <ResultPage categories={this.props.categories} items={this.props.items} idsOrdered={this.state.idsOrdered}/>
+                );
+            }
         }
-    }),
-
-    ResultItem = React.createClass({
-        propTypes: {
-            item: React.PropTypes.object
-        },
-        render: function () {
-            var item = this.props.item,
-                distance = item.distance + 'mi';
-
-            return (
-                <li>
-                    <span className='category'>{'\uf000'}</span>
-                    <div>
-                        <span className='name'>{item.name}</span>
-                        <span className='address'>{item.address}</span>
-                    </div>
-                    <span className='distance'>{distance}</span>
-                </li>
-            );
-        }
-    }),
-
-    ResultList = React.createClass({
-        propTypes: {
-            items: React.PropTypes.object,
-            idsFiltered: React.PropTypes.array
-        },
-        render: function () {
-            var items = this.props.items,
-                resultItems = this.props.idsFiltered.map(function (id) {
-                        return (
-                            <ResultItem item={items[id]} />
-                        );
-                    });
-
-            return (
-                <ul id='list'>{resultItems}</ul>
-            );
-        },
     }),
 
     ResultPage = React.createClass({
@@ -161,8 +109,89 @@ console.dir(categoriesSelected);
                 </div>
             );
         }
+    }),
+
+    CategoryList = React.createClass({
+        propTypes: {
+            categories: React.PropTypes.array,
+            categoriesSelected: React.PropTypes.object,
+            onCategorySelected: React.PropTypes.func
+        },
+        render: function () {
+            var categoriesSelected = this.props.categoriesSelected,
+                onCategorySelected = this.props.onCategorySelected,
+                categoryItems = this.props.categories.map(function (category) {
+                    return <CategoryItem category={category} selected={categoriesSelected[category.key]} onCategorySelected={onCategorySelected} />;
+                });
+
+            return (
+                <ul id='categories'>{categoryItems}</ul>
+            );
+        }
+    }),
+
+    CategoryItem = React.createClass({
+        propTypes: {
+            category: React.PropTypes.object,
+            selected: React.PropTypes.bool,
+            onCategorySelected: React.PropTypes.func
+        },
+        onClick: function () {
+            this.props.onCategorySelected(this.props.category);
+        },
+        render: function () {
+            var category = this.props.category,
+                classSymbol = 'fa fa-' + category.symbol;
+
+            return (
+                <li aria-selected={this.props.selected} onClick={this.onClick}>
+                    <span className='symbol'>{'\uf000'}</span>
+                    <span className='text'>{category.text}</span>
+                </li>
+            );
+        }
+    }),
+
+    ResultList = React.createClass({
+        propTypes: {
+            items: React.PropTypes.object,
+            idsFiltered: React.PropTypes.array
+        },
+        render: function () {
+            var items = this.props.items,
+                resultItems = this.props.idsFiltered.map(function (id) {
+                        return (
+                            <ResultItem item={items[id]} />
+                        );
+                    });
+
+            return (
+                <ul id='list'>{resultItems}</ul>
+            );
+        },
+    }),
+
+    ResultItem = React.createClass({
+        propTypes: {
+            item: React.PropTypes.object
+        },
+        render: function () {
+            var item = this.props.item,
+                distance = item.distance + 'mi';
+
+            return (
+                <li>
+                    <span className='category'>{'\uf000'}</span>
+                    <div>
+                        <span className='name'>{item.name}</span>
+                        <span className='address'>{item.address}</span>
+                    </div>
+                    <span className='distance'>{distance}</span>
+                </li>
+            );
+        }
     });
 
-React.render(<ResultPage categories={categories} items={items} idsOrdered={idsOrdered}/>, document.getElementsByTagName('body')[0]);
+React.render(<DogsApp items={items} />, document.getElementsByTagName('body')[0]);
 
 });
