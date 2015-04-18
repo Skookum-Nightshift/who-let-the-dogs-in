@@ -1,14 +1,23 @@
 <!DOCTYPE html>
 <html>
-<head>
+<head xmlns='http://www.w3.org/1999/xhtml'>
 <meta charset='utf-8'/>
 <title>Dogs-in</title>
-<!--
-<link ref='stylesheet' href='../lib/font-awesome/css/font-awesome.css'/>
--->
-<link rel='stylesheet' href='prototype-layout.css'/>
-<link rel='stylesheet' href='prototype-typography.css'/>
-<link rel='stylesheet' href='prototype-color.css'/>
+<style>
+*
+{
+    font-size: 100%;
+    margin: 0;
+    border: 0;
+    padding: 0;
+    font-family: 'Arial', sans-serif;
+}
+
+body
+{
+    max-width: 20rem; /* simulate width of iPhone 6 on MacBook */
+}
+</style>
 <script src='prototype-data.js'>
 </script>
 <script src='../lib/react.js'>
@@ -16,6 +25,6 @@
 <script src='../transformed/prototype.js'>
 </script>
 </head>
-<body class='explore list map'>
+<body>
 </body>
 </html>

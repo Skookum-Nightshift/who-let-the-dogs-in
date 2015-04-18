@@ -95,6 +95,9 @@ var DogsApp = React.createClass({
                     backgroundColor: colors.colorBackground,
                     borderWidth: '3px',
                     borderBottomStyle: 'solid'
+                },
+                styleHeading: {
+                    fontSize: '1.25rem'
                 }
             };
         },
@@ -129,8 +132,8 @@ var DogsApp = React.createClass({
             // TODO: Header class?
             return (
                 <div>
-                    <header style={this.state.styleHeader}>
-                        <h1>Dogs-in</h1>
+                    <header style={state.styleHeader}>
+                        <h1 style={state.styleHeading}>Dogs-in</h1>
                     </header>
                     <CategoryList colors={props.colors} layout={props.layout} categories={props.categories} categoriesSelected={state.categoriesSelected} onCategorySelected={this.onCategorySelected} />
                     <ResultList items={props.items} idsFiltered={state.idsFiltered} layout={props.layout} />
@@ -210,8 +213,8 @@ var DogsApp = React.createClass({
             // TODO: SVG for category symbol
             return (
                 <li style={state.styleItem} aria-selected={this.props.selected} onClick={this.onClick}>
-                    <span style={state.styleSymbol} className='symbol'></span>
-                    <span style={state.styleText} className='text'>{this.props.category.text}</span>
+                    <span style={state.styleSymbol}></span>
+                    <span style={state.styleText}>{this.props.category.text}</span>
                 </li>
             );
         }
@@ -280,12 +283,12 @@ var DogsApp = React.createClass({
 
             return (
                 <li style={state.styleItem}>
-                    <span className='category' style={state.styleCategory}></span>
+                    <span style={state.styleCategory}></span>
                     <div style={state.styleDiv}>
-                        <p className='name'>{item.name}</p>
-                        <p className='address'>{item.address}</p>
+                        <p>{item.name}</p>
+                        <p>{item.address}</p>
                     </div>
-                    <span className='distance' style={state.styleDistance}>{distance}</span>
+                    <span style={state.styleDistance}>{distance}</span>
                 </li>
             );
         }

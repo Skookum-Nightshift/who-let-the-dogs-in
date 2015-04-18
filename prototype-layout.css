@@ -10,21 +10,3 @@ body
 {
     max-width: 20rem; /* simulate width of iPhone 6 on MacBook */
 }
-
-/* tentative style for categories after initial selection */
-/*
-body:not(.explore) #categories
-{
-    display: flex;
-    align-items: center;
-}
-
-body:not(.explore) #categories li
-{
-    box-sizing: border-box;
-    width: 25%;
-    line-height: 1.5rem;
-    text-align: center;
-    border-style: solid;
-}
-*/
