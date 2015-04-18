@@ -16,9 +16,13 @@ module.exports = React.createClass({
                     borderWidth: '1px',
                     borderBottomStyle: 'dotted'
                 },
-                styleCategory: {
+                styleSymbol: {
                     flexShrink: 0,
-                    width: layout.widthCategorySymbol
+                    width: layout.widthCategorySymbol,
+                    textAlign: 'center'
+                },
+                styleImage: {
+                    height: '1em'
                 },
                 styleDiv: {
                     flexShrink: 1
@@ -33,12 +37,15 @@ module.exports = React.createClass({
 
         render: function () {
             var item = this.props.item,
+                pathImage = item.categoryObject.symbol + '.svg',
                 distance = item.distance + 'mi',
                 state = this.state;
 
             return (
                 <li style={state.styleItem}>
-                    <span style={state.styleCategory}></span>
+                    <span style={state.styleSymbol}>
+                        <img style={state.styleImage} src={pathImage} />
+                    </span>
                     <div style={state.styleDiv}>
                         <p>{item.name}</p>
                         <p>{item.address}</p>

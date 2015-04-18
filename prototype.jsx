@@ -8,6 +8,7 @@ var ResultPage = require('./prototype-ResultPage.jsx'),
             categories: React.PropTypes.array,
             items: React.PropTypes.object
         },
+
         getDefaultProps: function () {
             return {
                 colors: {
@@ -21,34 +22,49 @@ var ResultPage = require('./prototype-ResultPage.jsx'),
                     padding: '0.5rem'
                 },
                 categories: [{ 
-                    key: 'bars',
+                    key: 'bar',
                     text: 'Bars',
                     symbol: 'glass'
                 }, {
-                    key: 'restaurants',
+                    key: 'restaurant',
                     text: 'Restaurants',
                     symbol: 'cutlery'
                 }, {
-                    key: 'parks',
+                    key: 'park',
                     text: 'Parks',
                     symbol: 'compass'
                 }, {
-                    key: 'events',
+                    key: 'event',
                     text: 'Events',
                     symbol: 'calendar'
                 }]
             };
         },
+
         getInitialState: function () {
-            var items = this.props.items;
+            var props = this.props,
+                items = props.items,
+                idsItems = Object.keys(items),
+                categoriesMap = {};
+
+            props.categories.forEach(function (category) {
+                categoriesMap[category.key] = category;
+            });
+            idsItems.forEach(function (id) {
+                var item = items[id];
+
+                // TODO: Ask Enrique if it is okay to add a property to a props object?
+                item.categoryObject = categoriesMap[item.categoryKey];
+            });
 
             return {
                 idSelected: null,
-                idsOrdered: Object.keys(items).sort(function (idA, idB) {
+                idsOrdered: idsItems.sort(function (idA, idB) {
                     return items[idA].distance - items[idB].distance;
                 })
             };
         },
+
         render: function () {
             if (this.state.idSelected) {
                 // TODO: DirectionsPage?

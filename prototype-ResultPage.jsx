@@ -54,7 +54,7 @@ module.exports = React.createClass({
             });
 
             this.props.idsOrdered.forEach(function (id) {
-                if (noneSelected || categoriesSelected[items[id].category] === true) {
+                if (noneSelected || categoriesSelected[items[id].categoryKey] === true) {
                     idsFiltered.push(id);
                 }
             });

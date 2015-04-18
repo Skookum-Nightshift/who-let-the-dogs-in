@@ -27,7 +27,11 @@ module.exports = React.createClass({
                 },
                 styleSymbol: {
                     flexShrink: 0,
-                    width: layout.widthCategorySymbol
+                    width: layout.widthCategorySymbol,
+                    textAlign: 'center'
+                },
+                styleImage: {
+                    height: '1em'
                 },
                 styleText: {
                     flexShrink: 1
@@ -40,13 +44,17 @@ module.exports = React.createClass({
         },
 
         render: function () {
-            var state = this.state;
+            var props = this.props,
+                category = props.category,
+                pathImage = category.symbol + '.svg',
+                state = this.state;
 
-            // TODO: SVG for category symbol
             return (
-                <li style={state.styleItem} aria-selected={this.props.selected} onClick={this.onClick}>
-                    <span style={state.styleSymbol}></span>
-                    <span style={state.styleText}>{this.props.category.text}</span>
+                <li style={state.styleItem} aria-clicked={props.selected} onClick={this.onClick}>
+                    <span style={state.styleSymbol}>
+                        <img style={state.styleImage} src={pathImage}/>
+                    </span>
+                    <span style={state.styleText}>{category.text}</span>
                 </li>
             );
         }

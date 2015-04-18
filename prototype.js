@@ -54,6 +54,7 @@
 	            categories: React.PropTypes.array,
 	            items: React.PropTypes.object
 	        },
+
 	        getDefaultProps: function () {
 	            return {
 	                colors: {
@@ -67,34 +68,49 @@
 	                    padding: '0.5rem'
 	                },
 	                categories: [{ 
-	                    key: 'bars',
+	                    key: 'bar',
 	                    text: 'Bars',
 	                    symbol: 'glass'
 	                }, {
-	                    key: 'restaurants',
+	                    key: 'restaurant',
 	                    text: 'Restaurants',
 	                    symbol: 'cutlery'
 	                }, {
-	                    key: 'parks',
+	                    key: 'park',
 	                    text: 'Parks',
 	                    symbol: 'compass'
 	                }, {
-	                    key: 'events',
+	                    key: 'event',
 	                    text: 'Events',
 	                    symbol: 'calendar'
 	                }]
 	            };
 	        },
+
 	        getInitialState: function () {
-	            var items = this.props.items;
+	            var props = this.props,
+	                items = props.items,
+	                idsItems = Object.keys(items),
+	                categoriesMap = {};
+
+	            props.categories.forEach(function (category) {
+	                categoriesMap[category.key] = category;
+	            });
+	            idsItems.forEach(function (id) {
+	                var item = items[id];
+
+	                // TODO: Ask Enrique if it is okay to add a property to a props object?
+	                item.categoryObject = categoriesMap[item.categoryKey];
+	            });
 
 	            return {
 	                idSelected: null,
-	                idsOrdered: Object.keys(items).sort(function (idA, idB) {
+	                idsOrdered: idsItems.sort(function (idA, idB) {
 	                    return items[idA].distance - items[idB].distance;
 	                })
 	            };
 	        },
+
 	        render: function () {
 	            if (this.state.idSelected) {
 	                // TODO: DirectionsPage?
@@ -175,7 +191,7 @@
 	            });
 
 	            this.props.idsOrdered.forEach(function (id) {
-	                if (noneSelected || categoriesSelected[items[id].category] === true) {
+	                if (noneSelected || categoriesSelected[items[id].categoryKey] === true) {
 	                    idsFiltered.push(id);
 	                }
 	            });
@@ -306,7 +322,11 @@
 	                },
 	                styleSymbol: {
 	                    flexShrink: 0,
-	                    width: layout.widthCategorySymbol
+	                    width: layout.widthCategorySymbol,
+	                    textAlign: 'center'
+	                },
+	                styleImage: {
+	                    height: '1em'
 	                },
 	                styleText: {
 	                    flexShrink: 1
@@ -319,13 +339,17 @@
 	        },
 
 	        render: function () {
-	            var state = this.state;
+	            var props = this.props,
+	                category = props.category,
+	                pathImage = category.symbol + '.svg',
+	                state = this.state;
 
-	            // TODO: SVG for category symbol
 	            return (
-	                React.createElement("li", {style: state.styleItem, "aria-selected": this.props.selected, onClick: this.onClick}, 
-	                    React.createElement("span", {style: state.styleSymbol}), 
-	                    React.createElement("span", {style: state.styleText}, this.props.category.text)
+	                React.createElement("li", {style: state.styleItem, "aria-clicked": props.selected, onClick: this.onClick}, 
+	                    React.createElement("span", {style: state.styleSymbol}, 
+	                        React.createElement("img", {style: state.styleImage, src: pathImage})
+	                    ), 
+	                    React.createElement("span", {style: state.styleText}, category.text)
 	                )
 	            );
 	        }
@@ -354,9 +378,13 @@
 	                    borderWidth: '1px',
 	                    borderBottomStyle: 'dotted'
 	                },
-	                styleCategory: {
+	                styleSymbol: {
 	                    flexShrink: 0,
-	                    width: layout.widthCategorySymbol
+	                    width: layout.widthCategorySymbol,
+	                    textAlign: 'center'
+	                },
+	                styleImage: {
+	                    height: '1em'
 	                },
 	                styleDiv: {
 	                    flexShrink: 1
@@ -371,12 +399,15 @@
 
 	        render: function () {
 	            var item = this.props.item,
+	                pathImage = item.categoryObject.symbol + '.svg',
 	                distance = item.distance + 'mi',
 	                state = this.state;
 
 	            return (
 	                React.createElement("li", {style: state.styleItem}, 
-	                    React.createElement("span", {style: state.styleCategory}), 
+	                    React.createElement("span", {style: state.styleSymbol}, 
+	                        React.createElement("img", {style: state.styleImage, src: pathImage})
+	                    ), 
 	                    React.createElement("div", {style: state.styleDiv}, 
 	                        React.createElement("p", null, item.name), 
 	                        React.createElement("p", null, item.address)
