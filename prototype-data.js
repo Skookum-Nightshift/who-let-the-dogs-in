@@ -1,19 +1,20 @@
 var items = {
     '0': { // Enrique: will we need ids for the individual item objects?
         categoryKey: 'park', // bar, restaurant, park, event
-        dogFriendly: true, // boolean if possible, otherwise string 
-        time: 'yyyy-mm-ddThh:mm:ss +oo:oo', // for event
+        //time: 'yyyy-mm-ddThh:mm:ss +oo:oo', // for event
+        dogFriendly: false, // boolean if possible, otherwise string 
         name: 'Freedom Park',
         address: '1900 East Boulevard',
-        distance: 1.8, // is derived from location of item to current location
         city: 'Charlotte',
         state: 'NC',
-        postalCode: '22222', // zip code
+        postalCode: '28203', // zip code
+        neighborhood: 'Dilworth, Myers Park',
+        phoneNumber: '(704) 432-4280',
+        webSite: 'http://charmeck.org%2Fmecklenburg%2Fcounty%2Fparkandrec%2Fparks%2Fparksbyregion%2Fcentralregion%2Fpages%2Ffreedom.aspx',
         description: '',
         amenities: ['', ''], // list of strings, or booleans, or object?
         hours: '', // string?
-        phoneNumber: '', // optional
-        webSite: '', // optional
+        distance: 1.8, // is derived from location of item to current location
         location: { // unless you know that there is a more useful format
             latitude: '35 13 37 N', // TODO: specific format
             longitude: '80 50 36 W'
@@ -23,13 +24,91 @@ var items = {
         categoryKey: 'park',
         name: 'Marshall Park',
         address: '800 East Third Street',
-        distance: 1.9
+        city: 'Charlotte',
+        state: 'NC',
+        postalCode: '',
+        neighborhood: '',
+        phoneNumber: '',
+        webSite: '',
+        description: '',
+        distance: 1.9,
+        location: null
     },
     '2': {
         categoryKey: 'park',
         name: 'Romare Bearden Park',
-        address: '300 South Church Street',
+        address: '300 S Church St',
+        city: 'Charlotte',
+        state: 'NC',
+        postalCode: '28202',
+        neighborhood: 'Uptown',
+        phoneNumber: '',
+        webSite: '',
+        description: '',
         distance: 0.4
+    },
+    '3': {
+        categoryKey: 'park',
+        dogFriendly: true,
+        name: 'Frazier Park',
+        address: '1201 W Trade St',
+        city: 'Charlotte',
+        state: 'NC',
+        postalCode: '28202',
+        neighborhood: 'Third Ward',
+        phoneNumber: '704-432-4280',
+        webSite: 'http://charmeck.org/mecklenburg/county/ParkandRec/Parks/ParksByRegion/CentralRegion/Pages/frazier.aspx',
+        description: '',
+        distance: 1.9, // placeholder
+        location: null
+    },
+    '4': {
+        categoryKey: 'park',
+        dogFriendly: true,
+        name: 'William R. Davie Park',
+        address: '4635 Pineville-Matthews Road',
+        city: 'Charlotte',
+        state: 'NC',
+        postalCode: '28226',
+        neighborhood: 'Arboretum',
+        phoneNumber: '(704) 541-9880',
+        website: 'http://charmeck.org/mecklenburg/county/ParkandRec/Parks/ParksByRegion/SouthRegion/Pages/WilliamRDavie.aspx',
+        description: '',
+        distance: 13, // placeholder
+        location: null
+    },
+    '5': {
+        categoryKey: 'bar',
+        dogFriendly: false,
+        name: 'Dandelion Market',
+        address: '118 W 5th St',
+        city: 'Charlotte',
+        state: 'NC',
+        postalCode: '28202',
+        neighborhood: 'Fourth Ward',
+        phoneNumber: '(704) 333-7989',
+        webSite: 'http://www.dandelionmarketcharlotte.com',
+        description: '',
+        distance: 0.3, // placeholder
+        location: null
     }
+/*
+    '': {
+        categoryKey: '',
+        dogFriendly: false,
+        name: '',
+        address: '',
+        city: 'Charlotte',
+        state: 'NC',
+        postalCode: '',
+        neighborhood: '',
+        phoneNumber: '',
+        webSite: '',
+        description: '',
+        distance: 0, // placeholder
+        location: null
+    }
+/*
+*/
 };
 
