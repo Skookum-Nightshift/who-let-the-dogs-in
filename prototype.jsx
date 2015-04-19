@@ -1,6 +1,7 @@
 document.addEventListener('DOMContentLoaded', function () {
 
 var ResultPage = require('./prototype-ResultPage.jsx'),
+    ItemPage = require('./prototype-ItemPage.jsx'),
     DogsApp = React.createClass({
         propTypes: {
             colors: React.PropTypes.object,
@@ -65,16 +66,26 @@ var ResultPage = require('./prototype-ResultPage.jsx'),
             };
         },
 
+        onResultItemSelected: function(item) {
+            this.setState({
+                itemSelected: item
+            });
+        },
+
         render: function () {
-            if (this.state.idSelected) {
+            var props = this.props,
+                state = this.state,
+                itemSelected = state.itemSelected;
+
+            if (itemSelected) {
                 // TODO: DirectionsPage?
-                //return (
-                    // TODO: DetailsPage
-                //);
+                return (
+                    <ItemPage colors={props.colors} layout={props.layout} item={itemSelected} />
+                );
             } else {
                 // TO DO: LocationPage?
                 return (
-                    <ResultPage colors={this.props.colors} layout={this.props.layout} categories={this.props.categories} items={this.props.items} idsOrdered={this.state.idsOrdered} />
+                    <ResultPage colors={props.colors} layout={props.layout} categories={props.categories} items={props.items} idsOrdered={state.idsOrdered} onResultItemSelected={this.onResultItemSelected} />
                 );
             }
         }

@@ -7,7 +7,8 @@ module.exports = React.createClass({
             layout: React.PropTypes.object,
             categories: React.PropTypes.array,
             items: React.PropTypes.object,
-            idsOrdered: React.PropTypes.array
+            idsOrdered: React.PropTypes.array,
+            onResultItemSelected: React.PropTypes.func
         },
 
         getInitialState: function () {
@@ -77,7 +78,7 @@ module.exports = React.createClass({
                         <h1 style={state.styleHeading}>Dogs-in</h1>
                     </header>
                     <CategoryList colors={props.colors} layout={props.layout} categories={props.categories} categoriesSelected={state.categoriesSelected} onCategorySelected={this.onCategorySelected} />
-                    <ResultList items={props.items} idsFiltered={state.idsFiltered} layout={props.layout} />
+                    <ResultList items={props.items} idsFiltered={state.idsFiltered} layout={props.layout} onResultItemSelected={props.onResultItemSelected} />
                 </div>
             );
         }

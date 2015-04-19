@@ -47,6 +47,7 @@
 	document.addEventListener('DOMContentLoaded', function () {
 
 	var ResultPage = __webpack_require__(1),
+	    ItemPage = __webpack_require__(2),
 	    DogsApp = React.createClass({displayName: "DogsApp",
 	        propTypes: {
 	            colors: React.PropTypes.object,
@@ -111,16 +112,26 @@
 	            };
 	        },
 
+	        onResultItemSelected: function(item) {
+	            this.setState({
+	                itemSelected: item
+	            });
+	        },
+
 	        render: function () {
-	            if (this.state.idSelected) {
+	            var props = this.props,
+	                state = this.state,
+	                itemSelected = state.itemSelected;
+
+	            if (itemSelected) {
 	                // TODO: DirectionsPage?
-	                //return (
-	                    // TODO: DetailsPage
-	                //);
+	                return (
+	                    React.createElement(ItemPage, {colors: props.colors, layout: props.layout, item: itemSelected})
+	                );
 	            } else {
 	                // TO DO: LocationPage?
 	                return (
-	                    React.createElement(ResultPage, {colors: this.props.colors, layout: this.props.layout, categories: this.props.categories, items: this.props.items, idsOrdered: this.state.idsOrdered})
+	                    React.createElement(ResultPage, {colors: props.colors, layout: props.layout, categories: props.categories, items: props.items, idsOrdered: state.idsOrdered, onResultItemSelected: this.onResultItemSelected})
 	                );
 	            }
 	        }
@@ -135,8 +146,8 @@
 /* 1 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var CategoryList = __webpack_require__(2),
-	    ResultList = __webpack_require__(3);
+	var CategoryList = __webpack_require__(3),
+	    ResultList = __webpack_require__(4);
 
 	module.exports = React.createClass({displayName: "exports",
 	        propTypes: {
@@ -144,7 +155,8 @@
 	            layout: React.PropTypes.object,
 	            categories: React.PropTypes.array,
 	            items: React.PropTypes.object,
-	            idsOrdered: React.PropTypes.array
+	            idsOrdered: React.PropTypes.array,
+	            onResultItemSelected: React.PropTypes.func
 	        },
 
 	        getInitialState: function () {
@@ -214,7 +226,7 @@
 	                        React.createElement("h1", {style: state.styleHeading}, "Dogs-in")
 	                    ), 
 	                    React.createElement(CategoryList, {colors: props.colors, layout: props.layout, categories: props.categories, categoriesSelected: state.categoriesSelected, onCategorySelected: this.onCategorySelected}), 
-	                    React.createElement(ResultList, {items: props.items, idsFiltered: state.idsFiltered, layout: props.layout})
+	                    React.createElement(ResultList, {items: props.items, idsFiltered: state.idsFiltered, layout: props.layout, onResultItemSelected: props.onResultItemSelected})
 	                )
 	            );
 	        }
@@ -225,7 +237,104 @@
 /* 2 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var CategoryItem = __webpack_require__(4);
+	module.exports = React.createClass({displayName: "exports",
+	        propTypes: {
+	            colors: React.PropTypes.object,
+	            layout: React.PropTypes.object,
+	            item: React.PropTypes.object
+	        },
+
+	        getInitialState: function () {
+	            var items = this.props.items,
+	                categoriesSelected = {},
+	                props = this.props,
+	                layout = props.layout,
+	                colors = props.colors;
+
+	            return {
+	                styleNav: {
+	                    lineHeight: layout.lineHeightMeta,
+	                    paddingRight: layout.padding,
+	                    color: colors.colorMeta,
+	                    backgroundColor: colors.colorBackground,
+	                    borderWidth: '3px',
+	                    borderBottomStyle: 'solid'
+	                },
+	                styleNavList: {
+	                    display: 'flex',
+	                    alignItems: 'baseline',
+	                    listStyle: 'none'
+	                },
+	                styleNavListItem: {
+	                    display: 'flex',
+	                    alignItems: 'center'
+	                },
+	                styleSymbol: {
+	                    flexShrink: 0,
+	                    width: layout.widthCategorySymbol,
+	                    textAlign: 'center'
+	                },
+	                styleSymbolImage: {
+	                    height: '1em'
+	                },
+	                styleItemHeading: {
+	                    display: 'flex',
+	                    alignItems: 'baseline',
+	                    marginTop: '200px', // leave space for item image
+	                    paddingTop: layout.padding
+	                },
+	                styleItemName: {
+	                    // fontSize: '1.25rem'
+	                },
+	                styleSection: {
+	                    paddingLeft: layout.widthCategorySymbol,
+	                    paddingRight: layout.padding
+	                }
+	            };
+	        },
+
+	        render: function () {
+	            var item = this.props.item,
+	                srcSymbolImage = item.categoryObject.symbol + '.svg',
+	                state = this.state;
+
+	            // TODO: nav class?
+	            return (
+	                React.createElement("div", null, 
+	                    React.createElement("nav", {style: state.styleNav}, 
+	                        React.createElement("ul", {style: state.styleNavList}, 
+	                            React.createElement("li", {style: state.styleNavListItem}, 
+	                                React.createElement("span", {style: state.styleSymbol}, 
+	                                    React.createElement("img", {style: state.styleSymbolImage, src: "angle-left.svg"})
+	                                ), 
+	                                React.createElement("span", null, "Back")
+	                            )
+	                        )
+	                    ), 
+	                    React.createElement("article", null, 
+	                        React.createElement("header", {style: state.styleArticleHeader}, 
+	                            React.createElement("h1", {style: state.styleItemHeading}, 
+	                                React.createElement("span", {style: state.styleSymbol}, 
+	                                    React.createElement("img", {style: state.styleSymbolImage, src: srcSymbolImage})
+	                                ), 
+	                                React.createElement("span", {style: state.styleItemName}, item.name)
+	                            )
+	                        ), 
+	                        React.createElement("section", {style: state.styleSection}, 
+	                            React.createElement("p", null, item.address)
+	                        )
+	                    )
+	                )
+	            );
+	        }
+	    });
+
+
+/***/ },
+/* 3 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var CategoryItem = __webpack_require__(5);
 
 	module.exports = React.createClass({displayName: "exports",
 	        propTypes: {
@@ -258,16 +367,17 @@
 
 
 /***/ },
-/* 3 */
+/* 4 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var ResultItem = __webpack_require__(5);
+	var ResultItem = __webpack_require__(6);
 
 	module.exports = React.createClass({displayName: "exports",
 	        propTypes: {
 	            items: React.PropTypes.object,
 	            idsFiltered: React.PropTypes.array,
-	            layout: React.PropTypes.object
+	            layout: React.PropTypes.object,
+	            onResultItemSelected: React.PropTypes.func
 	        },
 	        style: {
 	            listStyle: 'none'
@@ -278,7 +388,7 @@
 	                layout = props.layout,
 	                resultItems = props.idsFiltered.map(function (id) {
 	                        return (
-	                            React.createElement(ResultItem, {item: items[id], layout: layout})
+	                            React.createElement(ResultItem, {item: items[id], layout: layout, onResultItemSelected: props.onResultItemSelected})
 	                        );
 	                    });
 
@@ -290,7 +400,7 @@
 
 
 /***/ },
-/* 4 */
+/* 5 */
 /***/ function(module, exports, __webpack_require__) {
 
 	module.exports = React.createClass({displayName: "exports",
@@ -357,13 +467,14 @@
 
 
 /***/ },
-/* 5 */
+/* 6 */
 /***/ function(module, exports, __webpack_require__) {
 
 	module.exports = React.createClass({displayName: "exports",
 	        propTypes: {
 	            item: React.PropTypes.object,
-	            layout: React.PropTypes.object
+	            layout: React.PropTypes.object,
+	            onResultItemSelected: React.PropTypes.func
 	        },
 
 	        getInitialState: function () {
@@ -397,6 +508,12 @@
 	            }
 	        },
 
+	        onClick: function () {
+	            var props = this.props;
+
+	            props.onResultItemSelected(props.item);
+	        },
+
 	        render: function () {
 	            var item = this.props.item,
 	                pathImage = item.categoryObject.symbol + '.svg',
@@ -404,7 +521,7 @@
 	                state = this.state;
 
 	            return (
-	                React.createElement("li", {style: state.styleItem}, 
+	                React.createElement("li", {style: state.styleItem, onClick: this.onClick}, 
 	                    React.createElement("span", {style: state.styleSymbol}, 
 	                        React.createElement("img", {style: state.styleImage, src: pathImage})
 	                    ), 

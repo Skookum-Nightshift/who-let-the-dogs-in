@@ -4,7 +4,8 @@ module.exports = React.createClass({
         propTypes: {
             items: React.PropTypes.object,
             idsFiltered: React.PropTypes.array,
-            layout: React.PropTypes.object
+            layout: React.PropTypes.object,
+            onResultItemSelected: React.PropTypes.func
         },
         style: {
             listStyle: 'none'
@@ -15,7 +16,7 @@ module.exports = React.createClass({
                 layout = props.layout,
                 resultItems = props.idsFiltered.map(function (id) {
                         return (
-                            <ResultItem item={items[id]} layout={layout} />
+                            <ResultItem item={items[id]} layout={layout} onResultItemSelected={props.onResultItemSelected} />
                         );
                     });
 
