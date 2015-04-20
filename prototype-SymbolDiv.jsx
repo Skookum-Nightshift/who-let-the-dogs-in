@@ -3,17 +3,28 @@ module.exports = React.createClass({
         layout: React.PropTypes.object,
         srcImage: React.PropTypes.string,
         srcImageOptional: React.PropTypes.string,
+        alignment: React.PropTypes.string
+    },
+
+    getDefaultProps: function () {
+        return {
+            alignment: 'left'
+        };
     },
 
     render: function () {
         var props = this.props,
             layout = props.layout,
             width = layout.widthSymbol,
+            marginNarrow = layout.marginNarrow,
+            left = props.alignment === 'left',
             styleDiv = {
                 flexShrink: 0,
                 display: 'flex',
                 alignItems: 'flex-start',
-                marginRight: layout.marginNarrow
+                marginLeft: left ? 0 : 'auto',
+                paddingLeft: left ? 0 : marginNarrow,
+                paddingRight: left ? marginNarrow : 0
             },
             styleSpan = {
                 flexShrink: 0,
@@ -34,12 +45,14 @@ module.exports = React.createClass({
                 return (
                     <span style={styleSpan}>{img(srcImage)}</span>
                 );
-            };
+            },
+            spanImage = span(props.srcImage),
+            spanImageOptional = span(props.srcImageOptional);
 
         return (
             <div style={styleDiv}>
-                {span(props.srcImageOptional)}
-                {span(props.srcImage)}
+                {left ? spanImageOptional : spanImage}
+                {left ? spanImage : spanImageOptional}
             </div>
         );
     }

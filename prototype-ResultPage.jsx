@@ -81,7 +81,7 @@ module.exports = React.createClass({
 
             return (
                 <div>
-                    <Header colors={colors} layout={layout} />
+                    <Header colors={colors} layout={layout} srcImageRight='search.svg' />
                     <div style={styleSideBySide}>
                         <CategoryList colors={colors} layout={layout} initial={state.initial} categoryDefs={props.categoryDefs} categoriesSelected={state.categoriesSelected} onCategorySelected={this.onCategorySelected} />
                         {map}

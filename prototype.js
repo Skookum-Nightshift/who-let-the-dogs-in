@@ -251,7 +251,7 @@
 
 	            return (
 	                React.createElement("div", null, 
-	                    React.createElement(Header, {colors: colors, layout: layout}), 
+	                    React.createElement(Header, {colors: colors, layout: layout, srcImageRight: "search.svg"}), 
 	                    React.createElement("div", {style: styleSideBySide}, 
 	                        React.createElement(CategoryList, {colors: colors, layout: layout, initial: state.initial, categoryDefs: props.categoryDefs, categoriesSelected: state.categoriesSelected, onCategorySelected: this.onCategorySelected}), 
 	                        map
@@ -330,35 +330,55 @@
 /* 3 */
 /***/ function(module, exports, __webpack_require__) {
 
+	var SymbolDiv = __webpack_require__(8);
+
 	module.exports = React.createClass({displayName: "exports",
 	        propTypes: {
 	            colors: React.PropTypes.object,
-	            layout: React.PropTypes.object
+	            layout: React.PropTypes.objecta,
+	            srcImageLeft: React.PropTypes.string,
+	            srcImageRight: React.PropTypes.string
 	        },
 
 	        render: function () {
 	            var props = this.props,
 	                colors = props.colors,
 	                layout = props.layout,
+	                marginWide = layout.marginWide,
+	                srcImageLeft = props.srcImageLeft,
+	                srcImageRight = props.srcImageRight,
 	                styleHeader = {
-	                    //dispay: 'flex',
+	                    display: 'flex',
+	                    alignItems: 'flex-start',
 	                    boxSizing: 'border-box',
 	                    lineHeight: layout.lineHeightMeta,
 	                    width: '100%',
-	                    paddingLeft: layout.marginWide,
-	                    paddingRight: layout.marginNarrow,
+	                    paddingLeft: srcImageLeft ? 0 : marginWide,
+	                    paddingRight: srcImageRight ? 0 : marginWide,
 	                    color: colors.colorMeta,
 	                    backgroundColor: colors.colorBackground,
 	                    borderWidth: '2px',
 	                    borderBottomStyle: 'solid'
 	                },
 	                styleHeading = {
+	                    flexShrink: 1,
 	                    fontSize: '1.25rem'
-	                };
+	                },
+	                symbolDiv = function(srcImage, alignment) {
+	                    if (srcImage) {
+	                        return (
+	                            React.createElement(SymbolDiv, {layout: layout, srcImage: srcImage, alignment: alignment})
+	                        );
+	                    }
+	                },
+	                symbolDivLeft = symbolDiv(srcImageLeft, 'left'),
+	                symbolDivRight = symbolDiv(srcImageRight, 'right');
 
 	            return (
 	                React.createElement("header", {style: styleHeader}, 
-	                    React.createElement("h1", {style: styleHeading}, "Dogs-in")
+	                    symbolDivLeft, 
+	                    React.createElement("h1", {style: styleHeading}, "Dogs-in"), 
+	                    symbolDivRight
 	                )
 	            );
 	        }
@@ -369,7 +389,7 @@
 /* 4 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var CategoryItem = __webpack_require__(8);
+	var CategoryItem = __webpack_require__(9);
 
 	module.exports = React.createClass({displayName: "exports",
 	        propTypes: {
@@ -440,7 +460,7 @@
 /* 6 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var SymbolDiv = __webpack_require__(9);
+	var SymbolDiv = __webpack_require__(8);
 
 	module.exports = React.createClass({displayName: "exports",
 	        propTypes: {
@@ -548,7 +568,72 @@
 /* 8 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var SymbolDiv = __webpack_require__(9);
+	module.exports = React.createClass({displayName: "exports",
+	    propTypes: {
+	        layout: React.PropTypes.object,
+	        srcImage: React.PropTypes.string,
+	        srcImageOptional: React.PropTypes.string,
+	        alignment: React.PropTypes.string
+	    },
+
+	    getDefaultProps: function () {
+	        return {
+	            alignment: 'left'
+	        };
+	    },
+
+	    render: function () {
+	        var props = this.props,
+	            layout = props.layout,
+	            width = layout.widthSymbol,
+	            marginNarrow = layout.marginNarrow,
+	            left = props.alignment === 'left',
+	            styleDiv = {
+	                flexShrink: 0,
+	                display: 'flex',
+	                alignItems: 'flex-start',
+	                marginLeft: left ? 0 : 'auto',
+	                paddingLeft: left ? 0 : marginNarrow,
+	                paddingRight: left ? marginNarrow : 0
+	            },
+	            styleSpan = {
+	                flexShrink: 0,
+	                width: width,
+	                textAlign: 'center'
+	            },
+	            styleImage = {
+	                height: width
+	            },
+	            img = function (srcImage) {
+	                if (srcImage) {
+	                    return (
+	                        React.createElement("img", {style: styleImage, src: srcImage})
+	                    );
+	                }
+	            },
+	            span = function (srcImage) {
+	                return (
+	                    React.createElement("span", {style: styleSpan}, img(srcImage))
+	                );
+	            },
+	            spanImage = span(props.srcImage),
+	            spanImageOptional = span(props.srcImageOptional);
+
+	        return (
+	            React.createElement("div", {style: styleDiv}, 
+	                left ? spanImageOptional : spanImage, 
+	                left ? spanImage : spanImageOptional
+	            )
+	        );
+	    }
+	});
+
+
+/***/ },
+/* 9 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var SymbolDiv = __webpack_require__(8);
 
 	module.exports = React.createClass({displayName: "exports",
 	        propTypes: {
@@ -601,62 +686,10 @@
 
 
 /***/ },
-/* 9 */
-/***/ function(module, exports, __webpack_require__) {
-
-	module.exports = React.createClass({displayName: "exports",
-	    propTypes: {
-	        layout: React.PropTypes.object,
-	        srcImage: React.PropTypes.string,
-	        srcImageOptional: React.PropTypes.string,
-	    },
-
-	    render: function () {
-	        var props = this.props,
-	            layout = props.layout,
-	            width = layout.widthSymbol,
-	            styleDiv = {
-	                flexShrink: 0,
-	                display: 'flex',
-	                alignItems: 'flex-start',
-	                marginRight: layout.marginNarrow
-	            },
-	            styleSpan = {
-	                flexShrink: 0,
-	                width: width,
-	                textAlign: 'center'
-	            },
-	            styleImage = {
-	                height: width
-	            },
-	            img = function (srcImage) {
-	                if (srcImage) {
-	                    return (
-	                        React.createElement("img", {style: styleImage, src: srcImage})
-	                    );
-	                }
-	            },
-	            span = function (srcImage) {
-	                return (
-	                    React.createElement("span", {style: styleSpan}, img(srcImage))
-	                );
-	            };
-
-	        return (
-	            React.createElement("div", {style: styleDiv}, 
-	                span(props.srcImageOptional), 
-	                span(props.srcImage)
-	            )
-	        );
-	    }
-	});
-
-
-/***/ },
 /* 10 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var SymbolDiv = __webpack_require__(9);
+	var SymbolDiv = __webpack_require__(8);
 
 	module.exports = React.createClass({displayName: "exports",
 	        propTypes: {
