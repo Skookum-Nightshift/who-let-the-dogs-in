@@ -4,7 +4,7 @@ module.exports = React.createClass({
         propTypes: {
             colors: React.PropTypes.object,
             layout: React.PropTypes.object,
-            categories: React.PropTypes.array,
+            categoryDefs: React.PropTypes.array,
             categoriesSelected: React.PropTypes.object,
             onCategorySelected: React.PropTypes.func
         },
@@ -19,12 +19,12 @@ module.exports = React.createClass({
                 onCategorySelected = props.onCategorySelected,
                 colors = props.colors,
                 layout = props.layout,
-                categoryItems = props.categories.map(function (category) {
-                    return <CategoryItem colors={colors} layout={layout} category={category} selected={categoriesSelected[category.key]} onCategorySelected={onCategorySelected} />;
+                categoryItems = props.categoryDefs.map(function (categoryDef) {
+                    return <CategoryItem colors={colors} layout={layout} categoryDef={categoryDef} selected={categoriesSelected[categoryDef.key]} onCategorySelected={onCategorySelected} />;
                 });
 
             return (
-                <ul id='categories' style={this.style}>{categoryItems}</ul>
+                <ul style={this.style}>{categoryItems}</ul>
             );
         }
     });

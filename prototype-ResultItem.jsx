@@ -1,3 +1,5 @@
+var SymbolDiv = require('./prototype-SymbolDiv.jsx');
+
 module.exports = React.createClass({
         propTypes: {
             item: React.PropTypes.object,
@@ -5,59 +7,55 @@ module.exports = React.createClass({
             onResultItemSelected: React.PropTypes.func
         },
 
-        getInitialState: function () {
-            var layout = this.props.layout;
+        onClick: function () {
+            var props = this.props,
+                onResultItemSelected = props.onResultItemSelected;
 
-            return {
-                styleItem: {
-                    display: 'flex',
-                    alignItems: 'flex-start',
-                    paddingTop: layout.padding,
-                    paddingBottom: layout.padding,
-                    borderWidth: '1px',
-                    borderBottomStyle: 'dotted'
-                },
-                styleSymbol: {
-                    flexShrink: 0,
-                    width: layout.widthCategorySymbol,
-                    textAlign: 'center'
-                },
-                styleImage: {
-                    height: '1em'
-                },
-                styleDiv: {
-                    flexShrink: 1
-                },
-                styleDistance: {
-                    flexShrink: 0,
-                    marginLeft: 'auto', // align right
-                    marginRight: layout.padding
-                }
+            if (onResultItemSelected) {
+                onResultItemSelected(props.item);
             }
         },
 
-        onClick: function () {
-            var props = this.props;
-
-            props.onResultItemSelected(props.item);
-        },
-
         render: function () {
-            var item = this.props.item,
-                pathImage = item.categoryObject.symbol + '.svg',
-                distance = item.distance + 'mi',
-                state = this.state;
+            var props = this.props,
+                layout = props.layout,
+                inResultPage = !props.onResultItemSelected,
+                styleItem = {
+                    display: 'flex',
+                    alignItems: 'flex-start',
+                    paddingTop: layout.marginNarrow,
+                    paddingBottom: layout.marginNarrow,
+                    borderWidth: '1px',
+                    borderBottomStyle: inResultPage ? 'none' : 'dotted'
+                },
+                styleDiv = {
+                    flexShrink: 1,
+                    marginLeft: layout.marginNarrow
+                },
+                styleDistance = {
+                    flexShrink: 0,
+                    marginLeft: 'auto', // align right
+                    marginRight: layout.marginNarrow
+                },
+                item = props.item,
+                city = function () {
+                    if (inResultPage) {
+                        return (
+                            <p>{item.city + ', ' + item.state + ' ' + item.postalCode}</p>
+                        );
+                    }
+                },
+                distance = item.distance + 'mi';
 
             return (
-                <li style={state.styleItem} onClick={this.onClick}>
-                    <span style={state.styleSymbol}>
-                        <img style={state.styleImage} src={pathImage} />
-                    </span>
-                    <div style={state.styleDiv}>
+                <li style={styleItem} onClick={this.onClick}>
+                    <SymbolDiv srcImage={item.categoryDef.srcImage} srcImageOptional={item.dogFriendly ? 'paw.svg' : ''} />
+                    <div style={styleDiv}>
                         <p>{item.name}</p>
                         <p>{item.address}</p>
+                        {city()}
                     </div>
-                    <span style={state.styleDistance}>{distance}</span>
+                    <span style={styleDistance}>{distance}</span>
                 </li>
             );
         }

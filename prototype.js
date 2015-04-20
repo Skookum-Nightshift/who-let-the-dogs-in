@@ -52,38 +52,58 @@
 	        propTypes: {
 	            colors: React.PropTypes.object,
 	            layout: React.PropTypes.object,
-	            categories: React.PropTypes.array,
+	            categoryDefs: React.PropTypes.array,
+	            contactDefs: React.PropTypes.array,
 	            items: React.PropTypes.object
 	        },
 
 	        getDefaultProps: function () {
+	            var srcImage = function (name) {
+	                    return name + '.svg';
+	            };
+
 	            return {
 	                colors: {
-	                    colorMeta: '#0a5a83', // blue
+	                    colorMeta: '#0a5a83', // dark blue hsv(200,92,51)
+	                    colorLink: '#0000ff', // blue hsv(240,100,100)
 	                    colorItem: '#000000', // black
 	                    colorBackground: '#ffffff' // white
 	                },
 	                layout: {
 	                    lineHeightMeta: '2.5rem',
-	                    widthCategorySymbol: '2rem',
-	                    padding: '0.5rem'
+	                    widthCategorySymbol: '1rem',
+	                    marginNarrow: '0.5rem',
+	                    marginWide: '2.5rem' // marginNarrow + 2 * widthCategorySymbol
 	                },
-	                categories: [{ 
+	                categoryDefs: [{ 
 	                    key: 'bar',
 	                    text: 'Bars',
-	                    symbol: 'glass'
+	                    srcImage: srcImage('glass')
 	                }, {
 	                    key: 'restaurant',
 	                    text: 'Restaurants',
-	                    symbol: 'cutlery'
+	                    srcImage: srcImage('cutlery')
 	                }, {
 	                    key: 'park',
 	                    text: 'Parks',
-	                    symbol: 'compass'
+	                    srcImage: srcImage('compass')
 	                }, {
 	                    key: 'event',
 	                    text: 'Events',
-	                    symbol: 'calendar'
+	                    srcImage: srcImage('calendar')
+	                }],
+	                contactDefs: [{
+	                    key: 'phone',
+	                    srcImage: srcImage('phone'),
+	                    callback: function (number) {
+	                        window.alert('Call phone number: ' + number);
+	                    }
+	                }, {
+	                    key: 'web',
+	                    srcImage: srcImage('external-link-square'),
+	                    callback: function (address) {
+	                        window.open(address); 
+	                    }
 	                }]
 	            };
 	        },
@@ -92,16 +112,16 @@
 	            var props = this.props,
 	                items = props.items,
 	                idsItems = Object.keys(items),
-	                categoriesMap = {};
+	                categoryMap = {};
 
-	            props.categories.forEach(function (category) {
-	                categoriesMap[category.key] = category;
+	            props.categoryDefs.forEach(function (categoryDef) {
+	                categoryMap[categoryDef.key] = categoryDef;
 	            });
 	            idsItems.forEach(function (id) {
 	                var item = items[id];
 
 	                // TODO: Ask Enrique if it is okay to add a property to a props object?
-	                item.categoryObject = categoriesMap[item.categoryKey];
+	                item.categoryDef = categoryMap[item.categoryKey];
 	            });
 
 	            return {
@@ -126,12 +146,12 @@
 	            if (itemSelected) {
 	                // TODO: DirectionsPage?
 	                return (
-	                    React.createElement(ItemPage, {colors: props.colors, layout: props.layout, item: itemSelected})
+	                    React.createElement(ItemPage, {colors: props.colors, layout: props.layout, contactDefs: props.contactDefs, item: itemSelected})
 	                );
 	            } else {
 	                // TO DO: LocationPage?
 	                return (
-	                    React.createElement(ResultPage, {colors: props.colors, layout: props.layout, categories: props.categories, items: props.items, idsOrdered: state.idsOrdered, onResultItemSelected: this.onResultItemSelected})
+	                    React.createElement(ResultPage, {colors: props.colors, layout: props.layout, categoryDefs: props.categoryDefs, items: props.items, idsOrdered: state.idsOrdered, onResultItemSelected: this.onResultItemSelected})
 	                );
 	            }
 	        }
@@ -146,14 +166,15 @@
 /* 1 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var CategoryList = __webpack_require__(3),
-	    ResultList = __webpack_require__(4);
+	var Header = __webpack_require__(3),
+	    CategoryList = __webpack_require__(4),
+	    ResultList = __webpack_require__(5);
 
 	module.exports = React.createClass({displayName: "exports",
 	        propTypes: {
 	            colors: React.PropTypes.object,
 	            layout: React.PropTypes.object,
-	            categories: React.PropTypes.array,
+	            categoryDefs: React.PropTypes.array,
 	            items: React.PropTypes.object,
 	            idsOrdered: React.PropTypes.array,
 	            onResultItemSelected: React.PropTypes.func
@@ -162,44 +183,29 @@
 	        getInitialState: function () {
 	            var items = this.props.items,
 	                categoriesSelected = {},
-	                props = this.props,
-	                layout = props.layout,
-	                colors = props.colors;
+	                props = this.props;
 
-	            this.props.categories.forEach(function (category) {
-	                categoriesSelected[category.key] = false; // all false means unfiltered
+	            props.categoryDefs.forEach(function (categoryDef) {
+	                categoriesSelected[categoryDef.key] = false; // all false means unfiltered
 	            });
 
 	            return {
 	                initial: true,
 	                categoriesSelected: categoriesSelected,
-	                idsFiltered: props.idsOrdered.concat(), // copy
-	                styleHeader: {
-	                    //dispay: 'flex',
-	                    lineHeight: layout.lineHeightMeta,
-	                    paddingLeft: layout.widthCategorySymbol,
-	                    paddingRight: layout.padding,
-	                    color: colors.colorMeta,
-	                    backgroundColor: colors.colorBackground,
-	                    borderWidth: '3px',
-	                    borderBottomStyle: 'solid'
-	                },
-	                styleHeading: {
-	                    fontSize: '1.25rem'
-	                }
+	                idsFiltered: props.idsOrdered.concat() // copy
 	            };
 	        },
 
-	        onCategorySelected: function (category) {
+	        onCategorySelected: function (categoryDef) {
 	            var categoriesSelected = Object.create(this.state.categoriesSelected),
-	                key = category.key,
+	                key = categoryDef.key,
 	                noneSelected = true,
 	                items = this.props.items,
 	                idsFiltered = [];
 
 	            categoriesSelected[key] = !categoriesSelected[key];
-	            this.props.categories.forEach(function (category) {
-	                noneSelected = noneSelected && !categoriesSelected[category.key];
+	            this.props.categoryDefs.forEach(function (categoryDef) {
+	                noneSelected = noneSelected && !categoriesSelected[categoryDef.key];
 	            });
 
 	            this.props.idsOrdered.forEach(function (id) {
@@ -217,15 +223,14 @@
 
 	        render: function () {
 	            var props = this.props,
+	                colors = props.colors,
+	                layout = props.layout,
 	                state = this.state;
 
-	            // TODO: Header class?
 	            return (
 	                React.createElement("div", null, 
-	                    React.createElement("header", {style: state.styleHeader}, 
-	                        React.createElement("h1", {style: state.styleHeading}, "Dogs-in")
-	                    ), 
-	                    React.createElement(CategoryList, {colors: props.colors, layout: props.layout, categories: props.categories, categoriesSelected: state.categoriesSelected, onCategorySelected: this.onCategorySelected}), 
+	                    React.createElement(Header, {colors: colors, layout: layout}), 
+	                    React.createElement(CategoryList, {colors: colors, layout: layout, categoryDefs: props.categoryDefs, categoriesSelected: state.categoriesSelected, onCategorySelected: this.onCategorySelected}), 
 	                    React.createElement(ResultList, {items: props.items, idsFiltered: state.idsFiltered, layout: props.layout, onResultItemSelected: props.onResultItemSelected})
 	                )
 	            );
@@ -237,93 +242,35 @@
 /* 2 */
 /***/ function(module, exports, __webpack_require__) {
 
+	var Header = __webpack_require__(3),
+	    ResultItem = __webpack_require__(6),
+	    ContactList = __webpack_require__(7);
+
 	module.exports = React.createClass({displayName: "exports",
 	        propTypes: {
 	            colors: React.PropTypes.object,
 	            layout: React.PropTypes.object,
+	            contactDefs: React.PropTypes.array,
 	            item: React.PropTypes.object
 	        },
 
-	        getInitialState: function () {
-	            var items = this.props.items,
-	                categoriesSelected = {},
-	                props = this.props,
-	                layout = props.layout,
-	                colors = props.colors;
-
-	            return {
-	                styleNav: {
-	                    lineHeight: layout.lineHeightMeta,
-	                    paddingRight: layout.padding,
-	                    color: colors.colorMeta,
-	                    backgroundColor: colors.colorBackground,
-	                    borderWidth: '3px',
-	                    borderBottomStyle: 'solid'
-	                },
-	                styleNavList: {
-	                    display: 'flex',
-	                    alignItems: 'baseline',
-	                    listStyle: 'none'
-	                },
-	                styleNavListItem: {
-	                    display: 'flex',
-	                    alignItems: 'center'
-	                },
-	                styleSymbol: {
-	                    flexShrink: 0,
-	                    width: layout.widthCategorySymbol,
-	                    textAlign: 'center'
-	                },
-	                styleSymbolImage: {
-	                    height: '1em'
-	                },
-	                styleItemHeading: {
-	                    display: 'flex',
-	                    alignItems: 'baseline',
-	                    marginTop: '200px', // leave space for item image
-	                    paddingTop: layout.padding
-	                },
-	                styleItemName: {
-	                    // fontSize: '1.25rem'
-	                },
-	                styleSection: {
-	                    paddingLeft: layout.widthCategorySymbol,
-	                    paddingRight: layout.padding
-	                }
-	            };
-	        },
-
 	        render: function () {
-	            var item = this.props.item,
-	                srcSymbolImage = item.categoryObject.symbol + '.svg',
-	                state = this.state;
+	            var props = this.props,
+	                colors = props.colors,
+	                layout = props.layout,
+	                styleList = {
+	                    marginTop: '200px' // leave space for item image
+	                },
+	                item = props.item;
 
-	            // TODO: nav class?
+	            // TODO: neighborhood, description, hours, amenities, directions
 	            return (
 	                React.createElement("div", null, 
-	                    React.createElement("nav", {style: state.styleNav}, 
-	                        React.createElement("ul", {style: state.styleNavList}, 
-	                            React.createElement("li", {style: state.styleNavListItem}, 
-	                                React.createElement("span", {style: state.styleSymbol}, 
-	                                    React.createElement("img", {style: state.styleSymbolImage, src: "angle-left.svg"})
-	                                ), 
-	                                React.createElement("span", null, "Back")
-	                            )
-	                        )
+	                    React.createElement(Header, {colors: colors, layout: layout}), 
+	                    React.createElement("ul", {style: styleList}, 
+	                        React.createElement(ResultItem, {item: item, layout: layout})
 	                    ), 
-	                    React.createElement("article", null, 
-	                        React.createElement("header", {style: state.styleArticleHeader}, 
-	                            React.createElement("h1", {style: state.styleItemHeading}, 
-	                                React.createElement("span", {style: state.styleSymbol}, 
-	                                    React.createElement("img", {style: state.styleSymbolImage, src: srcSymbolImage})
-	                                ), 
-	                                React.createElement("span", {style: state.styleItemName}, item.name)
-	                            )
-	                        ), 
-	                        React.createElement("section", {style: state.styleSection}, 
-	                            React.createElement("p", null, item.address)
-	                        )
-	                    )
+	                    React.createElement(ContactList, {colors: colors, layout: layout, contactDefs: props.contactDefs, contacts: item.contacts})
 	                )
 	            );
 	        }
@@ -334,13 +281,50 @@
 /* 3 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var CategoryItem = __webpack_require__(5);
+	module.exports = React.createClass({displayName: "exports",
+	        propTypes: {
+	            colors: React.PropTypes.object,
+	            layout: React.PropTypes.object
+	        },
+
+	        render: function () {
+	            var props = this.props,
+	                colors = props.colors,
+	                layout = props.layout,
+	                styleHeader = {
+	                    //dispay: 'flex',
+	                    lineHeight: layout.lineHeightMeta,
+	                    paddingLeft: layout.marginWide,
+	                    paddingRight: layout.marginNarrow,
+	                    color: colors.colorMeta,
+	                    backgroundColor: colors.colorBackground,
+	                    borderWidth: '2px',
+	                    borderBottomStyle: 'solid'
+	                },
+	                styleHeading = {
+	                    fontSize: '1.25rem'
+	                };
+
+	            return (
+	                React.createElement("header", {style: styleHeader}, 
+	                    React.createElement("h1", {style: styleHeading}, "Dogs-in")
+	                )
+	            );
+	        }
+	    });
+
+
+/***/ },
+/* 4 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var CategoryItem = __webpack_require__(8);
 
 	module.exports = React.createClass({displayName: "exports",
 	        propTypes: {
 	            colors: React.PropTypes.object,
 	            layout: React.PropTypes.object,
-	            categories: React.PropTypes.array,
+	            categoryDefs: React.PropTypes.array,
 	            categoriesSelected: React.PropTypes.object,
 	            onCategorySelected: React.PropTypes.func
 	        },
@@ -355,19 +339,19 @@
 	                onCategorySelected = props.onCategorySelected,
 	                colors = props.colors,
 	                layout = props.layout,
-	                categoryItems = props.categories.map(function (category) {
-	                    return React.createElement(CategoryItem, {colors: colors, layout: layout, category: category, selected: categoriesSelected[category.key], onCategorySelected: onCategorySelected});
+	                categoryItems = props.categoryDefs.map(function (categoryDef) {
+	                    return React.createElement(CategoryItem, {colors: colors, layout: layout, categoryDef: categoryDef, selected: categoriesSelected[categoryDef.key], onCategorySelected: onCategorySelected});
 	                });
 
 	            return (
-	                React.createElement("ul", {id: "categories", style: this.style}, categoryItems)
+	                React.createElement("ul", {style: this.style}, categoryItems)
 	            );
 	        }
 	    });
 
 
 /***/ },
-/* 4 */
+/* 5 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var ResultItem = __webpack_require__(6);
@@ -400,14 +384,124 @@
 
 
 /***/ },
-/* 5 */
+/* 6 */
 /***/ function(module, exports, __webpack_require__) {
+
+	var SymbolDiv = __webpack_require__(9);
+
+	module.exports = React.createClass({displayName: "exports",
+	        propTypes: {
+	            item: React.PropTypes.object,
+	            layout: React.PropTypes.object,
+	            onResultItemSelected: React.PropTypes.func
+	        },
+
+	        onClick: function () {
+	            var props = this.props,
+	                onResultItemSelected = props.onResultItemSelected;
+
+	            if (onResultItemSelected) {
+	                onResultItemSelected(props.item);
+	            }
+	        },
+
+	        render: function () {
+	            var props = this.props,
+	                layout = props.layout,
+	                inResultPage = !props.onResultItemSelected,
+	                styleItem = {
+	                    display: 'flex',
+	                    alignItems: 'flex-start',
+	                    paddingTop: layout.marginNarrow,
+	                    paddingBottom: layout.marginNarrow,
+	                    borderWidth: '1px',
+	                    borderBottomStyle: inResultPage ? 'none' : 'dotted'
+	                },
+	                styleDiv = {
+	                    flexShrink: 1,
+	                    marginLeft: layout.marginNarrow
+	                },
+	                styleDistance = {
+	                    flexShrink: 0,
+	                    marginLeft: 'auto', // align right
+	                    marginRight: layout.marginNarrow
+	                },
+	                item = props.item,
+	                city = function () {
+	                    if (inResultPage) {
+	                        return (
+	                            React.createElement("p", null, item.city + ', ' + item.state + ' ' + item.postalCode)
+	                        );
+	                    }
+	                },
+	                distance = item.distance + 'mi';
+
+	            return (
+	                React.createElement("li", {style: styleItem, onClick: this.onClick}, 
+	                    React.createElement(SymbolDiv, {srcImage: item.categoryDef.srcImage, srcImageOptional: item.dogFriendly ? 'paw.svg' : ''}), 
+	                    React.createElement("div", {style: styleDiv}, 
+	                        React.createElement("p", null, item.name), 
+	                        React.createElement("p", null, item.address), 
+	                        city()
+	                    ), 
+	                    React.createElement("span", {style: styleDistance}, distance)
+	                )
+	            );
+	        }
+	    });
+
+
+/***/ },
+/* 7 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var ContactItem = __webpack_require__(10);
 
 	module.exports = React.createClass({displayName: "exports",
 	        propTypes: {
 	            colors: React.PropTypes.object,
 	            layout: React.PropTypes.object,
-	            category: React.PropTypes.object,
+	            contactDefs: React.PropTypes.array,
+	            contacts: React.PropTypes.object
+	        },
+
+	        render: function () {
+	            var props = this.props,
+	                colors = props.colors,
+	                layout = props.layout,
+	                contacts = props.contacts,
+	                styleList = {
+	                    listStyle: 'none',
+	                    marginTop: layout.marginNarrow // TODO: align at bottom of page?
+	                },
+	                contactItems = [];
+
+	            props.contactDefs.forEach(function (contactDef) {
+	                var value = contacts[contactDef.key];
+
+	                if (value) {
+	                    contactItems.push(React.createElement(ContactItem, {colors: colors, layout: layout, contactDef: contactDef, value: value}));
+	                }
+	            });
+
+	            return (
+	                React.createElement("ul", {style: styleList}, contactItems)
+	            );
+	        }
+	    });
+
+
+/***/ },
+/* 8 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var SymbolDiv = __webpack_require__(9);
+
+	module.exports = React.createClass({displayName: "exports",
+	        propTypes: {
+	            colors: React.PropTypes.object,
+	            layout: React.PropTypes.object,
+	            categoryDef: React.PropTypes.object,
 	            selected: React.PropTypes.bool,
 	            onCategorySelected: React.PropTypes.func
 	        },
@@ -430,36 +524,27 @@
 	                    borderWidth: '1px',
 	                    borderBottomStyle: 'solid'
 	                },
-	                styleSymbol: {
-	                    flexShrink: 0,
-	                    width: layout.widthCategorySymbol,
-	                    textAlign: 'center'
-	                },
-	                styleImage: {
-	                    height: '1em'
-	                },
 	                styleText: {
-	                    flexShrink: 1
+	                    flexShrink: 1,
+	                    marginLeft: layout.marginNarrow,
+	                    marginRight: layout.marginNarrow
 	                }
 	            };
 	        },
 
 	        onClick: function () {
-	            this.props.onCategorySelected(this.props.category);
+	            this.props.onCategorySelected(this.props.categoryDef);
 	        },
 
 	        render: function () {
 	            var props = this.props,
-	                category = props.category,
-	                pathImage = category.symbol + '.svg',
+	                categoryDef = props.categoryDef,
 	                state = this.state;
 
 	            return (
 	                React.createElement("li", {style: state.styleItem, "aria-clicked": props.selected, onClick: this.onClick}, 
-	                    React.createElement("span", {style: state.styleSymbol}, 
-	                        React.createElement("img", {style: state.styleImage, src: pathImage})
-	                    ), 
-	                    React.createElement("span", {style: state.styleText}, category.text)
+	                    React.createElement(SymbolDiv, {srcImage: categoryDef.srcImage}), 
+	                    React.createElement("span", {style: state.styleText}, categoryDef.text)
 	                )
 	            );
 	        }
@@ -467,69 +552,106 @@
 
 
 /***/ },
-/* 6 */
+/* 9 */
 /***/ function(module, exports, __webpack_require__) {
 
 	module.exports = React.createClass({displayName: "exports",
-	        propTypes: {
-	            item: React.PropTypes.object,
-	            layout: React.PropTypes.object,
-	            onResultItemSelected: React.PropTypes.func
-	        },
+	    propTypes: {
+	        srcImage: React.PropTypes.string,
+	        srcImageOptional: React.PropTypes.string,
+	        width: React.PropTypes.string,
+	        height: React.PropTypes.string
+	    },
 
-	        getInitialState: function () {
-	            var layout = this.props.layout;
+	    getDefaultProps: function () {
+	        return {
+	            width: '1rem',
+	            height: '1rem'
+	        };
+	    },
 
-	            return {
-	                styleItem: {
-	                    display: 'flex',
-	                    alignItems: 'flex-start',
-	                    paddingTop: layout.padding,
-	                    paddingBottom: layout.padding,
-	                    borderWidth: '1px',
-	                    borderBottomStyle: 'dotted'
-	                },
-	                styleSymbol: {
-	                    flexShrink: 0,
-	                    width: layout.widthCategorySymbol,
-	                    textAlign: 'center'
-	                },
-	                styleImage: {
-	                    height: '1em'
-	                },
-	                styleDiv: {
-	                    flexShrink: 1
-	                },
-	                styleDistance: {
-	                    flexShrink: 0,
-	                    marginLeft: 'auto', // align right
-	                    marginRight: layout.padding
+	    render: function () {
+	        var props = this.props,
+	            styleDiv = {
+	                flexShrink: 0,
+	                display: 'flex',
+	                alignItems: 'flex-start'
+	            },
+	            styleSpan = {
+	                flexShrink: 0,
+	                width: props.width,
+	                textAlign: 'center'
+	            },
+	            styleImage = {
+	                height: props.height
+	            },
+	            img = function (srcImage) {
+	                if (srcImage) {
+	                    return (
+	                        React.createElement("img", {style: styleImage, src: srcImage})
+	                    );
 	                }
-	            }
+	            },
+	            span = function (srcImage) {
+	                return (
+	                    React.createElement("span", {style: styleSpan}, img(srcImage))
+	                );
+	            };
+
+	        return (
+	            React.createElement("div", {style: styleDiv}, 
+	                span(props.srcImageOptional), 
+	                span(props.srcImage)
+	            )
+	        );
+	    }
+	});
+
+
+/***/ },
+/* 10 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var SymbolDiv = __webpack_require__(9);
+
+	module.exports = React.createClass({displayName: "exports",
+	        propTypes: {
+	            colors: React.PropTypes.object,
+	            layout: React.PropTypes.object,
+	            contactDef: React.PropTypes.object,
+	            value: React.PropTypes.string
 	        },
 
 	        onClick: function () {
 	            var props = this.props;
 
-	            props.onResultItemSelected(props.item);
+	            props.contactDef.callback(props.value);
 	        },
 
 	        render: function () {
-	            var item = this.props.item,
-	                pathImage = item.categoryObject.symbol + '.svg',
-	                distance = item.distance + 'mi',
-	                state = this.state;
+	            var props = this.props,
+	                layout = props.layout;
+	                styleItem = {
+	                    display: 'flex',
+	                    alignItems: 'flex-start',
+	                    lineHeight: layout.lineHeightMeta,
+	                    color: props.colors.colorLink,
+	                    borderWidth: '1px',
+	                    borderTopStyle: 'dotted'
+	                },
+	                styleValue = {
+	                    flexShrink: 1,
+	                    marginLeft: layout.marginNarrow,
+	                    marginRight: layout.marginNarrow,
+	                    whiteSpace: 'nowrap', // TODO: or 2 lines for web address?
+	                    overflow: 'hidden',
+	                    textOverflow: 'ellipsis'
+	                };
 
 	            return (
-	                React.createElement("li", {style: state.styleItem, onClick: this.onClick}, 
-	                    React.createElement("span", {style: state.styleSymbol}, 
-	                        React.createElement("img", {style: state.styleImage, src: pathImage})
-	                    ), 
-	                    React.createElement("div", {style: state.styleDiv}, 
-	                        React.createElement("p", null, item.name), 
-	                        React.createElement("p", null, item.address)
-	                    ), 
-	                    React.createElement("span", {style: state.styleDistance}, distance)
+	                React.createElement("li", {style: styleItem, onClick: this.onClick}, 
+	                    React.createElement(SymbolDiv, {srcImage: props.contactDef.srcImage}), 
+	                    React.createElement("span", {style: styleValue}, props.value)
 	                )
 	            );
 	        }
