@@ -23,11 +23,10 @@ module.exports = React.createClass({
                     lineHeight: layout.lineHeightMeta,
                     color: props.colors.colorLink,
                     borderWidth: '1px',
-                    borderTopStyle: 'dotted'
+                    borderTopStyle: 'solid'
                 },
                 styleValue = {
                     flexShrink: 1,
-                    marginLeft: layout.marginNarrow,
                     marginRight: layout.marginNarrow,
                     whiteSpace: 'nowrap', // TODO: or 2 lines for web address?
                     overflow: 'hidden',
@@ -36,7 +35,7 @@ module.exports = React.createClass({
 
             return (
                 <li style={styleItem} onClick={this.onClick}>
-                    <SymbolDiv srcImage={props.contactDef.srcImage} />
+                    <SymbolDiv layout={layout} srcImage={props.contactDef.srcImage} />
                     <span style={styleValue}>{props.value}</span>
                 </li>
             );

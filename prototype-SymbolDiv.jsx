@@ -1,32 +1,27 @@
 module.exports = React.createClass({
     propTypes: {
+        layout: React.PropTypes.object,
         srcImage: React.PropTypes.string,
         srcImageOptional: React.PropTypes.string,
-        width: React.PropTypes.string,
-        height: React.PropTypes.string
-    },
-
-    getDefaultProps: function () {
-        return {
-            width: '1rem',
-            height: '1rem'
-        };
     },
 
     render: function () {
         var props = this.props,
+            layout = props.layout,
+            width = layout.widthSymbol,
             styleDiv = {
                 flexShrink: 0,
                 display: 'flex',
-                alignItems: 'flex-start'
+                alignItems: 'flex-start',
+                marginRight: layout.marginNarrow
             },
             styleSpan = {
                 flexShrink: 0,
-                width: props.width,
+                width: width,
                 textAlign: 'center'
             },
             styleImage = {
-                height: props.height
+                height: width
             },
             img = function (srcImage) {
                 if (srcImage) {

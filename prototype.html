@@ -13,11 +13,16 @@
     padding: 0;
 }
 
-body
+body > div
 {
     font-family: 'Arial', sans-serif;
 /* comment out the following property to test responsive styles for phone versus tablet */
-    max-width: 20rem; /* simulate width of iPhone 6 on MacBook without resizing browser window */
+    width: 360px; /* simulate width of iPhone 6 on MacBook without resizing browser window */
+    height: 480px;
+/*  background-color to test vertical alignment and overflow */
+/*
+    background-color: yellow;
+*/
 }
 </style>
 <!-- React is an external dependency in a sibling folder: -->

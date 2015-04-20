@@ -10,7 +10,9 @@ module.exports = React.createClass({
                 layout = props.layout,
                 styleHeader = {
                     //dispay: 'flex',
+                    boxSizing: 'border-box',
                     lineHeight: layout.lineHeightMeta,
+                    width: '100%',
                     paddingLeft: layout.marginWide,
                     paddingRight: layout.marginNarrow,
                     color: colors.colorMeta,

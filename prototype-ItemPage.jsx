@@ -14,17 +14,41 @@ module.exports = React.createClass({
             var props = this.props,
                 colors = props.colors,
                 layout = props.layout,
-                styleList = {
-                    marginTop: '200px' // leave space for item image
+                marginWide = layout.marginWide,
+                // TO DO: align ContactList at bottom?
+                styleDiv = {
+                    //display: 'flex',
+                    //alignItems: 'flex-start',
+                    //alignContent: 'flex-start',
+                    //flexWrap: 'wrap',
+                    //overflow: 'hidden'
                 },
+                styleImage = {
+                    boxSizing: 'border-box',
+                    width: '100%',
+                    height: layout.heightCategoryList,
+                    borderWidth: '1px',
+                    borderBottomStyle: 'solid'
+                },
+                styleList = {
+                    listStyle: 'none',
+                    width: '100%'
+                },
+                styleItem = {
+                    marginLeft: marginWide
+                }
                 item = props.item;
 
-            // TODO: neighborhood, description, hours, amenities, directions
+            // TODO: description, hours, amenities, directions
             return (
-                <div>
+                <div style={styleDiv}>
                     <Header colors={colors} layout={layout} />
+                    <img style={styleImage} src='TODO.jpg' alt='Picture' />
                     <ul style={styleList}>
                         <ResultItem item={item} layout={layout} />
+                        <li style={styleItem}>
+                            <p>{item.neighborhood}</p>
+                        </li>
                     </ul>
                     <ContactList colors={colors} layout={layout} contactDefs={props.contactDefs} contacts={item.contacts} />
                 </div>

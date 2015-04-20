@@ -14,21 +14,9 @@ var ResultPage = require('./prototype-ResultPage.jsx'),
         getDefaultProps: function () {
             var srcImage = function (name) {
                     return name + '.svg';
-            };
+                };
 
             return {
-                colors: {
-                    colorMeta: '#0a5a83', // dark blue hsv(200,92,51)
-                    colorLink: '#0000ff', // blue hsv(240,100,100)
-                    colorItem: '#000000', // black
-                    colorBackground: '#ffffff' // white
-                },
-                layout: {
-                    lineHeightMeta: '2.5rem',
-                    widthCategorySymbol: '1rem',
-                    marginNarrow: '0.5rem',
-                    marginWide: '2.5rem' // marginNarrow + 2 * widthCategorySymbol
-                },
                 categoryDefs: [{ 
                     key: 'bar',
                     text: 'Bars',
@@ -58,7 +46,21 @@ var ResultPage = require('./prototype-ResultPage.jsx'),
                     callback: function (address) {
                         window.open(address); 
                     }
-                }]
+                }],
+                colors: {
+                    colorMeta: '#0a5a83', // dark blue hsv(200,92,51)
+                    colorSelected: '#80d4ff', // light blue hsx(200,50,100)
+                    colorLink: '#0000ff', // blue hsv(240,100,100)
+                    colorItem: '#000000', // black
+                    colorBackground: '#ffffff' // white
+                },
+                layout: {
+                    lineHeightMeta: '2.5rem',
+                    heightCategoryList: '164px', // 4 * (2.5rem + 1px)
+                    widthSymbol: '1rem',
+                    marginNarrow: '0.5rem',
+                    marginWide: '2.5rem' // marginNarrow + 2 * widthCategorySymbol
+                }
             };
         },
 

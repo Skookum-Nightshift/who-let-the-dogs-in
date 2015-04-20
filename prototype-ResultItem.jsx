@@ -26,11 +26,10 @@ module.exports = React.createClass({
                     paddingTop: layout.marginNarrow,
                     paddingBottom: layout.marginNarrow,
                     borderWidth: '1px',
-                    borderBottomStyle: inResultPage ? 'none' : 'dotted'
+                    borderBottomStyle: inResultPage ? 'none' : 'solid'
                 },
                 styleDiv = {
-                    flexShrink: 1,
-                    marginLeft: layout.marginNarrow
+                    flexShrink: 1
                 },
                 styleDistance = {
                     flexShrink: 0,
@@ -49,7 +48,7 @@ module.exports = React.createClass({
 
             return (
                 <li style={styleItem} onClick={this.onClick}>
-                    <SymbolDiv srcImage={item.categoryDef.srcImage} srcImageOptional={item.dogFriendly ? 'paw.svg' : ''} />
+                    <SymbolDiv layout={layout} srcImage={item.categoryDef.srcImage} srcImageOptional={item.dogFriendly ? 'paw.svg' : ''} />
                     <div style={styleDiv}>
                         <p>{item.name}</p>
                         <p>{item.address}</p>

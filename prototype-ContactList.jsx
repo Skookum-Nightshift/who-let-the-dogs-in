@@ -15,7 +15,8 @@ module.exports = React.createClass({
                 contacts = props.contacts,
                 styleList = {
                     listStyle: 'none',
-                    marginTop: layout.marginNarrow // TODO: align at bottom of page?
+                    width: '100%',
+                    marginTop: layout.marginNarrow
                 },
                 contactItems = [];
 

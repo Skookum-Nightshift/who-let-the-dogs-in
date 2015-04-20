@@ -60,21 +60,9 @@
 	        getDefaultProps: function () {
 	            var srcImage = function (name) {
 	                    return name + '.svg';
-	            };
+	                };
 
 	            return {
-	                colors: {
-	                    colorMeta: '#0a5a83', // dark blue hsv(200,92,51)
-	                    colorLink: '#0000ff', // blue hsv(240,100,100)
-	                    colorItem: '#000000', // black
-	                    colorBackground: '#ffffff' // white
-	                },
-	                layout: {
-	                    lineHeightMeta: '2.5rem',
-	                    widthCategorySymbol: '1rem',
-	                    marginNarrow: '0.5rem',
-	                    marginWide: '2.5rem' // marginNarrow + 2 * widthCategorySymbol
-	                },
 	                categoryDefs: [{ 
 	                    key: 'bar',
 	                    text: 'Bars',
@@ -104,7 +92,21 @@
 	                    callback: function (address) {
 	                        window.open(address); 
 	                    }
-	                }]
+	                }],
+	                colors: {
+	                    colorMeta: '#0a5a83', // dark blue hsv(200,92,51)
+	                    colorSelected: '#80d4ff', // light blue hsx(200,50,100)
+	                    colorLink: '#0000ff', // blue hsv(240,100,100)
+	                    colorItem: '#000000', // black
+	                    colorBackground: '#ffffff' // white
+	                },
+	                layout: {
+	                    lineHeightMeta: '2.5rem',
+	                    heightCategoryList: '164px', // 4 * (2.5rem + 1px)
+	                    widthSymbol: '1rem',
+	                    marginNarrow: '0.5rem',
+	                    marginWide: '2.5rem' // marginNarrow + 2 * widthCategorySymbol
+	                }
 	            };
 	        },
 
@@ -225,12 +227,35 @@
 	            var props = this.props,
 	                colors = props.colors,
 	                layout = props.layout,
-	                state = this.state;
+	                state = this.state,
+	                styleSideBySide = {
+	                    display: 'flex',
+	                    alignItems: 'flex-start',
+	                    width: '100%'
+	                },
+	                styleMap = {
+	                    flexGrow: 1,
+	                    flexShrink: 1,
+	                    boxSizing: 'border-box',
+	                    height: layout.heightCategoryList,
+	                    borderColor: colors.colorMeta,
+	                    borderWidth: '1px',
+	                    borderLeftStyle: 'solid',
+	                    borderBottomStyle: 'solid'
+	                },
+	                map;
+
+	            if (!state.initial) {
+	                map = React.createElement("img", {style: styleMap, src: "TODO.jpg", alt: "Map"})
+	            }
 
 	            return (
 	                React.createElement("div", null, 
 	                    React.createElement(Header, {colors: colors, layout: layout}), 
-	                    React.createElement(CategoryList, {colors: colors, layout: layout, categoryDefs: props.categoryDefs, categoriesSelected: state.categoriesSelected, onCategorySelected: this.onCategorySelected}), 
+	                    React.createElement("div", {style: styleSideBySide}, 
+	                        React.createElement(CategoryList, {colors: colors, layout: layout, initial: state.initial, categoryDefs: props.categoryDefs, categoriesSelected: state.categoriesSelected, onCategorySelected: this.onCategorySelected}), 
+	                        map
+	                    ), 
 	                    React.createElement(ResultList, {items: props.items, idsFiltered: state.idsFiltered, layout: props.layout, onResultItemSelected: props.onResultItemSelected})
 	                )
 	            );
@@ -258,17 +283,41 @@
 	            var props = this.props,
 	                colors = props.colors,
 	                layout = props.layout,
-	                styleList = {
-	                    marginTop: '200px' // leave space for item image
+	                marginWide = layout.marginWide,
+	                // TO DO: align ContactList at bottom?
+	                styleDiv = {
+	                    //display: 'flex',
+	                    //alignItems: 'flex-start',
+	                    //alignContent: 'flex-start',
+	                    //flexWrap: 'wrap',
+	                    //overflow: 'hidden'
 	                },
+	                styleImage = {
+	                    boxSizing: 'border-box',
+	                    width: '100%',
+	                    height: layout.heightCategoryList,
+	                    borderWidth: '1px',
+	                    borderBottomStyle: 'solid'
+	                },
+	                styleList = {
+	                    listStyle: 'none',
+	                    width: '100%'
+	                },
+	                styleItem = {
+	                    marginLeft: marginWide
+	                }
 	                item = props.item;
 
-	            // TODO: neighborhood, description, hours, amenities, directions
+	            // TODO: description, hours, amenities, directions
 	            return (
-	                React.createElement("div", null, 
+	                React.createElement("div", {style: styleDiv}, 
 	                    React.createElement(Header, {colors: colors, layout: layout}), 
+	                    React.createElement("img", {style: styleImage, src: "TODO.jpg", alt: "Picture"}), 
 	                    React.createElement("ul", {style: styleList}, 
-	                        React.createElement(ResultItem, {item: item, layout: layout})
+	                        React.createElement(ResultItem, {item: item, layout: layout}), 
+	                        React.createElement("li", {style: styleItem}, 
+	                            React.createElement("p", null, item.neighborhood)
+	                        )
 	                    ), 
 	                    React.createElement(ContactList, {colors: colors, layout: layout, contactDefs: props.contactDefs, contacts: item.contacts})
 	                )
@@ -293,7 +342,9 @@
 	                layout = props.layout,
 	                styleHeader = {
 	                    //dispay: 'flex',
+	                    boxSizing: 'border-box',
 	                    lineHeight: layout.lineHeightMeta,
+	                    width: '100%',
 	                    paddingLeft: layout.marginWide,
 	                    paddingRight: layout.marginNarrow,
 	                    color: colors.colorMeta,
@@ -324,13 +375,10 @@
 	        propTypes: {
 	            colors: React.PropTypes.object,
 	            layout: React.PropTypes.object,
+	            initial: React.PropTypes.bool,
 	            categoryDefs: React.PropTypes.array,
 	            categoriesSelected: React.PropTypes.object,
 	            onCategorySelected: React.PropTypes.func
-	        },
-
-	        style: {
-	            listStyle: 'none',
 	        },
 
 	        render: function () {
@@ -339,12 +387,17 @@
 	                onCategorySelected = props.onCategorySelected,
 	                colors = props.colors,
 	                layout = props.layout,
+	                initial = props.initial,
+	                style = {
+	                    listStyle: 'none',
+	                    width: initial ? '100%' : layout.marginWide
+	                },
 	                categoryItems = props.categoryDefs.map(function (categoryDef) {
-	                    return React.createElement(CategoryItem, {colors: colors, layout: layout, categoryDef: categoryDef, selected: categoriesSelected[categoryDef.key], onCategorySelected: onCategorySelected});
+	                    return React.createElement(CategoryItem, {colors: colors, layout: layout, initial: initial, categoryDef: categoryDef, selected: categoriesSelected[categoryDef.key], onCategorySelected: onCategorySelected});
 	                });
 
 	            return (
-	                React.createElement("ul", {style: this.style}, categoryItems)
+	                React.createElement("ul", {style: style}, categoryItems)
 	            );
 	        }
 	    });
@@ -415,11 +468,10 @@
 	                    paddingTop: layout.marginNarrow,
 	                    paddingBottom: layout.marginNarrow,
 	                    borderWidth: '1px',
-	                    borderBottomStyle: inResultPage ? 'none' : 'dotted'
+	                    borderBottomStyle: inResultPage ? 'none' : 'solid'
 	                },
 	                styleDiv = {
-	                    flexShrink: 1,
-	                    marginLeft: layout.marginNarrow
+	                    flexShrink: 1
 	                },
 	                styleDistance = {
 	                    flexShrink: 0,
@@ -438,7 +490,7 @@
 
 	            return (
 	                React.createElement("li", {style: styleItem, onClick: this.onClick}, 
-	                    React.createElement(SymbolDiv, {srcImage: item.categoryDef.srcImage, srcImageOptional: item.dogFriendly ? 'paw.svg' : ''}), 
+	                    React.createElement(SymbolDiv, {layout: layout, srcImage: item.categoryDef.srcImage, srcImageOptional: item.dogFriendly ? 'paw.svg' : ''}), 
 	                    React.createElement("div", {style: styleDiv}, 
 	                        React.createElement("p", null, item.name), 
 	                        React.createElement("p", null, item.address), 
@@ -472,7 +524,8 @@
 	                contacts = props.contacts,
 	                styleList = {
 	                    listStyle: 'none',
-	                    marginTop: layout.marginNarrow // TODO: align at bottom of page?
+	                    width: '100%',
+	                    marginTop: layout.marginNarrow
 	                },
 	                contactItems = [];
 
@@ -501,35 +554,10 @@
 	        propTypes: {
 	            colors: React.PropTypes.object,
 	            layout: React.PropTypes.object,
+	            initial: React.PropTypes.bool,
 	            categoryDef: React.PropTypes.object,
 	            selected: React.PropTypes.bool,
 	            onCategorySelected: React.PropTypes.func
-	        },
-
-	        getInitialState: function () {
-	            var props = this.props,
-	                selected = props.selected,
-	                colors = props.colors,
-	                colorMeta = colors.colorMeta,
-	                colorBackground = colors.colorBackground,
-	                layout = props.layout;
-
-	            return {
-	                styleItem: {
-	                    display: 'flex',
-	                    alignItems: 'flex-start',
-	                    lineHeight: layout.lineHeightMeta,
-	                    color: selected ? colorBackground : colorMeta,
-	                    backgroundColor: selected ? colorMeta : colorBackground,
-	                    borderWidth: '1px',
-	                    borderBottomStyle: 'solid'
-	                },
-	                styleText: {
-	                    flexShrink: 1,
-	                    marginLeft: layout.marginNarrow,
-	                    marginRight: layout.marginNarrow
-	                }
-	            };
 	        },
 
 	        onClick: function () {
@@ -539,12 +567,33 @@
 	        render: function () {
 	            var props = this.props,
 	                categoryDef = props.categoryDef,
-	                state = this.state;
+	                selected = props.selected,
+	                colors = props.colors,
+	                colorMeta = colors.colorMeta,
+	                colorBackground = colors.colorBackground,
+	                layout = props.layout,
+	                styleItem = {
+	                    display: 'flex',
+	                    alignItems: 'flex-start',
+	                    lineHeight: layout.lineHeightMeta,
+	                    color: selected ? colorBackground : colorMeta,
+	                    backgroundColor: selected ? colorMeta : colorBackground,
+	                    borderWidth: '1px',
+	                    borderBottomStyle: 'solid'
+	                },
+	                styleText = {
+	                    flexShrink: 1,
+	                    marginRight: layout.marginNarrow
+	                };
+
+	            if (!props.initial) {
+	                styleText.display = 'none';
+	            }
 
 	            return (
-	                React.createElement("li", {style: state.styleItem, "aria-clicked": props.selected, onClick: this.onClick}, 
-	                    React.createElement(SymbolDiv, {srcImage: categoryDef.srcImage}), 
-	                    React.createElement("span", {style: state.styleText}, categoryDef.text)
+	                React.createElement("li", {style: styleItem, "aria-clicked": props.selected, onClick: this.onClick}, 
+	                    React.createElement(SymbolDiv, {layout: layout, srcImage: categoryDef.srcImage}), 
+	                    React.createElement("span", {style: styleText}, categoryDef.text)
 	                )
 	            );
 	        }
@@ -557,33 +606,28 @@
 
 	module.exports = React.createClass({displayName: "exports",
 	    propTypes: {
+	        layout: React.PropTypes.object,
 	        srcImage: React.PropTypes.string,
 	        srcImageOptional: React.PropTypes.string,
-	        width: React.PropTypes.string,
-	        height: React.PropTypes.string
-	    },
-
-	    getDefaultProps: function () {
-	        return {
-	            width: '1rem',
-	            height: '1rem'
-	        };
 	    },
 
 	    render: function () {
 	        var props = this.props,
+	            layout = props.layout,
+	            width = layout.widthSymbol,
 	            styleDiv = {
 	                flexShrink: 0,
 	                display: 'flex',
-	                alignItems: 'flex-start'
+	                alignItems: 'flex-start',
+	                marginRight: layout.marginNarrow
 	            },
 	            styleSpan = {
 	                flexShrink: 0,
-	                width: props.width,
+	                width: width,
 	                textAlign: 'center'
 	            },
 	            styleImage = {
-	                height: props.height
+	                height: width
 	            },
 	            img = function (srcImage) {
 	                if (srcImage) {
@@ -637,11 +681,10 @@
 	                    lineHeight: layout.lineHeightMeta,
 	                    color: props.colors.colorLink,
 	                    borderWidth: '1px',
-	                    borderTopStyle: 'dotted'
+	                    borderTopStyle: 'solid'
 	                },
 	                styleValue = {
 	                    flexShrink: 1,
-	                    marginLeft: layout.marginNarrow,
 	                    marginRight: layout.marginNarrow,
 	                    whiteSpace: 'nowrap', // TODO: or 2 lines for web address?
 	                    overflow: 'hidden',
@@ -650,7 +693,7 @@
 
 	            return (
 	                React.createElement("li", {style: styleItem, onClick: this.onClick}, 
-	                    React.createElement(SymbolDiv, {srcImage: props.contactDef.srcImage}), 
+	                    React.createElement(SymbolDiv, {layout: layout, srcImage: props.contactDef.srcImage}), 
 	                    React.createElement("span", {style: styleValue}, props.value)
 	                )
 	            );
