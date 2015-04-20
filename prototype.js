@@ -114,7 +114,8 @@
 	            var props = this.props,
 	                items = props.items,
 	                idsItems = Object.keys(items),
-	                categoryMap = {};
+	                categoryMap = {},
+	                indexMap = 0;
 
 	            props.categoryDefs.forEach(function (categoryDef) {
 	                categoryMap[categoryDef.key] = categoryDef;
@@ -124,6 +125,7 @@
 
 	                // TODO: Ask Enrique if it is okay to add a property to a props object?
 	                item.categoryDef = categoryMap[item.categoryKey];
+	                item.indexMap = ++indexMap;
 	            });
 
 	            return {
@@ -243,10 +245,11 @@
 	                    borderLeftStyle: 'solid',
 	                    borderBottomStyle: 'solid'
 	                },
+	                initial = state.initial,
 	                map;
 
-	            if (!state.initial) {
-	                map = React.createElement("img", {style: styleMap, src: "TODO.jpg", alt: "Map"})
+	            if (!initial) {
+	                map = React.createElement("img", {style: styleMap, src: "TODO.jpg", alt: "Map"});
 	            }
 
 	            return (
@@ -256,7 +259,7 @@
 	                        React.createElement(CategoryList, {colors: colors, layout: layout, initial: state.initial, categoryDefs: props.categoryDefs, categoriesSelected: state.categoriesSelected, onCategorySelected: this.onCategorySelected}), 
 	                        map
 	                    ), 
-	                    React.createElement(ResultList, {items: props.items, idsFiltered: state.idsFiltered, layout: props.layout, onResultItemSelected: props.onResultItemSelected})
+	                    React.createElement(ResultList, {items: props.items, idsFiltered: state.idsFiltered, mapIndexDemo: !initial, colors: colors, layout: props.layout, onResultItemSelected: props.onResultItemSelected})
 	                )
 	            );
 	        }
@@ -324,10 +327,10 @@
 	            // TODO: description, hours, amenities
 	            return (
 	                React.createElement("div", {style: styleDiv}, 
-	                    React.createElement(Header, {colors: colors, layout: layout}), 
+	                    React.createElement(Header, {colors: colors, layout: layout, srcImageLeft: "angle-left.svg"}), 
 	                    React.createElement("img", {style: styleImage, src: "TODO.jpg", alt: "Picture"}), 
 	                    React.createElement("ul", {style: styleList}, 
-	                        React.createElement(ResultItem, {item: item, layout: layout}), 
+	                        React.createElement(ResultItem, {colors: colors, layout: layout, item: item}), 
 	                        React.createElement("li", null, 
 	                            React.createElement("p", {style: stylePara}, 
 	                                React.createElement("span", null, item.neighborhood), 
@@ -449,6 +452,8 @@
 	        propTypes: {
 	            items: React.PropTypes.object,
 	            idsFiltered: React.PropTypes.array,
+	            mapIndexDemo: React.PropTypes.bool,
+	            colors: React.PropTypes.object,
 	            layout: React.PropTypes.object,
 	            onResultItemSelected: React.PropTypes.func
 	        },
@@ -458,10 +463,11 @@
 	        render: function () {
 	            var props = this.props,
 	                items = props.items,
+	                colors = props.colors,
 	                layout = props.layout,
 	                resultItems = props.idsFiltered.map(function (id) {
 	                        return (
-	                            React.createElement(ResultItem, {item: items[id], layout: layout, onResultItemSelected: props.onResultItemSelected})
+	                            React.createElement(ResultItem, {item: items[id], mapIndexDemo: props.mapIndexDemo, colors: colors, layout: layout, onResultItemSelected: props.onResultItemSelected})
 	                        );
 	                    });
 
@@ -476,11 +482,13 @@
 /* 6 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var SymbolDiv = __webpack_require__(8);
+	var SymbolDiv = __webpack_require__(8),
+	    MapIndex = __webpack_require__(10);
 
 	module.exports = React.createClass({displayName: "exports",
 	        propTypes: {
 	            item: React.PropTypes.object,
+	            mapIndexDemo: React.PropTypes.bool,
 	            layout: React.PropTypes.object,
 	            onResultItemSelected: React.PropTypes.func
 	        },
@@ -511,8 +519,7 @@
 	                },
 	                styleDistance = {
 	                    flexShrink: 0,
-	                    marginLeft: 'auto', // align right
-	                    marginRight: layout.marginWide
+	                    marginLeft: 'auto' // align right
 	                },
 	                item = props.item,
 	                city = function () {
@@ -522,7 +529,12 @@
 	                        );
 	                    }
 	                },
-	                distance = item.distance + 'mi';
+	                distance = item.distance + 'mi',
+	                index;
+
+	            if (props.mapIndexDemo) {
+	                index = item.indexMap;
+	            }
 
 	            return (
 	                React.createElement("li", {style: styleItem, onClick: this.onClick}, 
@@ -532,7 +544,8 @@
 	                        React.createElement("p", null, item.address), 
 	                        city()
 	                    ), 
-	                    React.createElement("span", {style: styleDistance}, distance)
+	                    React.createElement("span", {style: styleDistance}, distance), 
+	                    React.createElement(MapIndex, {colors: props.colors, layout: layout, index: index})
 	                )
 	            );
 	        }
@@ -543,7 +556,7 @@
 /* 7 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var ContactItem = __webpack_require__(10);
+	var ContactItem = __webpack_require__(11);
 
 	module.exports = React.createClass({displayName: "exports",
 	        propTypes: {
@@ -703,6 +716,54 @@
 
 /***/ },
 /* 10 */
+/***/ function(module, exports, __webpack_require__) {
+
+	module.exports = React.createClass({displayName: "exports",
+	        propTypes: {
+	            colors: React.PropTypes.object,
+	            layout: React.PropTypes.object,
+	            index: React.PropTypes.number
+	        },
+
+	        render: function () {
+	            var props = this.props,
+	                colors = props.colors,
+	                layout = props.layout,
+	                styleDiv = {
+	                    flexShrink: 0,
+	                    marginLeft: layout.marginNarrow,
+	                    minWidth: '2rem', // 2 * layout.widthSymbol,
+	                    textAlign: 'right'
+	                },
+	                padding = '0.25em',
+	                styleSpan = {
+	                    fontWeight: 'bold',
+	                    color: colors.colorBackground,
+	                    backgroundColor: colors.colorItem,
+	                    paddingLeft: padding,
+	                    paddingRight: padding,
+	                    borderTopLeftRadius: padding,
+	                    borderBottomLeftRadius: padding
+	                },
+	                index = props.index,
+	                span;
+
+	            console.log(index);
+	            if (index) {
+	                span = React.createElement("span", {style: styleSpan}, index);
+	            }
+
+	            return (
+	                React.createElement("div", {style: styleDiv}, 
+	                    span
+	                )
+	            );
+	        }
+	    });
+
+
+/***/ },
+/* 11 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var SymbolDiv = __webpack_require__(8);

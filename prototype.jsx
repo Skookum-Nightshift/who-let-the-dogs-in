@@ -68,7 +68,8 @@ var ResultPage = require('./prototype-ResultPage.jsx'),
             var props = this.props,
                 items = props.items,
                 idsItems = Object.keys(items),
-                categoryMap = {};
+                categoryMap = {},
+                indexMap = 0;
 
             props.categoryDefs.forEach(function (categoryDef) {
                 categoryMap[categoryDef.key] = categoryDef;
@@ -78,6 +79,7 @@ var ResultPage = require('./prototype-ResultPage.jsx'),
 
                 // TODO: Ask Enrique if it is okay to add a property to a props object?
                 item.categoryDef = categoryMap[item.categoryKey];
+                item.indexMap = ++indexMap;
             });
 
             return {

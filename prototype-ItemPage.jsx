@@ -55,10 +55,10 @@ module.exports = React.createClass({
             // TODO: description, hours, amenities
             return (
                 <div style={styleDiv}>
-                    <Header colors={colors} layout={layout} />
+                    <Header colors={colors} layout={layout} srcImageLeft='angle-left.svg' />
                     <img style={styleImage} src='TODO.jpg' alt='Picture' />
                     <ul style={styleList}>
-                        <ResultItem item={item} layout={layout} />
+                        <ResultItem colors={colors} layout={layout} item={item} />
                         <li>
                             <p style={stylePara}>
                                 <span>{item.neighborhood}</span>

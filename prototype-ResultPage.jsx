@@ -73,10 +73,11 @@ module.exports = React.createClass({
                     borderLeftStyle: 'solid',
                     borderBottomStyle: 'solid'
                 },
+                initial = state.initial,
                 map;
 
-            if (!state.initial) {
-                map = <img style={styleMap} src='TODO.jpg' alt='Map' />
+            if (!initial) {
+                map = <img style={styleMap} src='TODO.jpg' alt='Map' />;
             }
 
             return (
@@ -86,7 +87,7 @@ module.exports = React.createClass({
                         <CategoryList colors={colors} layout={layout} initial={state.initial} categoryDefs={props.categoryDefs} categoriesSelected={state.categoriesSelected} onCategorySelected={this.onCategorySelected} />
                         {map}
                     </div>
-                    <ResultList items={props.items} idsFiltered={state.idsFiltered} layout={props.layout} onResultItemSelected={props.onResultItemSelected} />
+                    <ResultList items={props.items} idsFiltered={state.idsFiltered} mapIndexDemo={!initial} colors={colors} layout={props.layout} onResultItemSelected={props.onResultItemSelected} />
                 </div>
             );
         }

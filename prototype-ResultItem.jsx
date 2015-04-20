@@ -1,8 +1,10 @@
-var SymbolDiv = require('./prototype-SymbolDiv.jsx');
+var SymbolDiv = require('./prototype-SymbolDiv.jsx'),
+    MapIndex = require('./prototype-MapIndex.jsx');
 
 module.exports = React.createClass({
         propTypes: {
             item: React.PropTypes.object,
+            mapIndexDemo: React.PropTypes.bool,
             layout: React.PropTypes.object,
             onResultItemSelected: React.PropTypes.func
         },
@@ -33,8 +35,7 @@ module.exports = React.createClass({
                 },
                 styleDistance = {
                     flexShrink: 0,
-                    marginLeft: 'auto', // align right
-                    marginRight: layout.marginNarrow
+                    marginLeft: 'auto' // align right
                 },
                 item = props.item,
                 city = function () {
@@ -44,7 +45,12 @@ module.exports = React.createClass({
                         );
                     }
                 },
-                distance = item.distance + 'mi';
+                distance = item.distance + 'mi',
+                index;
+
+            if (props.mapIndexDemo) {
+                index = item.indexMap;
+            }
 
             return (
                 <li style={styleItem} onClick={this.onClick}>
@@ -55,6 +61,7 @@ module.exports = React.createClass({
                         {city()}
                     </div>
                     <span style={styleDistance}>{distance}</span>
+                    <MapIndex colors={props.colors} layout={layout} index={index} />
                 </li>
             );
         }
