@@ -34,20 +34,36 @@ module.exports = React.createClass({
                     listStyle: 'none',
                     width: '100%'
                 },
-                styleItem = {
+                stylePara = {
+                    display: 'flex',
+                    alignItems: 'baseline',
                     marginLeft: marginWide
-                }
+                },
+                styleDirections = {
+                    color: colors.colorLink,
+                    marginLeft: 'auto',
+                    padding: layout.marginNarrow,
+                    //paddingRight: layout.marginNarrow,
+                    marginRight: marginWide,
+                    //paddingLeft: '0.25em',
+                    //paddingRight: '0.25em',
+                    borderWidth: '1px',
+                    borderStyle: 'solid'
+                },
                 item = props.item;
 
-            // TODO: description, hours, amenities, directions
+            // TODO: description, hours, amenities
             return (
                 <div style={styleDiv}>
                     <Header colors={colors} layout={layout} />
                     <img style={styleImage} src='TODO.jpg' alt='Picture' />
                     <ul style={styleList}>
                         <ResultItem item={item} layout={layout} />
-                        <li style={styleItem}>
-                            <p>{item.neighborhood}</p>
+                        <li>
+                            <p style={stylePara}>
+                                <span>{item.neighborhood}</span>
+                                <span style={styleDirections}>Directions</span>
+                            </p>
                         </li>
                     </ul>
                     <ContactList colors={colors} layout={layout} contactDefs={props.contactDefs} contacts={item.contacts} />

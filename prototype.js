@@ -303,20 +303,36 @@
 	                    listStyle: 'none',
 	                    width: '100%'
 	                },
-	                styleItem = {
+	                stylePara = {
+	                    display: 'flex',
+	                    alignItems: 'baseline',
 	                    marginLeft: marginWide
-	                }
+	                },
+	                styleDirections = {
+	                    color: colors.colorLink,
+	                    marginLeft: 'auto',
+	                    padding: layout.marginNarrow,
+	                    //paddingRight: layout.marginNarrow,
+	                    marginRight: marginWide,
+	                    //paddingLeft: '0.25em',
+	                    //paddingRight: '0.25em',
+	                    borderWidth: '1px',
+	                    borderStyle: 'solid'
+	                },
 	                item = props.item;
 
-	            // TODO: description, hours, amenities, directions
+	            // TODO: description, hours, amenities
 	            return (
 	                React.createElement("div", {style: styleDiv}, 
 	                    React.createElement(Header, {colors: colors, layout: layout}), 
 	                    React.createElement("img", {style: styleImage, src: "TODO.jpg", alt: "Picture"}), 
 	                    React.createElement("ul", {style: styleList}, 
 	                        React.createElement(ResultItem, {item: item, layout: layout}), 
-	                        React.createElement("li", {style: styleItem}, 
-	                            React.createElement("p", null, item.neighborhood)
+	                        React.createElement("li", null, 
+	                            React.createElement("p", {style: stylePara}, 
+	                                React.createElement("span", null, item.neighborhood), 
+	                                React.createElement("span", {style: styleDirections}, "Directions")
+	                            )
 	                        )
 	                    ), 
 	                    React.createElement(ContactList, {colors: colors, layout: layout, contactDefs: props.contactDefs, contacts: item.contacts})
@@ -496,7 +512,7 @@
 	                styleDistance = {
 	                    flexShrink: 0,
 	                    marginLeft: 'auto', // align right
-	                    marginRight: layout.marginNarrow
+	                    marginRight: layout.marginWide
 	                },
 	                item = props.item,
 	                city = function () {
