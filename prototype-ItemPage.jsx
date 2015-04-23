@@ -7,7 +7,9 @@ module.exports = React.createClass({
             colors: React.PropTypes.object,
             layout: React.PropTypes.object,
             contactDefs: React.PropTypes.array,
-            item: React.PropTypes.object
+            item: React.PropTypes.object,
+            setPrevPage: React.PropTypes.func,
+            setDirectionsPage: React.PropTypes.func
         },
 
         render: function () {
@@ -43,19 +45,19 @@ module.exports = React.createClass({
                     color: colors.colorLink,
                     marginLeft: 'auto',
                     padding: layout.marginNarrow,
-                    //paddingRight: layout.marginNarrow,
-                    marginRight: marginWide,
-                    //paddingLeft: '0.25em',
-                    //paddingRight: '0.25em',
                     borderWidth: '1px',
                     borderStyle: 'solid'
+                },
+                linkLeft = {
+                    srcImage: 'angle-left.svg',
+                    setPage: props.setPrevPage
                 },
                 item = props.item;
 
             // TODO: description, hours, amenities
             return (
                 <div style={styleDiv}>
-                    <Header colors={colors} layout={layout} srcImageLeft='angle-left.svg' />
+                    <Header colors={colors} layout={layout} linkLeft={linkLeft} />
                     <img style={styleImage} src='TODO.jpg' alt='Picture' />
                     <ul style={styleList}>
                         <ResultItem colors={colors} layout={layout} item={item} />

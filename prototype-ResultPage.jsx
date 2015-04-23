@@ -8,7 +8,8 @@ module.exports = React.createClass({
             layout: React.PropTypes.object,
             categoryDefs: React.PropTypes.array,
             items: React.PropTypes.array,
-            setItemPage: React.PropTypes.func
+            setItemPage: React.PropTypes.func,
+            setLocationPage: React.PropTypes.func
         },
 
         getInitialState: function () {
@@ -72,6 +73,10 @@ module.exports = React.createClass({
                     borderBottomStyle: 'solid'
                 },
                 initial = state.initial,
+                linkRight = {
+                    srcImage: 'search.svg',
+                    setPage: props.setLocationPage
+                },
                 map;
 
             if (!initial) {
@@ -80,7 +85,7 @@ module.exports = React.createClass({
 
             return (
                 <div>
-                    <Header colors={colors} layout={layout} srcImageRight='search.svg' />
+                    <Header colors={colors} layout={layout} linkRight={linkRight} />
                     <div style={styleSideBySide}>
                         <CategoryList colors={colors} layout={layout} initial={state.initial} categoryDefs={props.categoryDefs} categoriesSelected={state.categoriesSelected} onCategorySelected={this.onCategorySelected} />
                         {map}
