@@ -5,6 +5,7 @@ var items = require('./prototype-data.js'),
     contactDefs = require('./prototype-ContactDefs.js'),
 
     ResultPage = require('./prototype-ResultPage.jsx'),
+    LocationPage = require('./prototype-LocationPage.jsx'),
     ItemPage = require('./prototype-ItemPage.jsx'),
     DirectionsPage = require('./prototype-DirectionsPage.jsx'),
 
@@ -53,7 +54,7 @@ var items = require('./prototype-data.js'),
             });
 
             return {
-                page: <ResultPage colors={props.colors} layout={props.layout} categoryDefs={props.categoryDefs} items={items} setItemPage={this.setItemPage} />
+                page: <ResultPage colors={props.colors} layout={props.layout} categoryDefs={props.categoryDefs} items={items} setItemPage={this.setItemPage} setLocationPage={this.setLocationPage} />
             };
         },
 
@@ -81,7 +82,7 @@ var items = require('./prototype-data.js'),
                 setPrevPage = this.setPage.bind(this, this.state.page);
 
             this.setState({
-            //    page: <LocationPage colors={props.colors} layout={props.layout} setLocation={this.setLocation} setPrevPage={setPrevPage} />
+                page: <LocationPage colors={props.colors} layout={props.layout} setLocation={this.setLocation} setPrevPage={setPrevPage} />
             });
         },
 
