@@ -6,22 +6,22 @@ module.exports = React.createClass({
             item: React.PropTypes.object,
             mapIndexDemo: React.PropTypes.bool,
             layout: React.PropTypes.object,
-            onResultItemSelected: React.PropTypes.func
+            setItemPage: React.PropTypes.func
         },
 
         onClick: function () {
             var props = this.props,
-                onResultItemSelected = props.onResultItemSelected;
+                setItemPage = props.setItemPage;
 
-            if (onResultItemSelected) {
-                onResultItemSelected(props.item);
+            if (setItemPage) {
+                setItemPage(props.item);
             }
         },
 
         render: function () {
             var props = this.props,
                 layout = props.layout,
-                inResultPage = !props.onResultItemSelected,
+                inResultPage = !props.setItemPage,
                 styleItem = {
                     display: 'flex',
                     alignItems: 'flex-start',

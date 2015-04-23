@@ -7,9 +7,8 @@ module.exports = React.createClass({
             colors: React.PropTypes.object,
             layout: React.PropTypes.object,
             categoryDefs: React.PropTypes.array,
-            items: React.PropTypes.object,
-            idsOrdered: React.PropTypes.array,
-            onResultItemSelected: React.PropTypes.func
+            items: React.PropTypes.array,
+            setItemPage: React.PropTypes.func
         },
 
         getInitialState: function () {
@@ -24,7 +23,7 @@ module.exports = React.createClass({
             return {
                 initial: true,
                 categoriesSelected: categoriesSelected,
-                idsFiltered: props.idsOrdered.concat() // copy
+                itemsFiltered: items.concat() // shallow copy
             };
         },
 
@@ -32,24 +31,23 @@ module.exports = React.createClass({
             var categoriesSelected = Object.create(this.state.categoriesSelected),
                 key = categoryDef.key,
                 noneSelected = true,
-                items = this.props.items,
-                idsFiltered = [];
+                itemsFiltered = [];
 
             categoriesSelected[key] = !categoriesSelected[key];
             this.props.categoryDefs.forEach(function (categoryDef) {
                 noneSelected = noneSelected && !categoriesSelected[categoryDef.key];
             });
 
-            this.props.idsOrdered.forEach(function (id) {
-                if (noneSelected || categoriesSelected[items[id].categoryKey] === true) {
-                    idsFiltered.push(id);
+            this.props.items.forEach(function (item) {
+                if (noneSelected || categoriesSelected[item.categoryKey] === true) {
+                    idsFiltered.push(item);
                 }
             });
 
             this.setState({
                 initial: false,
                 categoriesSelected: categoriesSelected,
-                idsFiltered: idsFiltered
+                itemsFiltered: itemsFiltered
             });
         },
 
@@ -87,7 +85,7 @@ module.exports = React.createClass({
                         <CategoryList colors={colors} layout={layout} initial={state.initial} categoryDefs={props.categoryDefs} categoriesSelected={state.categoriesSelected} onCategorySelected={this.onCategorySelected} />
                         {map}
                     </div>
-                    <ResultList items={props.items} idsFiltered={state.idsFiltered} mapIndexDemo={!initial} colors={colors} layout={props.layout} onResultItemSelected={props.onResultItemSelected} />
+                    <ResultList items={state.itemsFiltered} mapIndexDemo={!initial} colors={colors} layout={props.layout} setItemPage={props.setItemPage} />
                 </div>
             );
         }

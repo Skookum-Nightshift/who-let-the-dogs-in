@@ -1,11 +1,12 @@
-var items = require('./prototype-data.js'),
-    categoryDefs = require('./prototype-CategoryDefs.js'),
-    contactDefs = require('./prototype-ContactDefs.js');
-
 document.addEventListener('DOMContentLoaded', function () {
 
-var ResultPage = require('./prototype-ResultPage.jsx'),
+var items = require('./prototype-data.js'),
+    categoryDefs = require('./prototype-CategoryDefs.js'),
+    contactDefs = require('./prototype-ContactDefs.js'),
+
+    ResultPage = require('./prototype-ResultPage.jsx'),
     ItemPage = require('./prototype-ItemPage.jsx'),
+
     DogsApp = React.createClass({
         propTypes: {
             colors: React.PropTypes.object,
@@ -16,10 +17,6 @@ var ResultPage = require('./prototype-ResultPage.jsx'),
         },
 
         getDefaultProps: function () {
-            var srcImage = function (name) {
-                    return name + '.svg';
-                };
-
             return {
                 categoryDefs: categoryDefs, 
                 contactDefs: contactDefs,
@@ -55,7 +52,7 @@ var ResultPage = require('./prototype-ResultPage.jsx'),
             });
 
             return {
-                page: <ResultPage colors={props.colors} layout={props.layout} categoryDefs={props.categoryDefs} items={items} onResultItemSelected={this.onResultItemSelected} />
+                page: <ResultPage colors={props.colors} layout={props.layout} categoryDefs={props.categoryDefs} items={items} setItemPage={this.setItemPage} />
             };
         },
 
@@ -65,11 +62,52 @@ var ResultPage = require('./prototype-ResultPage.jsx'),
             });
         },
 
+        setItems: function (items) {
+            var props = this.props;
+
+            this.setState({
+                page: <ResultPage colors={props.colors} layout={props.layout} categoryDefs={props.categoryDefs} items={items} setItemPage={this.setItemPage} />
+            });
+        },
+
+        setLocation: function (location) {
+            // TODO: get items for new location
+            this.setItems(items);
+        },
+
+        setLocationPage: function () {
+            var props = this.props,
+                setPrevPage = this.setPage.bind(this, this.state.page);
+
+            this.setState({
+            //    page: <LocationPage colors={props.colors} layout={props.layout} setLocation={this.setLocation} setPrevPage={setPrevPage} />
+            });
+        },
+
+        setItemPage: function (item) {
+            var props = this.props,
+                setPrevPage = this.setPage.bind(this, this.state.page);
+
+            this.setState({
+                page: <ItemPage colors={props.colors} layout={props.layout} contactDefs={props.contactDefs} item={item} setPrevPage={setPrevPage} />
+            });
+        },
+
+        setDirectionsPage: function (item) {
+            var props = this.props,
+                setPrevPage = this.setPage.bind(this, this.state.page);
+
+            this.setState({
+            //    page: <DirectionsPage colors={props.colors} layout={props.layout} item={item} setPrevPage={setPrevPage} />
+            });
+        },
+
         render: function () {
             return this.state.page;
         }
     });
 
+// TODO: property will become the data API object
 React.render(<DogsApp items={items} />, document.getElementsByTagName('body')[0]);
 
 });
