@@ -28,7 +28,6 @@ module.exports = React.createClass({
                 index = props.index,
                 span;
 
-            console.log(index);
             if (index) {
                 span = <span style={styleSpan}>{index}</span>;
             }

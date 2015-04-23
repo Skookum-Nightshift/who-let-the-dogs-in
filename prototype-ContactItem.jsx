@@ -16,7 +16,7 @@ module.exports = React.createClass({
 
         render: function () {
             var props = this.props,
-                layout = props.layout;
+                layout = props.layout,
                 styleItem = {
                     display: 'flex',
                     alignItems: 'flex-start',
