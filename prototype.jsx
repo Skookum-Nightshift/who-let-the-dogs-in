@@ -1,3 +1,6 @@
+var items = require('./prototype-data.js'),
+    categoryDefs = require('./prototype-CategoryDefs.js');
+
 document.addEventListener('DOMContentLoaded', function () {
 
 var ResultPage = require('./prototype-ResultPage.jsx'),
@@ -8,7 +11,7 @@ var ResultPage = require('./prototype-ResultPage.jsx'),
             layout: React.PropTypes.object,
             categoryDefs: React.PropTypes.array,
             contactDefs: React.PropTypes.array,
-            items: React.PropTypes.object
+            items: React.PropTypes.array
         },
 
         getDefaultProps: function () {
@@ -17,23 +20,7 @@ var ResultPage = require('./prototype-ResultPage.jsx'),
                 };
 
             return {
-                categoryDefs: [{ 
-                    key: 'bar',
-                    text: 'Bars',
-                    srcImage: srcImage('glass')
-                }, {
-                    key: 'restaurant',
-                    text: 'Restaurants',
-                    srcImage: srcImage('cutlery')
-                }, {
-                    key: 'park',
-                    text: 'Parks',
-                    srcImage: srcImage('compass')
-                }, {
-                    key: 'event',
-                    text: 'Events',
-                    srcImage: srcImage('calendar')
-                }],
+                categoryDefs: categoryDefs, 
                 contactDefs: [{
                     key: 'phone',
                     srcImage: srcImage('phone'),
@@ -66,52 +53,31 @@ var ResultPage = require('./prototype-ResultPage.jsx'),
 
         getInitialState: function () {
             var props = this.props,
-                items = props.items,
-                idsItems = Object.keys(items),
                 categoryMap = {},
                 indexMap = 0;
 
             props.categoryDefs.forEach(function (categoryDef) {
                 categoryMap[categoryDef.key] = categoryDef;
             });
-            idsItems.forEach(function (id) {
-                var item = items[id];
-
+            items.forEach(function (item) {
                 // TODO: Ask Enrique if it is okay to add a property to a props object?
                 item.categoryDef = categoryMap[item.categoryKey];
-                item.indexMap = ++indexMap;
+                item.indexMap = ++indexMap; // demo
             });
 
             return {
-                idSelected: null,
-                idsOrdered: idsItems.sort(function (idA, idB) {
-                    return items[idA].distance - items[idB].distance;
-                })
+                page: <ResultPage colors={props.colors} layout={props.layout} categoryDefs={props.categoryDefs} items={items} onResultItemSelected={this.onResultItemSelected} />
             };
         },
 
-        onResultItemSelected: function(item) {
+        setPage: function (page) {
             this.setState({
-                itemSelected: item
+                page: page
             });
         },
 
         render: function () {
-            var props = this.props,
-                state = this.state,
-                itemSelected = state.itemSelected;
-
-            if (itemSelected) {
-                // TODO: DirectionsPage?
-                return (
-                    <ItemPage colors={props.colors} layout={props.layout} contactDefs={props.contactDefs} item={itemSelected} />
-                );
-            } else {
-                // TO DO: LocationPage?
-                return (
-                    <ResultPage colors={props.colors} layout={props.layout} categoryDefs={props.categoryDefs} items={props.items} idsOrdered={state.idsOrdered} onResultItemSelected={this.onResultItemSelected} />
-                );
-            }
+            return this.state.page;
         }
     });
 
