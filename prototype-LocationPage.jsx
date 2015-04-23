@@ -21,16 +21,45 @@ module.exports = React.createClass({
             var props = this.props,
                 colors = props.colors,
                 layout = props.layout,
+                marginWide = layout.marginWide,
                 styleDiv = {
+                },
+                styleForm = {
+                    marginLeft: marginWide,
+                    marginRight: marginWide
+                },
+                styleFieldsetInput = {
+                    marginTop: '1rem'
+                },
+                styleInput = {
+                    borderColor: colors.colorItem,
+                    borderWidth: '1px',
+                    borderStyle: 'solid'
+                },
+                styleFieldsetButtons = {
+                    display: 'flex',
+                    alignItems: 'flex-start',
+                    marginTop: '1rem'
+                },
+                styleButton = {
+                    backgroundColor: colors.colorBackground,
+                    borderColor: colors.colorItem,
+                    borderWidth: '1px',
+                    borderStyle: 'solid',
+                    padding: layout.marginNarrow,
+                    marginLeft: marginWide
                 };
 
             return (
                 <div style={styleDiv}>
                     <Header colors={colors} layout={layout} />
-                    <form>
-                        <fieldset>
-                            <button onClick={this.onClickOK}>OK</button>
-                            <button onclick={this.onClickCancel}>Cancel</button>
+                    <form style={styleForm}>
+                        <fieldset style={styleFieldsetInput}>
+                            <input type='text' style={styleInput} />
+                        </fieldset>
+                        <fieldset style={styleFieldsetButtons}>
+                            <button style={styleButton} onClick={this.onClickOK}>OK</button>
+                            <button style={styleButton} onclick={this.onClickCancel}>Cancel</button>
                         </fieldset>
                     </form>
                 </div>
