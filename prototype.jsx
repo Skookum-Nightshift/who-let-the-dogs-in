@@ -1,5 +1,6 @@
 var items = require('./prototype-data.js'),
-    categoryDefs = require('./prototype-CategoryDefs.js');
+    categoryDefs = require('./prototype-CategoryDefs.js'),
+    contactDefs = require('./prototype-ContactDefs.js');
 
 document.addEventListener('DOMContentLoaded', function () {
 
@@ -21,19 +22,7 @@ var ResultPage = require('./prototype-ResultPage.jsx'),
 
             return {
                 categoryDefs: categoryDefs, 
-                contactDefs: [{
-                    key: 'phone',
-                    srcImage: srcImage('phone'),
-                    callback: function (number) {
-                        window.alert('Call phone number: ' + number);
-                    }
-                }, {
-                    key: 'web',
-                    srcImage: srcImage('external-link-square'),
-                    callback: function (address) {
-                        window.open(address); 
-                    }
-                }],
+                contactDefs: contactDefs,
                 colors: {
                     colorMeta: '#0a5a83', // dark blue hsv(200,92,51)
                     colorSelected: '#80d4ff', // light blue hsx(200,50,100)
