@@ -12,6 +12,11 @@ module.exports = React.createClass({
             setDirectionsPage: React.PropTypes.func
         },
 
+        onClickDirections: function () {
+            // TODO: location too?
+            this.props.setDirectionsPage(this.props.item);
+        },
+
         render: function () {
             var props = this.props,
                 colors = props.colors,
@@ -64,7 +69,7 @@ module.exports = React.createClass({
                         <li>
                             <p style={stylePara}>
                                 <span>{item.neighborhood}</span>
-                                <span style={styleDirections}>Directions</span>
+                                <span style={styleDirections} onClick={this.onClickDirections}>Directions</span>
                             </p>
                         </li>
                     </ul>

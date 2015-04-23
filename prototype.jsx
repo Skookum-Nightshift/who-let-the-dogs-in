@@ -6,6 +6,7 @@ var items = require('./prototype-data.js'),
 
     ResultPage = require('./prototype-ResultPage.jsx'),
     ItemPage = require('./prototype-ItemPage.jsx'),
+    DirectionsPage = require('./prototype-DirectionsPage.jsx'),
 
     DogsApp = React.createClass({
         propTypes: {
@@ -89,7 +90,7 @@ var items = require('./prototype-data.js'),
                 setPrevPage = this.setPage.bind(this, this.state.page);
 
             this.setState({
-                page: <ItemPage colors={props.colors} layout={props.layout} contactDefs={props.contactDefs} item={item} setPrevPage={setPrevPage} />
+                page: <ItemPage colors={props.colors} layout={props.layout} contactDefs={props.contactDefs} item={item} setPrevPage={setPrevPage} setDirectionsPage={this.setDirectionsPage} />
             });
         },
 
@@ -98,7 +99,7 @@ var items = require('./prototype-data.js'),
                 setPrevPage = this.setPage.bind(this, this.state.page);
 
             this.setState({
-            //    page: <DirectionsPage colors={props.colors} layout={props.layout} item={item} setPrevPage={setPrevPage} />
+                page: <DirectionsPage colors={props.colors} layout={props.layout} item={item} setPrevPage={setPrevPage} />
             });
         },
 
