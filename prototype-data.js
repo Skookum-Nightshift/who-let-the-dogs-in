@@ -1,5 +1,5 @@
-var items = {
-    '0': { // Enrique: will we need ids for the individual item objects?
+module.exports = [{
+        id: 0,
         categoryKey: 'park', // bar, restaurant, park, event
         //time: 'yyyy-mm-ddThh:mm:ss +oo:oo', // for event
         dogFriendly: false, // boolean if possible, otherwise string 
@@ -21,8 +21,8 @@ var items = {
             latitude: '35 13 37 N', // TODO: specific format
             longitude: '80 50 36 W'
         }
-    },
-    '1': {
+    }, {
+        id: 1,
         categoryKey: 'park',
         name: 'Marshall Park',
         address: '800 East Third Street',
@@ -37,8 +37,8 @@ var items = {
         description: '',
         distance: 1.9,
         location: null
-    },
-    '2': {
+    }, {
+        id: 2,
         categoryKey: 'park',
         name: 'Romare Bearden Park',
         address: '300 S Church St',
@@ -53,8 +53,8 @@ var items = {
         description: '',
         distance: 0.4,
         location: null
-    },
-    '3': {
+    }, {
+        id: 3,
         categoryKey: 'park',
         dogFriendly: true,
         name: 'Frazier Park',
@@ -70,8 +70,8 @@ var items = {
         description: '',
         distance: 1.9, // placeholder
         location: null
-    },
-    '4': {
+    }, {
+        id: 4,
         categoryKey: 'park',
         dogFriendly: true,
         name: 'William R. Davie Park',
@@ -87,8 +87,8 @@ var items = {
         description: '',
         distance: 13, // placeholder
         location: null
-    },
-    '5': {
+    }, {
+        id: 5,
         categoryKey: 'bar',
         dogFriendly: false,
         name: 'Dandelion Market',
@@ -104,9 +104,10 @@ var items = {
         description: '',
         distance: 0.3, // placeholder
         location: null
-    }
+    }];
 /*
-    '': {
+    {
+        id: 7,
         categoryKey: '',
         dogFriendly: false,
         name: '',
@@ -123,7 +124,4 @@ var items = {
         distance: 0, // placeholder
         location: null
     }
-/*
 */
-};
-
