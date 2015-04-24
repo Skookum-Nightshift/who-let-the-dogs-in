@@ -4,17 +4,13 @@ module.exports = React.createClass({
         srcImage: React.PropTypes.string,
         srcImageOptional: React.PropTypes.string,
         alignment: React.PropTypes.string,
-        setPage: React.PropTypes.func
+        onClick: React.PropTypes.func
     },
 
     getDefaultProps: function () {
         return {
             alignment: 'left'
         };
-    },
-
-    onClick: function () {
-        this.props.setPage();
     },
 
     render: function () {
@@ -55,7 +51,7 @@ module.exports = React.createClass({
             spanImageOptional = span(props.srcImageOptional);
 
         return (
-            <div style={styleDiv} onClick={this.onClick}>
+            <div style={styleDiv} onClick={props.onClick}>
                 {left ? spanImageOptional : spanImage}
                 {left ? spanImage : spanImageOptional}
             </div>

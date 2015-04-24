@@ -35,7 +35,7 @@ module.exports = React.createClass({
                 symbolDiv = function(link, alignment) {
                     if (link) {
                         return (
-                            <SymbolDiv layout={layout} srcImage={link.srcImage} alignment={alignment} setPage={link.setPage} />
+                            <SymbolDiv layout={layout} srcImage={link.srcImage} alignment={alignment} onClick={link.setPage} />
                         );
                     }
                 },
