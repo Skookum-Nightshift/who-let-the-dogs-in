@@ -41,7 +41,7 @@ module.exports = React.createClass({
 
             this.props.items.forEach(function (item) {
                 if (noneSelected || categoriesSelected[item.categoryKey] === true) {
-                    idsFiltered.push(item);
+                    itemsFiltered.push(item);
                 }
             });
 

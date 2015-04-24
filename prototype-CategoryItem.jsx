@@ -42,7 +42,7 @@ module.exports = React.createClass({
 
             return (
                 <li style={styleItem} aria-clicked={props.selected} onClick={this.onClick}>
-                    <SymbolDiv layout={layout} srcImage={categoryDef.srcImage} />
+                    <SymbolDiv layout={layout} srcImage={categoryDef.srcImage} setPage={this.onClick} />
                     <span style={styleText}>{categoryDef.text}</span>
                 </li>
             );
