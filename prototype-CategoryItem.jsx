@@ -4,7 +4,6 @@ module.exports = React.createClass({
         propTypes: {
             colors: React.PropTypes.object,
             layout: React.PropTypes.object,
-            initial: React.PropTypes.bool,
             categoryDef: React.PropTypes.object,
             selected: React.PropTypes.bool,
             onCategorySelected: React.PropTypes.func
@@ -25,6 +24,7 @@ module.exports = React.createClass({
                 styleItem = {
                     display: 'flex',
                     alignItems: 'flex-start',
+                    flexGrow: 1,
                     lineHeight: layout.lineHeightMeta,
                     color: selected ? colorBackground : colorMeta,
                     backgroundColor: selected ? colorMeta : colorBackground,
@@ -36,9 +36,9 @@ module.exports = React.createClass({
                     marginRight: layout.marginNarrow
                 };
 
-            if (!props.initial) {
-                styleText.display = 'none';
-            }
+            //if (/* TODO: media query? */) {
+            //    styleText.display = 'none';
+            //}
 
             return (
                 <li style={styleItem} aria-clicked={props.selected} onClick={this.onClick}>

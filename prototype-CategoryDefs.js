@@ -11,11 +11,11 @@ module.exports = [{
         text: 'Restaurants',
         srcImage: srcImage('cutlery')
     }, {
+        key: 'lodging',
+        text: 'Lodging',
+        srcImage: srcImage('bed')
+    }, {
         key: 'park',
         text: 'Parks',
         srcImage: srcImage('compass')
-    }, {
-        key: 'event',
-        text: 'Events',
-        srcImage: srcImage('calendar')
     }];

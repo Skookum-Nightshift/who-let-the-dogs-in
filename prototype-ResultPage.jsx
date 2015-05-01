@@ -22,7 +22,7 @@ module.exports = React.createClass({
             });
 
             return {
-                initial: true,
+                initial: false,
                 categoriesSelected: categoriesSelected,
                 itemsFiltered: items.concat() // shallow copy
             };
@@ -79,6 +79,7 @@ module.exports = React.createClass({
                 },
                 map;
 
+console.log(initial);
             if (!initial) {
                 map = <img style={styleMap} src='TODO.jpg' alt='Map' />;
             }

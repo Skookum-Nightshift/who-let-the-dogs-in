@@ -56,7 +56,7 @@ module.exports = [{
     }, {
         id: 3,
         categoryKey: 'park',
-        dogFriendly: true,
+//        dogFriendly: true,
         name: 'Frazier Park',
         address: '1201 W Trade St',
         city: 'Charlotte',
@@ -73,7 +73,7 @@ module.exports = [{
     }, {
         id: 4,
         categoryKey: 'park',
-        dogFriendly: true,
+//        dogFriendly: true,
         name: 'William R. Davie Park',
         address: '4635 Pineville-Matthews Road',
         city: 'Charlotte',

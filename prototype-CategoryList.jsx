@@ -18,8 +18,9 @@ module.exports = React.createClass({
                 layout = props.layout,
                 initial = props.initial,
                 style = {
-                    listStyle: 'none',
-                    width: initial ? '100%' : layout.marginWide
+                    display: 'flex',
+                    alignItems: 'flex-start',
+                    listStyle: 'none'
                 },
                 categoryItems = props.categoryDefs.map(function (categoryDef) {
                     return <CategoryItem colors={colors} layout={layout} initial={initial} categoryDef={categoryDef} selected={categoriesSelected[categoryDef.key]} onCategorySelected={onCategorySelected} />;

@@ -223,7 +223,7 @@
 	    }, {
 	        id: 3,
 	        categoryKey: 'park',
-	        dogFriendly: true,
+	//        dogFriendly: true,
 	        name: 'Frazier Park',
 	        address: '1201 W Trade St',
 	        city: 'Charlotte',
@@ -240,7 +240,7 @@
 	    }, {
 	        id: 4,
 	        categoryKey: 'park',
-	        dogFriendly: true,
+	//        dogFriendly: true,
 	        name: 'William R. Davie Park',
 	        address: '4635 Pineville-Matthews Road',
 	        city: 'Charlotte',
@@ -311,13 +311,13 @@
 	        text: 'Restaurants',
 	        srcImage: srcImage('cutlery')
 	    }, {
+	        key: 'lodging',
+	        text: 'Lodging',
+	        srcImage: srcImage('bed')
+	    }, {
 	        key: 'park',
 	        text: 'Parks',
 	        srcImage: srcImage('compass')
-	    }, {
-	        key: 'event',
-	        text: 'Events',
-	        srcImage: srcImage('calendar')
 	    }];
 
 
@@ -376,7 +376,7 @@
 	        });
 
 	        return {
-	            initial: true,
+	            initial: false,
 	            categoriesSelected: categoriesSelected,
 	            itemsFiltered: items.concat() // shallow copy
 	        };
@@ -395,7 +395,7 @@
 
 	        this.props.items.forEach(function (item) {
 	            if (noneSelected || categoriesSelected[item.categoryKey] === true) {
-	                idsFiltered.push(item);
+	                itemsFiltered.push(item);
 	            }
 	        });
 
@@ -433,6 +433,7 @@
 	        },
 	            map;
 
+	        console.log(initial);
 	        if (!initial) {
 	            map = React.createElement('img', { style: styleMap, src: 'TODO.jpg', alt: 'Map' });
 	        }
@@ -688,7 +689,7 @@
 
 	'use strict';
 
-	var SymbolDiv = __webpack_require__(14);
+	var SymbolDiv = __webpack_require__(13);
 
 	module.exports = React.createClass({
 	    displayName: 'exports',
@@ -726,7 +727,7 @@
 	        },
 	            symbolDiv = function symbolDiv(link, alignment) {
 	            if (link) {
-	                return React.createElement(SymbolDiv, { layout: layout, srcImage: link.srcImage, alignment: alignment, setPage: link.setPage });
+	                return React.createElement(SymbolDiv, { layout: layout, srcImage: link.srcImage, alignment: alignment, onClick: link.setPage });
 	            }
 	        },
 	            symbolDivLeft = symbolDiv(linkLeft, 'left'),
@@ -752,7 +753,7 @@
 
 	'use strict';
 
-	var CategoryItem = __webpack_require__(13);
+	var CategoryItem = __webpack_require__(14);
 
 	module.exports = React.createClass({
 	    displayName: 'exports',
@@ -831,7 +832,7 @@
 
 	'use strict';
 
-	var SymbolDiv = __webpack_require__(14),
+	var SymbolDiv = __webpack_require__(13),
 	    MapIndex = __webpack_require__(15);
 
 	module.exports = React.createClass({
@@ -970,69 +971,6 @@
 
 	'use strict';
 
-	var SymbolDiv = __webpack_require__(14);
-
-	module.exports = React.createClass({
-	    displayName: 'exports',
-
-	    propTypes: {
-	        colors: React.PropTypes.object,
-	        layout: React.PropTypes.object,
-	        initial: React.PropTypes.bool,
-	        categoryDef: React.PropTypes.object,
-	        selected: React.PropTypes.bool,
-	        onCategorySelected: React.PropTypes.func
-	    },
-
-	    onClick: function onClick() {
-	        this.props.onCategorySelected(this.props.categoryDef);
-	    },
-
-	    render: function render() {
-	        var props = this.props,
-	            categoryDef = props.categoryDef,
-	            selected = props.selected,
-	            colors = props.colors,
-	            colorMeta = colors.colorMeta,
-	            colorBackground = colors.colorBackground,
-	            layout = props.layout,
-	            styleItem = {
-	            display: 'flex',
-	            alignItems: 'flex-start',
-	            lineHeight: layout.lineHeightMeta,
-	            color: selected ? colorBackground : colorMeta,
-	            backgroundColor: selected ? colorMeta : colorBackground,
-	            borderWidth: '1px',
-	            borderBottomStyle: 'solid'
-	        },
-	            styleText = {
-	            flexShrink: 1,
-	            marginRight: layout.marginNarrow
-	        };
-
-	        if (!props.initial) {
-	            styleText.display = 'none';
-	        }
-
-	        return React.createElement(
-	            'li',
-	            { style: styleItem, 'aria-clicked': props.selected, onClick: this.onClick },
-	            React.createElement(SymbolDiv, { layout: layout, srcImage: categoryDef.srcImage }),
-	            React.createElement(
-	                'span',
-	                { style: styleText },
-	                categoryDef.text
-	            )
-	        );
-	    }
-	});
-
-/***/ },
-/* 14 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
 	module.exports = React.createClass({
 	    displayName: 'exports',
 
@@ -1041,17 +979,13 @@
 	        srcImage: React.PropTypes.string,
 	        srcImageOptional: React.PropTypes.string,
 	        alignment: React.PropTypes.string,
-	        setPage: React.PropTypes.func
+	        onClick: React.PropTypes.func
 	    },
 
 	    getDefaultProps: function getDefaultProps() {
 	        return {
 	            alignment: 'left'
 	        };
-	    },
-
-	    onClick: function onClick() {
-	        this.props.setPage();
 	    },
 
 	    render: function render() {
@@ -1113,9 +1047,72 @@
 
 	        return React.createElement(
 	            'div',
-	            { style: styleDiv, onClick: this.onClick },
+	            { style: styleDiv, onClick: props.onClick },
 	            left ? spanImageOptional : spanImage,
 	            left ? spanImage : spanImageOptional
+	        );
+	    }
+	});
+
+/***/ },
+/* 14 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var SymbolDiv = __webpack_require__(13);
+
+	module.exports = React.createClass({
+	    displayName: 'exports',
+
+	    propTypes: {
+	        colors: React.PropTypes.object,
+	        layout: React.PropTypes.object,
+	        initial: React.PropTypes.bool,
+	        categoryDef: React.PropTypes.object,
+	        selected: React.PropTypes.bool,
+	        onCategorySelected: React.PropTypes.func
+	    },
+
+	    onClick: function onClick() {
+	        this.props.onCategorySelected(this.props.categoryDef);
+	    },
+
+	    render: function render() {
+	        var props = this.props,
+	            categoryDef = props.categoryDef,
+	            selected = props.selected,
+	            colors = props.colors,
+	            colorMeta = colors.colorMeta,
+	            colorBackground = colors.colorBackground,
+	            layout = props.layout,
+	            styleItem = {
+	            display: 'flex',
+	            alignItems: 'flex-start',
+	            lineHeight: layout.lineHeightMeta,
+	            color: selected ? colorBackground : colorMeta,
+	            backgroundColor: selected ? colorMeta : colorBackground,
+	            borderWidth: '1px',
+	            borderBottomStyle: 'solid'
+	        },
+	            styleText = {
+	            flexShrink: 1,
+	            marginRight: layout.marginNarrow
+	        };
+
+	        if (!props.initial) {
+	            styleText.display = 'none';
+	        }
+
+	        return React.createElement(
+	            'li',
+	            { style: styleItem, 'aria-clicked': props.selected, onClick: this.onClick },
+	            React.createElement(SymbolDiv, { layout: layout, srcImage: categoryDef.srcImage, onClick: this.onClick }),
+	            React.createElement(
+	                'span',
+	                { style: styleText },
+	                categoryDef.text
+	            )
 	        );
 	    }
 	});
@@ -1180,7 +1177,7 @@
 
 	'use strict';
 
-	var SymbolDiv = __webpack_require__(14);
+	var SymbolDiv = __webpack_require__(13);
 
 	module.exports = React.createClass({
 	    displayName: 'exports',
