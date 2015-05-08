@@ -24,6 +24,15 @@ module.exports = React.createClass({
                 marginWide = layout.marginWide,
                 styleDiv = {
                 },
+                styleMap = {
+                    display: 'block',
+                    width: '100%',
+                    boxSizing: 'border-box',
+                    height: layout.heightCategoryList,
+                    borderColor: colors.colorMeta,
+                    borderWidth: '1px',
+                    borderBottomStyle: 'solid'
+                },
                 styleForm = {
                     marginLeft: marginWide,
                     marginRight: marginWide
@@ -53,6 +62,7 @@ module.exports = React.createClass({
             return (
                 <div style={styleDiv}>
                     <Header colors={colors} layout={layout} />
+                    <img style={styleMap} src='TODO.jpg' alt='Map' />;
                     <form style={styleForm}>
                         <fieldset style={styleFieldsetInput}>
                             <input type='text' style={styleInput} />

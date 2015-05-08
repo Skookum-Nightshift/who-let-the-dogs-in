@@ -21,7 +21,7 @@ module.exports = React.createClass({
         render: function () {
             var props = this.props,
                 layout = props.layout,
-                inResultPage = !props.setItemPage,
+                inResultPage = false, // TODO: !props.setItemPage,
                 styleItem = {
                     display: 'flex',
                     alignItems: 'flex-start',
@@ -45,7 +45,7 @@ module.exports = React.createClass({
                         );
                     }
                 },
-                distance = item.distance + 'mi',
+                // distance = item.distance + 'mi',
                 index;
 
             if (props.mapIndexDemo) {
@@ -54,13 +54,13 @@ module.exports = React.createClass({
 
             return (
                 <li style={styleItem} onClick={this.onClick}>
-                    <SymbolDiv layout={layout} srcImage={item.categoryDef.srcImage} srcImageOptional={item.dogFriendly ? 'paw.svg' : ''} />
+                    <SymbolDiv layout={layout} srcImage={item.categoryDef.srcImage} />
                     <div style={styleDiv}>
-                        <p>{item.name}</p>
-                        <p>{item.address}</p>
+                        <p>{item.getName()}</p>
+                        <p>{item.getAddress()}</p>
                         {city()}
                     </div>
-                    <span style={styleDistance}>{distance}</span>
+//                    <span style={styleDistance}>{distance}</span>
                     <MapIndex colors={props.colors} layout={layout} index={index} />
                 </li>
             );

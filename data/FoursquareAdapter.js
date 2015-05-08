@@ -7,9 +7,10 @@
 // For more information about Adapter pattern: pp. 139-150 in Design Patterns.
 
 var FoursquareAdapter = function (venueResponse) {
+console.log(venueResponse);
         this.venueResponse = venueResponse;
     },
-    prototype = FoursquareAdapter.prototype, // for member functions below
+    prototype = FoursquareAdapter.prototype; // for member functions below
 
 prototype.getName = function () {
     return this.venueResponse.name;
@@ -58,7 +59,7 @@ prototype.getPlaceTypes = function () {
     // Food 4d4b7105d754a06374d81259
     // Hotel 4bf58dd8d48988d1fa931735
     // Dog Run 4bf58dd8d48988d1e5941735 TODO: or Park 4bf58dd8d48988d163941735
-    return this.venueResponses.categories.map(function (category) {
+    return this.venueResponse.categories.map(function (category) {
         return category.name; // TODO: compare pluralName, shortName
     });
 };
@@ -75,14 +76,15 @@ var categoryMap = {
 
 prototype.getCategory = function () {
     var category;
-
-    this.venueResponse.forEach(function (category) {
+console.log(this.venueResponse.categories);
+    this.venueResponse.categories.forEach(function (category) {
         var value = categoryMap[category.name];
 
         if (value) {
             category = value;
         }
     });
+console.log(category);
     return category;
 };
 

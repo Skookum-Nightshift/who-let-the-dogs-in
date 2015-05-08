@@ -25,6 +25,8 @@ module.exports = React.createClass({
                     display: 'flex',
                     alignItems: 'flex-start',
                     flexGrow: 1,
+                    flexShrink: 1,
+                    width: '25%', // TODO: make dependent on data
                     lineHeight: layout.lineHeightMeta,
                     color: selected ? colorBackground : colorMeta,
                     backgroundColor: selected ? colorMeta : colorBackground,
@@ -33,7 +35,10 @@ module.exports = React.createClass({
                 },
                 styleText = {
                     flexShrink: 1,
-                    marginRight: layout.marginNarrow
+                    marginRight: layout.marginNarrow,
+                    whiteSpace: 'nowrap',
+                    overflow: 'hidden',
+                    textOverflow: 'ellipsis',
                 };
 
             //if (/* TODO: media query? */) {

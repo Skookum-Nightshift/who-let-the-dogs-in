@@ -30,10 +30,12 @@ module.exports = React.createClass({
                     //flexWrap: 'wrap',
                     //overflow: 'hidden'
                 },
-                styleImage = {
-                    boxSizing: 'border-box',
+                styleMap = {
+                    display: 'block',
                     width: '100%',
+                    boxSizing: 'border-box',
                     height: layout.heightCategoryList,
+                    borderColor: colors.colorMeta,
                     borderWidth: '1px',
                     borderBottomStyle: 'solid'
                 },
@@ -63,7 +65,7 @@ module.exports = React.createClass({
             return (
                 <div style={styleDiv}>
                     <Header colors={colors} layout={layout} linkLeft={linkLeft} />
-                    <img style={styleImage} src='TODO.jpg' alt='Picture' />
+                    <img style={styleMap} src='TODO.jpg' alt='Map' />
                     <ul style={styleList}>
                         <ResultItem colors={colors} layout={layout} item={item} />
                         <li>

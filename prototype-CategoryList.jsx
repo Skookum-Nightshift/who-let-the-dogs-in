@@ -18,6 +18,7 @@ module.exports = React.createClass({
                 layout = props.layout,
                 initial = props.initial,
                 style = {
+                    width: '100%',
                     display: 'flex',
                     alignItems: 'flex-start',
                     listStyle: 'none'

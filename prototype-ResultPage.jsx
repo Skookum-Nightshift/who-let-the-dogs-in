@@ -40,7 +40,7 @@ module.exports = React.createClass({
             });
 
             this.props.items.forEach(function (item) {
-                if (noneSelected || categoriesSelected[item.categoryKey] === true) {
+                if (noneSelected || categoriesSelected[item.getCategory()] === true) {
                     itemsFiltered.push(item);
                 }
             });
@@ -57,19 +57,13 @@ module.exports = React.createClass({
                 colors = props.colors,
                 layout = props.layout,
                 state = this.state,
-                styleSideBySide = {
-                    display: 'flex',
-                    alignItems: 'flex-start',
-                    width: '100%'
-                },
                 styleMap = {
-                    flexGrow: 1,
-                    flexShrink: 1,
+                    display: 'block',
+                    width: '100%',
                     boxSizing: 'border-box',
                     height: layout.heightCategoryList,
                     borderColor: colors.colorMeta,
                     borderWidth: '1px',
-                    borderLeftStyle: 'solid',
                     borderBottomStyle: 'solid'
                 },
                 initial = state.initial,
@@ -87,10 +81,8 @@ console.log(initial);
             return (
                 <div>
                     <Header colors={colors} layout={layout} linkRight={linkRight} />
-                    <div style={styleSideBySide}>
-                        <CategoryList colors={colors} layout={layout} initial={state.initial} categoryDefs={props.categoryDefs} categoriesSelected={state.categoriesSelected} onCategorySelected={this.onCategorySelected} />
-                        {map}
-                    </div>
+                    <CategoryList colors={colors} layout={layout} initial={state.initial} categoryDefs={props.categoryDefs} categoriesSelected={state.categoriesSelected} onCategorySelected={this.onCategorySelected} />
+                    {map}
                     <ResultList items={state.itemsFiltered} mapIndexDemo={!initial} colors={colors} layout={props.layout} setItemPage={props.setItemPage} />
                 </div>
             );

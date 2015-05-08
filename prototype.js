@@ -51,6 +51,7 @@
 	    var items = __webpack_require__(1),
 	        categoryDefs = __webpack_require__(2),
 	        contactDefs = __webpack_require__(3),
+	        providers = __webpack_require__(8),
 	        ResultPage = __webpack_require__(4),
 	        LocationPage = __webpack_require__(5),
 	        ItemPage = __webpack_require__(6),
@@ -63,7 +64,8 @@
 	            layout: React.PropTypes.object,
 	            categoryDefs: React.PropTypes.array,
 	            contactDefs: React.PropTypes.array,
-	            items: React.PropTypes.array
+	            items: React.PropTypes.array, // TODO: superseded by providers
+	            providers: React.PropTypes.object
 	        },
 
 	        getDefaultProps: function getDefaultProps() {
@@ -89,6 +91,24 @@
 
 	        getInitialState: function getInitialState() {
 	            var props = this.props,
+	                layout = props.layout,
+	                colors = props.colors,
+
+	            // Skookum in Charlotte, NC
+	            location = {
+	                latitude: 35.226074,
+	                longitude: -80.844034
+	            },
+	                items = props.providers.map.Foursquare.getItems(location),
+	                styleMap = {
+	                display: 'block',
+	                width: '100%',
+	                boxSizing: 'border-box',
+	                height: layout.heightCategoryList,
+	                borderColor: colors.colorMeta,
+	                borderWidth: '1px',
+	                borderBottomStyle: 'solid'
+	            },
 	                categoryMap = {},
 	                indexMap = 0;
 
@@ -96,15 +116,20 @@
 	                categoryMap[categoryDef.key] = categoryDef;
 	            });
 	            items.forEach(function (item) {
+	                console.dir(items);
+	                console.log(item.getCategory());
 	                // TODO: Ask Enrique if it is okay to add a property to a props object?
-	                item.categoryDef = categoryMap[item.categoryKey];
+	                item.categoryDef = categoryMap[item.getCategory()];
 	                item.indexMap = ++indexMap; // demo
 	            });
 
 	            return {
+	                location: location,
 	                page: React.createElement(ResultPage, { colors: props.colors, layout: props.layout, categoryDefs: props.categoryDefs, items: items, setItemPage: this.setItemPage, setLocationPage: this.setLocationPage })
 	            };
 	        },
+
+	        componentWillMount: function componentWillMount() {},
 
 	        setPage: function setPage(page) {
 	            this.setState({
@@ -158,8 +183,10 @@
 	    });
 
 	    // TODO: property will become the data API object
-	    React.render(React.createElement(DogsApp, { items: items }), document.getElementsByTagName('body')[0]);
+	    React.render(React.createElement(DogsApp, { items: items, providers: providers }), document.getElementsByTagName('body')[0]);
 	});
+
+	// TODO: search for items
 
 /***/ },
 /* 1 */
@@ -329,13 +356,13 @@
 	        return name + '.svg';
 	    };
 
-	module.exports = [{
+	module.exports = [ /* {
 	        key: 'phone',
 	        srcImage: srcImage('phone'),
 	        callback: function (number) {
 	            window.alert('Call phone number: ' + number);
 	        }
-	    }, {
+	    }, */ {
 	        key: 'web',
 	        srcImage: srcImage('external-link-square'),
 	        callback: function (address) {
@@ -350,9 +377,9 @@
 
 	'use strict';
 
-	var Header = __webpack_require__(8),
-	    CategoryList = __webpack_require__(9),
-	    ResultList = __webpack_require__(10);
+	var Header = __webpack_require__(9),
+	    CategoryList = __webpack_require__(10),
+	    ResultList = __webpack_require__(11);
 
 	module.exports = React.createClass({
 	    displayName: 'exports',
@@ -394,7 +421,7 @@
 	        });
 
 	        this.props.items.forEach(function (item) {
-	            if (noneSelected || categoriesSelected[item.categoryKey] === true) {
+	            if (noneSelected || categoriesSelected[item.getCategory()] === true) {
 	                itemsFiltered.push(item);
 	            }
 	        });
@@ -411,19 +438,13 @@
 	            colors = props.colors,
 	            layout = props.layout,
 	            state = this.state,
-	            styleSideBySide = {
-	            display: 'flex',
-	            alignItems: 'flex-start',
-	            width: '100%'
-	        },
 	            styleMap = {
-	            flexGrow: 1,
-	            flexShrink: 1,
+	            display: 'block',
+	            width: '100%',
 	            boxSizing: 'border-box',
 	            height: layout.heightCategoryList,
 	            borderColor: colors.colorMeta,
 	            borderWidth: '1px',
-	            borderLeftStyle: 'solid',
 	            borderBottomStyle: 'solid'
 	        },
 	            initial = state.initial,
@@ -442,12 +463,8 @@
 	            'div',
 	            null,
 	            React.createElement(Header, { colors: colors, layout: layout, linkRight: linkRight }),
-	            React.createElement(
-	                'div',
-	                { style: styleSideBySide },
-	                React.createElement(CategoryList, { colors: colors, layout: layout, initial: state.initial, categoryDefs: props.categoryDefs, categoriesSelected: state.categoriesSelected, onCategorySelected: this.onCategorySelected }),
-	                map
-	            ),
+	            React.createElement(CategoryList, { colors: colors, layout: layout, initial: state.initial, categoryDefs: props.categoryDefs, categoriesSelected: state.categoriesSelected, onCategorySelected: this.onCategorySelected }),
+	            map,
 	            React.createElement(ResultList, { items: state.itemsFiltered, mapIndexDemo: !initial, colors: colors, layout: props.layout, setItemPage: props.setItemPage })
 	        );
 	    }
@@ -459,7 +476,7 @@
 
 	'use strict';
 
-	var Header = __webpack_require__(8);
+	var Header = __webpack_require__(9);
 
 	module.exports = React.createClass({
 	    displayName: 'exports',
@@ -486,6 +503,15 @@
 	            layout = props.layout,
 	            marginWide = layout.marginWide,
 	            styleDiv = {},
+	            styleMap = {
+	            display: 'block',
+	            width: '100%',
+	            boxSizing: 'border-box',
+	            height: layout.heightCategoryList,
+	            borderColor: colors.colorMeta,
+	            borderWidth: '1px',
+	            borderBottomStyle: 'solid'
+	        },
 	            styleForm = {
 	            marginLeft: marginWide,
 	            marginRight: marginWide
@@ -516,6 +542,8 @@
 	            'div',
 	            { style: styleDiv },
 	            React.createElement(Header, { colors: colors, layout: layout }),
+	            React.createElement('img', { style: styleMap, src: 'TODO.jpg', alt: 'Map' }),
+	            ';',
 	            React.createElement(
 	                'form',
 	                { style: styleForm },
@@ -549,9 +577,9 @@
 
 	'use strict';
 
-	var Header = __webpack_require__(8),
-	    ResultItem = __webpack_require__(11),
-	    ContactList = __webpack_require__(12);
+	var Header = __webpack_require__(9),
+	    ResultItem = __webpack_require__(12),
+	    ContactList = __webpack_require__(13);
 
 	module.exports = React.createClass({
 	    displayName: 'exports',
@@ -578,10 +606,12 @@
 
 	        // TO DO: align ContactList at bottom?
 	        styleDiv = {},
-	            styleImage = {
-	            boxSizing: 'border-box',
+	            styleMap = {
+	            display: 'block',
 	            width: '100%',
+	            boxSizing: 'border-box',
 	            height: layout.heightCategoryList,
+	            borderColor: colors.colorMeta,
 	            borderWidth: '1px',
 	            borderBottomStyle: 'solid'
 	        },
@@ -612,7 +642,7 @@
 	            'div',
 	            { style: styleDiv },
 	            React.createElement(Header, { colors: colors, layout: layout, linkLeft: linkLeft }),
-	            React.createElement('img', { style: styleImage, src: 'TODO.jpg', alt: 'Picture' }),
+	            React.createElement('img', { style: styleMap, src: 'TODO.jpg', alt: 'Map' }),
 	            React.createElement(
 	                'ul',
 	                { style: styleList },
@@ -653,7 +683,7 @@
 
 	'use strict';
 
-	var Header = __webpack_require__(8);
+	var Header = __webpack_require__(9);
 
 	module.exports = React.createClass({
 	    displayName: 'exports',
@@ -687,9 +717,29 @@
 /* 8 */
 /***/ function(module, exports, __webpack_require__) {
 
+	var providers = {
+	        map: {},
+	        array: [
+	            __webpack_require__(14) /*,
+	            require('./YelpOffline.js') */
+	        ]
+	    },
+	    map = providers.map;
+
+	providers.array.forEach(function (provider) {
+	    map[provider.name] = provider;
+	});
+
+	module.exports = providers;
+
+
+/***/ },
+/* 9 */
+/***/ function(module, exports, __webpack_require__) {
+
 	'use strict';
 
-	var SymbolDiv = __webpack_require__(13);
+	var SymbolDiv = __webpack_require__(15);
 
 	module.exports = React.createClass({
 	    displayName: 'exports',
@@ -748,12 +798,12 @@
 	});
 
 /***/ },
-/* 9 */
+/* 10 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var CategoryItem = __webpack_require__(14);
+	var CategoryItem = __webpack_require__(16);
 
 	module.exports = React.createClass({
 	    displayName: 'exports',
@@ -775,8 +825,10 @@
 	            layout = props.layout,
 	            initial = props.initial,
 	            style = {
-	            listStyle: 'none',
-	            width: initial ? '100%' : layout.marginWide
+	            width: '100%',
+	            display: 'flex',
+	            alignItems: 'flex-start',
+	            listStyle: 'none'
 	        },
 	            categoryItems = props.categoryDefs.map(function (categoryDef) {
 	            return React.createElement(CategoryItem, { colors: colors, layout: layout, initial: initial, categoryDef: categoryDef, selected: categoriesSelected[categoryDef.key], onCategorySelected: onCategorySelected });
@@ -791,12 +843,12 @@
 	});
 
 /***/ },
-/* 10 */
+/* 11 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var ResultItem = __webpack_require__(11);
+	var ResultItem = __webpack_require__(12);
 
 	module.exports = React.createClass({
 	    displayName: 'exports',
@@ -827,13 +879,13 @@
 	    } });
 
 /***/ },
-/* 11 */
+/* 12 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var SymbolDiv = __webpack_require__(13),
-	    MapIndex = __webpack_require__(15);
+	var SymbolDiv = __webpack_require__(15),
+	    MapIndex = __webpack_require__(17);
 
 	module.exports = React.createClass({
 	    displayName: 'exports',
@@ -857,8 +909,9 @@
 	    render: function render() {
 	        var props = this.props,
 	            layout = props.layout,
-	            inResultPage = !props.setItemPage,
-	            styleItem = {
+	            inResultPage = false,
+	            // TODO: !props.setItemPage,
+	        styleItem = {
 	            display: 'flex',
 	            alignItems: 'flex-start',
 	            paddingTop: layout.marginNarrow,
@@ -883,8 +936,9 @@
 	                );
 	            }
 	        },
-	            distance = item.distance + 'mi',
-	            index;
+
+	        // distance = item.distance + 'mi',
+	        index;
 
 	        if (props.mapIndexDemo) {
 	            index = item.indexMap;
@@ -893,22 +947,23 @@
 	        return React.createElement(
 	            'li',
 	            { style: styleItem, onClick: this.onClick },
-	            React.createElement(SymbolDiv, { layout: layout, srcImage: item.categoryDef.srcImage, srcImageOptional: item.dogFriendly ? 'paw.svg' : '' }),
+	            React.createElement(SymbolDiv, { layout: layout, srcImage: item.categoryDef.srcImage }),
 	            React.createElement(
 	                'div',
 	                { style: styleDiv },
 	                React.createElement(
 	                    'p',
 	                    null,
-	                    item.name
+	                    item.getName()
 	                ),
 	                React.createElement(
 	                    'p',
 	                    null,
-	                    item.address
+	                    item.getAddress()
 	                ),
 	                city()
 	            ),
+	            '//                    ',
 	            React.createElement(
 	                'span',
 	                { style: styleDistance },
@@ -920,12 +975,12 @@
 	});
 
 /***/ },
-/* 12 */
+/* 13 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var ContactItem = __webpack_require__(16);
+	var ContactItem = __webpack_require__(18);
 
 	module.exports = React.createClass({
 	    displayName: 'exports',
@@ -966,7 +1021,91 @@
 	});
 
 /***/ },
-/* 13 */
+/* 14 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var locationMap = {
+	    // Skookum in Charlotte, NC
+
+	    "35.226074,-80.844034": [
+	  {
+	    "venue": {
+	      "id": "544ad14a498e92c459c5c1ec",
+	      "name": "Craft Growler Shop",
+	      "contact": {
+	        "formattedPhone":"(980) 207-3716"
+	        },
+	      "location": {
+	        "address": "1320 S Church St",
+	        "lat": 35.219983573512,
+	        "lng": -80.856992608206,
+	        "distance": 7841,
+	        "postalCode": "28203",
+	        "cc": "US",
+	        "neighborhood": "South End",
+	        "city": "Charlotte",
+	        "state": "NC",
+	        "country": "United States",
+	        "contextLine": "South End, Charlotte",
+	        "formattedAddress": [
+	          "<span itemprop=\"streetAddress\">1320 S Church St<\/span>",
+	          "<span itemprop=\"addressLocality\">Charlotte<\/span>, <span itemprop=\"addressRegion\">NC<\/span> <span itemprop=\"postalCode\">28203<\/span>"
+	        ]
+	      },
+	      "canonicalUrl": "https:\/\/foursquare.com\/v\/craft-growler-shop\/544ad14a498e92c459c5c1ec",
+	      "categories": [
+	        {
+	          "id": "5370f356bcbc57f1066c94c2",
+	          "name": "Bar", //"Beer Store",
+	          "icon": {
+	            "prefix": "https:\/\/ss3.4sqi.net\/img\/categories_v2\/nightlife\/beergarden_",
+	            "mapPrefix": "https:\/\/ss3.4sqi.net\/img\/categories_map\/nightlife\/beergarden",
+	            "suffix": ".png"
+	          },
+	          "primary": true
+	        }
+	      ]
+	    }
+	  }
+	]
+	},
+
+	    Adapter = __webpack_require__(19),
+
+	    // TODO: Temporary synchronous function until page can be rendered without items!
+	    getItems = function (location) {
+	        var key = [location.latitude, location.longitude].join(','),
+	            data = locationMap[key];
+
+	        return data ? data.map(function (item) {
+	                return new Adapter(item.venue);
+	            }) :
+	            null;
+	    },
+
+	    // Example location = { latitude: 35.226074, longitude: -80.844034 }
+	    // Argument of callback is list of adapted item objects (or null if search fails)
+	    // TODO: what about a recommended region for map, like Yelp?
+	    search = function (location, callback) {
+	        var key = [location.latitude, location.longitude].join(','),
+	            data = locationMap[key],
+	            adapted = data ? data.map(function (item) {
+	                    return new Adapter(item.venue);
+	                }) :
+	                null;
+
+	        callback(adapted);
+	    };
+
+	module.exports = {
+	    name: 'Foursquare',
+	    getItems: getItems,
+	    search: search
+	};
+
+
+/***/ },
+/* 15 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -1055,12 +1194,12 @@
 	});
 
 /***/ },
-/* 14 */
+/* 16 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var SymbolDiv = __webpack_require__(13);
+	var SymbolDiv = __webpack_require__(15);
 
 	module.exports = React.createClass({
 	    displayName: 'exports',
@@ -1068,7 +1207,6 @@
 	    propTypes: {
 	        colors: React.PropTypes.object,
 	        layout: React.PropTypes.object,
-	        initial: React.PropTypes.bool,
 	        categoryDef: React.PropTypes.object,
 	        selected: React.PropTypes.bool,
 	        onCategorySelected: React.PropTypes.func
@@ -1089,6 +1227,9 @@
 	            styleItem = {
 	            display: 'flex',
 	            alignItems: 'flex-start',
+	            flexGrow: 1,
+	            flexShrink: 1,
+	            width: '25%', // TODO: make dependent on data
 	            lineHeight: layout.lineHeightMeta,
 	            color: selected ? colorBackground : colorMeta,
 	            backgroundColor: selected ? colorMeta : colorBackground,
@@ -1097,12 +1238,14 @@
 	        },
 	            styleText = {
 	            flexShrink: 1,
-	            marginRight: layout.marginNarrow
-	        };
+	            marginRight: layout.marginNarrow,
+	            whiteSpace: 'nowrap',
+	            overflow: 'hidden',
+	            textOverflow: 'ellipsis' };
 
-	        if (!props.initial) {
-	            styleText.display = 'none';
-	        }
+	        //if (/* TODO: media query? */) {
+	        //    styleText.display = 'none';
+	        //}
 
 	        return React.createElement(
 	            'li',
@@ -1118,7 +1261,7 @@
 	});
 
 /***/ },
-/* 15 */
+/* 17 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -1172,12 +1315,12 @@
 	});
 
 /***/ },
-/* 16 */
+/* 18 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var SymbolDiv = __webpack_require__(13);
+	var SymbolDiv = __webpack_require__(15);
 
 	module.exports = React.createClass({
 	    displayName: 'exports',
@@ -1226,6 +1369,124 @@
 	        );
 	    }
 	});
+
+/***/ },
+/* 19 */
+/***/ function(module, exports, __webpack_require__) {
+
+	// For more information about the adapted-to interface:
+	// https://developers.google.com/places/android/place-details
+
+	// For more information about the adapted-from interface:
+	// https://developer.foursquare.com/docs/responses/venue
+
+	// For more information about Adapter pattern: pp. 139-150 in Design Patterns.
+
+	var FoursquareAdapter = function (venueResponse) {
+	console.log(venueResponse);
+	        this.venueResponse = venueResponse;
+	    },
+	    prototype = FoursquareAdapter.prototype; // for member functions below
+
+	prototype.getName = function () {
+	    return this.venueResponse.name;
+	};
+
+	prototype.getAddress = function () {
+	    // TODO: what about separate properties? city, state, postalCode
+	    return this.venueResponse.location.address; // optional string
+	};
+
+	prototype.getID = function () {
+	    return this.venueResponse.id;
+	};
+
+	prototype.getPhoneNumber = function () {
+	    return this.venueResponse.contact.formattedPhone; // TODO: compare to phone
+	};
+
+	prototype.getWebsiteUri = function () {
+	    return this.venueResponse.url;
+	};
+
+	// LatLng has properties latitude and longitude of type double
+	prototype.getLatLng = function (){
+	    var location = this.venueResponse.location; // TODO: verify type of lat and lng
+
+	    return {
+	        latitude: location.lat,
+	        longitude: location.lng
+	    }; 
+	};
+
+	// LatLngBounds has properties southwest and northeast of type LatLng
+	prototype.getViewport = function () {
+	    return null;
+	};
+
+	// getLocale
+
+	prototype.getPlaceTypes = function () {
+	    // TODO
+	    // https://developer.foursquare.com/docs/responses/category.html
+	    // https://developer.foursquare.com/docs/venues/categories.html
+	    // https://developer.foursquare.com/categorytree
+	    // Bar 4bf58dd8d48988d116941735
+	    // Food 4d4b7105d754a06374d81259
+	    // Hotel 4bf58dd8d48988d1fa931735
+	    // Dog Run 4bf58dd8d48988d1e5941735 TODO: or Park 4bf58dd8d48988d163941735
+	    return this.venueResponse.categories.map(function (category) {
+	        return category.name; // TODO: compare pluralName, shortName
+	    });
+	};
+
+	// getCategory is our addition to the API
+	// return a standard string for the category that matters
+
+	var categoryMap = {
+	        'Bar': 'Bars',
+	        'Food': 'Restaurants',
+	        'Hotel': 'Hotels',
+	        'Dog Run': 'Dog Parks'
+	    };
+
+	prototype.getCategory = function () {
+	    var category;
+	console.log(this.venueResponse.categories);
+	    this.venueResponse.categories.forEach(function (category) {
+	        var value = categoryMap[category.name];
+
+	        if (value) {
+	            category = value;
+	        }
+	    });
+	console.log(category);
+	    return category;
+	};
+
+	// getPriceLevel: the JavaScript object does not seem to have this property
+	// An object containing the price tier from 1 (least pricey) - 4 (most pricey) and a message describing the price tier.
+
+	prototype.getRating = function () {
+	    return this.venueResponse.rating; // Numerical rating of the venue (0 through 10). Returned as part of an explore result, excluded in search results. Not all venues will have a rating.
+	};
+
+	// TODO:
+	// categories
+	// attribution/display requirements
+
+	// https://developer.foursquare.com/overview/attribution
+
+	// https://developer.foursquare.com/overview/attribution#linking
+	// provide links back to corresponding Foursquare venue pages whenever you display any basic data
+	// creating your own place detail page and linking that back to us
+
+	// https://developer.foursquare.com/overview/attribution#visual
+	// If you are displaying a list of venues as part of search results, you do not need to link to us on that screen. Instead, provide Visual Attribution.
+	// https://foursquare.com/about/logos
+
+	module.exports = FoursquareAdapter;
+
 
 /***/ }
 /******/ ]);

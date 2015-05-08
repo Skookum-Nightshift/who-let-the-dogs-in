@@ -11,7 +11,7 @@
 var YelpAdapter = function (business) {
         this.business = business;
     },
-    prototype = YelpAdapter.prototype, // for member functions below
+    prototype = YelpAdapter.prototype; // for member functions below
 
 // TODO: region?
 /*
