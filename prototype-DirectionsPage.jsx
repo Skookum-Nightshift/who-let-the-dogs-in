@@ -1,4 +1,5 @@
-var Header = require('./prototype-Header.jsx');
+var Header = require('./prototype-Header.jsx'),
+    Map = require('./prototype-Map.jsx');
 
 module.exports = React.createClass({
         propTypes: {
@@ -22,6 +23,7 @@ module.exports = React.createClass({
             return (
                 <div style={styleDiv}>
                     <Header colors={colors} layout={layout} linkLeft={linkLeft} />
+                    <Map layout={layout} />
                 </div>
             );
         }

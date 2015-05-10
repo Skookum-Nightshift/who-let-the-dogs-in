@@ -1,4 +1,5 @@
-var Header = require('./prototype-Header.jsx');
+var Header = require('./prototype-Header.jsx'),
+    Map = require('./prototype-Map.jsx');
 
 module.exports = React.createClass({
         propTypes: {
@@ -62,7 +63,7 @@ module.exports = React.createClass({
             return (
                 <div style={styleDiv}>
                     <Header colors={colors} layout={layout} />
-                    <img style={styleMap} src='TODO.jpg' alt='Map' />;
+                    <Map layout={layout} />
                     <form style={styleForm}>
                         <fieldset style={styleFieldsetInput}>
                             <input type='text' style={styleInput} />

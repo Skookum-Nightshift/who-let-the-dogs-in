@@ -385,7 +385,8 @@
 
 	var Header = __webpack_require__(9),
 	    CategoryList = __webpack_require__(10),
-	    ResultList = __webpack_require__(11);
+	    Map = __webpack_require__(11),
+	    ResultList = __webpack_require__(12);
 
 	module.exports = React.createClass({
 	    displayName: 'exports',
@@ -409,7 +410,6 @@
 	        });
 
 	        return {
-	            initial: false,
 	            categoriesSelected: categoriesSelected,
 	            itemsFiltered: items.concat() // shallow copy
 	        };
@@ -433,7 +433,6 @@
 	        });
 
 	        this.setState({
-	            initial: false,
 	            categoriesSelected: categoriesSelected,
 	            itemsFiltered: itemsFiltered
 	        });
@@ -453,24 +452,18 @@
 	            borderWidth: '1px',
 	            borderBottomStyle: 'solid'
 	        },
-	            initial = state.initial,
 	            linkRight = {
 	            srcImage: 'search.svg',
 	            setPage: props.setLocationPage
-	        },
-	            map;
-
-	        if (!initial) {
-	            map = React.createElement('img', { style: styleMap, src: 'TODO.jpg', alt: 'Map' });
-	        }
+	        };
 
 	        return React.createElement(
 	            'div',
 	            null,
 	            React.createElement(Header, { colors: colors, layout: layout, linkRight: linkRight }),
-	            React.createElement(CategoryList, { colors: colors, layout: layout, initial: state.initial, categoryDefs: props.categoryDefs, categoriesSelected: state.categoriesSelected, onCategorySelected: this.onCategorySelected }),
-	            map,
-	            React.createElement(ResultList, { items: state.itemsFiltered, mapIndexDemo: !initial, colors: colors, layout: props.layout, setItemPage: props.setItemPage })
+	            React.createElement(CategoryList, { colors: colors, layout: layout, categoryDefs: props.categoryDefs, categoriesSelected: state.categoriesSelected, onCategorySelected: this.onCategorySelected }),
+	            React.createElement(Map, { layout: layout }),
+	            React.createElement(ResultList, { items: state.itemsFiltered, mapIndexDemo: true, colors: colors, layout: props.layout, setItemPage: props.setItemPage })
 	        );
 	    }
 	});
@@ -481,7 +474,8 @@
 
 	'use strict';
 
-	var Header = __webpack_require__(9);
+	var Header = __webpack_require__(9),
+	    Map = __webpack_require__(11);
 
 	module.exports = React.createClass({
 	    displayName: 'exports',
@@ -547,8 +541,7 @@
 	            'div',
 	            { style: styleDiv },
 	            React.createElement(Header, { colors: colors, layout: layout }),
-	            React.createElement('img', { style: styleMap, src: 'TODO.jpg', alt: 'Map' }),
-	            ';',
+	            React.createElement(Map, { layout: layout }),
 	            React.createElement(
 	                'form',
 	                { style: styleForm },
@@ -583,8 +576,9 @@
 	'use strict';
 
 	var Header = __webpack_require__(9),
-	    ResultItem = __webpack_require__(12),
-	    ContactList = __webpack_require__(13);
+	    Map = __webpack_require__(11),
+	    ResultItem = __webpack_require__(13),
+	    ContactList = __webpack_require__(14);
 
 	module.exports = React.createClass({
 	    displayName: 'exports',
@@ -648,7 +642,7 @@
 	            'div',
 	            { style: styleDiv },
 	            React.createElement(Header, { colors: colors, layout: layout, linkLeft: linkLeft }),
-	            React.createElement('img', { style: styleMap, src: 'TODO.jpg', alt: 'Map' }),
+	            React.createElement(Map, { layout: layout }),
 	            React.createElement(ResultItem, { colors: colors, layout: layout, item: item, mapIndexDemo: true }),
 	            React.createElement(ContactList, { colors: colors, layout: layout, contactDefs: props.contactDefs, item: item }),
 	            React.createElement(
@@ -698,7 +692,8 @@
 
 	'use strict';
 
-	var Header = __webpack_require__(9);
+	var Header = __webpack_require__(9),
+	    Map = __webpack_require__(11);
 
 	module.exports = React.createClass({
 	    displayName: 'exports',
@@ -723,7 +718,8 @@
 	        return React.createElement(
 	            'div',
 	            { style: styleDiv },
-	            React.createElement(Header, { colors: colors, layout: layout, linkLeft: linkLeft })
+	            React.createElement(Header, { colors: colors, layout: layout, linkLeft: linkLeft }),
+	            React.createElement(Map, { layout: layout })
 	        );
 	    }
 	});
@@ -735,7 +731,7 @@
 	var providers = {
 	        map: {},
 	        array: [
-	            __webpack_require__(14) /*,
+	            __webpack_require__(15) /*,
 	            require('./YelpOffline.js') */
 	        ]
 	    },
@@ -754,7 +750,7 @@
 
 	'use strict';
 
-	var SymbolDiv = __webpack_require__(15);
+	var SymbolDiv = __webpack_require__(17);
 
 	module.exports = React.createClass({
 	    displayName: 'exports',
@@ -826,7 +822,6 @@
 	    propTypes: {
 	        colors: React.PropTypes.object,
 	        layout: React.PropTypes.object,
-	        initial: React.PropTypes.bool,
 	        categoryDefs: React.PropTypes.array,
 	        categoriesSelected: React.PropTypes.object,
 	        onCategorySelected: React.PropTypes.func
@@ -838,7 +833,6 @@
 	            onCategorySelected = props.onCategorySelected,
 	            colors = props.colors,
 	            layout = props.layout,
-	            initial = props.initial,
 	            style = {
 	            width: '100%',
 	            display: 'flex',
@@ -846,7 +840,7 @@
 	            listStyle: 'none'
 	        },
 	            categoryItems = props.categoryDefs.map(function (categoryDef) {
-	            return React.createElement(CategoryItem, { colors: colors, layout: layout, initial: initial, categoryDef: categoryDef, selected: categoriesSelected[categoryDef.key], onCategorySelected: onCategorySelected });
+	            return React.createElement(CategoryItem, { colors: colors, layout: layout, categoryDef: categoryDef, selected: categoriesSelected[categoryDef.key], onCategorySelected: onCategorySelected });
 	        });
 
 	        return React.createElement(
@@ -863,7 +857,38 @@
 
 	'use strict';
 
-	var ResultItem = __webpack_require__(12);
+	module.exports = React.createClass({
+	    displayName: 'exports',
+
+	    propTypes: {
+	        colors: React.PropTypes.object,
+	        layout: React.PropTypes.object
+	        //item: React.PropTypes.object
+	    },
+
+	    render: function render() {
+	        var props = this.props,
+	            layout = props.layout,
+	            styleMap = {
+	            display: 'block',
+	            width: '100%',
+	            boxSizing: 'border-box',
+	            height: layout.heightCategoryList,
+	            borderWidth: '1px',
+	            borderBottomStyle: 'solid'
+	        };
+
+	        return React.createElement('img', { style: styleMap, src: 'TODO.jpg', alt: 'Map' });
+	    }
+	});
+
+/***/ },
+/* 12 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var ResultItem = __webpack_require__(13);
 
 	module.exports = React.createClass({
 	    displayName: 'exports',
@@ -894,13 +919,13 @@
 	    } });
 
 /***/ },
-/* 12 */
+/* 13 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var SymbolDiv = __webpack_require__(15),
-	    MapIndex = __webpack_require__(17);
+	var SymbolDiv = __webpack_require__(17),
+	    MapIndex = __webpack_require__(18);
 
 	module.exports = React.createClass({
 	    displayName: 'exports',
@@ -998,12 +1023,12 @@
 	});
 
 /***/ },
-/* 13 */
+/* 14 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var ContactItem = __webpack_require__(18);
+	var ContactItem = __webpack_require__(19);
 
 	module.exports = React.createClass({
 	    displayName: 'exports',
@@ -1045,7 +1070,7 @@
 	});
 
 /***/ },
-/* 14 */
+/* 15 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var locationMap = {
@@ -4642,7 +4667,7 @@
 	// Hotel 4bf58dd8d48988d1fa931735
 	// Dog Run 4bf58dd8d48988d1e5941735 TODO: or Park 4bf58dd8d48988d163941735
 	    },
-	    Adapter = __webpack_require__(19),
+	    Adapter = __webpack_require__(20),
 
 	    // TODO: Temporary synchronous function until page can be rendered without items!
 	    getItems = function (location) {
@@ -4677,7 +4702,74 @@
 
 
 /***/ },
-/* 15 */
+/* 16 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var SymbolDiv = __webpack_require__(17);
+
+	module.exports = React.createClass({
+	    displayName: 'exports',
+
+	    propTypes: {
+	        colors: React.PropTypes.object,
+	        layout: React.PropTypes.object,
+	        categoryDef: React.PropTypes.object,
+	        selected: React.PropTypes.bool,
+	        onCategorySelected: React.PropTypes.func
+	    },
+
+	    onClick: function onClick() {
+	        this.props.onCategorySelected(this.props.categoryDef);
+	    },
+
+	    render: function render() {
+	        var props = this.props,
+	            categoryDef = props.categoryDef,
+	            selected = props.selected,
+	            colors = props.colors,
+	            colorMeta = colors.colorMeta,
+	            colorBackground = colors.colorBackground,
+	            layout = props.layout,
+	            styleItem = {
+	            display: 'flex',
+	            alignItems: 'flex-start',
+	            flexGrow: 1,
+	            flexShrink: 1,
+	            width: '25%', // TODO: make dependent on data
+	            lineHeight: layout.lineHeightMeta,
+	            color: selected ? colorBackground : colorMeta,
+	            backgroundColor: selected ? colorMeta : colorBackground,
+	            borderWidth: '1px',
+	            borderBottomStyle: 'solid'
+	        },
+	            styleText = {
+	            flexShrink: 1,
+	            marginRight: layout.marginNarrow,
+	            whiteSpace: 'nowrap',
+	            overflow: 'hidden',
+	            textOverflow: 'ellipsis' };
+
+	        //if (/* TODO: media query? */) {
+	        //    styleText.display = 'none';
+	        //}
+
+	        return React.createElement(
+	            'li',
+	            { style: styleItem, 'aria-clicked': props.selected, onClick: this.onClick },
+	            React.createElement(SymbolDiv, { layout: layout, srcImage: categoryDef.srcImage, onClick: this.onClick }),
+	            React.createElement(
+	                'span',
+	                { style: styleText },
+	                categoryDef.text
+	            )
+	        );
+	    }
+	});
+
+/***/ },
+/* 17 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -4766,74 +4858,7 @@
 	});
 
 /***/ },
-/* 16 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	var SymbolDiv = __webpack_require__(15);
-
-	module.exports = React.createClass({
-	    displayName: 'exports',
-
-	    propTypes: {
-	        colors: React.PropTypes.object,
-	        layout: React.PropTypes.object,
-	        categoryDef: React.PropTypes.object,
-	        selected: React.PropTypes.bool,
-	        onCategorySelected: React.PropTypes.func
-	    },
-
-	    onClick: function onClick() {
-	        this.props.onCategorySelected(this.props.categoryDef);
-	    },
-
-	    render: function render() {
-	        var props = this.props,
-	            categoryDef = props.categoryDef,
-	            selected = props.selected,
-	            colors = props.colors,
-	            colorMeta = colors.colorMeta,
-	            colorBackground = colors.colorBackground,
-	            layout = props.layout,
-	            styleItem = {
-	            display: 'flex',
-	            alignItems: 'flex-start',
-	            flexGrow: 1,
-	            flexShrink: 1,
-	            width: '25%', // TODO: make dependent on data
-	            lineHeight: layout.lineHeightMeta,
-	            color: selected ? colorBackground : colorMeta,
-	            backgroundColor: selected ? colorMeta : colorBackground,
-	            borderWidth: '1px',
-	            borderBottomStyle: 'solid'
-	        },
-	            styleText = {
-	            flexShrink: 1,
-	            marginRight: layout.marginNarrow,
-	            whiteSpace: 'nowrap',
-	            overflow: 'hidden',
-	            textOverflow: 'ellipsis' };
-
-	        //if (/* TODO: media query? */) {
-	        //    styleText.display = 'none';
-	        //}
-
-	        return React.createElement(
-	            'li',
-	            { style: styleItem, 'aria-clicked': props.selected, onClick: this.onClick },
-	            React.createElement(SymbolDiv, { layout: layout, srcImage: categoryDef.srcImage, onClick: this.onClick }),
-	            React.createElement(
-	                'span',
-	                { style: styleText },
-	                categoryDef.text
-	            )
-	        );
-	    }
-	});
-
-/***/ },
-/* 17 */
+/* 18 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -4887,12 +4912,12 @@
 	});
 
 /***/ },
-/* 18 */
+/* 19 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var SymbolDiv = __webpack_require__(15);
+	var SymbolDiv = __webpack_require__(17);
 
 	module.exports = React.createClass({
 	    displayName: 'exports',
@@ -4941,7 +4966,7 @@
 	});
 
 /***/ },
-/* 19 */
+/* 20 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// For more information about the adapted-to interface:

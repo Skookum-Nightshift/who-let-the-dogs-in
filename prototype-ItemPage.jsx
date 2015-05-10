@@ -1,4 +1,5 @@
 var Header = require('./prototype-Header.jsx'),
+    Map = require('./prototype-Map.jsx'),
     ResultItem = require('./prototype-ResultItem.jsx'),
     ContactList = require('./prototype-ContactList.jsx');
 
@@ -66,7 +67,7 @@ module.exports = React.createClass({
             return (
                 <div style={styleDiv}>
                     <Header colors={colors} layout={layout} linkLeft={linkLeft} />
-                    <img style={styleMap} src='TODO.jpg' alt='Map' />
+                    <Map layout={layout} />
                     <ResultItem colors={colors} layout={layout} item={item} mapIndexDemo={true} />
                     <ContactList colors={colors} layout={layout} contactDefs={props.contactDefs} item={item} />
                     <ul style={styleDirectionsList}>

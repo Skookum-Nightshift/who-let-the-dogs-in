@@ -1,5 +1,6 @@
 var Header = require('./prototype-Header.jsx'),
     CategoryList = require('./prototype-CategoryList.jsx'),
+    Map = require('./prototype-Map.jsx'),
     ResultList = require('./prototype-ResultList.jsx');
 
 module.exports = React.createClass({
@@ -73,7 +74,7 @@ module.exports = React.createClass({
                 <div>
                     <Header colors={colors} layout={layout} linkRight={linkRight} />
                     <CategoryList colors={colors} layout={layout} categoryDefs={props.categoryDefs} categoriesSelected={state.categoriesSelected} onCategorySelected={this.onCategorySelected} />
-                    <img style={styleMap} src='TODO.jpg' alt='Map' />
+                    <Map layout={layout} />
                     <ResultList items={state.itemsFiltered} mapIndexDemo={true} colors={colors} layout={props.layout} setItemPage={props.setItemPage} />
                 </div>
             );
