@@ -25,15 +25,6 @@ module.exports = React.createClass({
                 marginWide = layout.marginWide,
                 styleDiv = {
                 },
-                styleMap = {
-                    display: 'block',
-                    width: '100%',
-                    boxSizing: 'border-box',
-                    height: layout.heightCategoryList,
-                    borderColor: colors.colorMeta,
-                    borderWidth: '1px',
-                    borderBottomStyle: 'solid'
-                },
                 styleForm = {
                     marginLeft: marginWide,
                     marginRight: marginWide

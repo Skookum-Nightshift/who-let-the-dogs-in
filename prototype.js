@@ -443,15 +443,7 @@
 	            colors = props.colors,
 	            layout = props.layout,
 	            state = this.state,
-	            styleMap = {
-	            display: 'block',
-	            width: '100%',
-	            boxSizing: 'border-box',
-	            height: layout.heightCategoryList,
-	            borderColor: colors.colorMeta,
-	            borderWidth: '1px',
-	            borderBottomStyle: 'solid'
-	        },
+	            categoryList = React.createElement(CategoryList, { colors: colors, layout: layout, categoryDefs: props.categoryDefs, categoriesSelected: state.categoriesSelected, onCategorySelected: this.onCategorySelected }),
 	            linkRight = {
 	            srcImage: 'search.svg',
 	            setPage: props.setLocationPage
@@ -460,8 +452,7 @@
 	        return React.createElement(
 	            'div',
 	            null,
-	            React.createElement(Header, { colors: colors, layout: layout, linkRight: linkRight }),
-	            React.createElement(CategoryList, { colors: colors, layout: layout, categoryDefs: props.categoryDefs, categoriesSelected: state.categoriesSelected, onCategorySelected: this.onCategorySelected }),
+	            React.createElement(Header, { colors: colors, layout: layout, categoryList: categoryList, linkRight: linkRight }),
 	            React.createElement(Map, { layout: layout }),
 	            React.createElement(ResultList, { items: state.itemsFiltered, mapIndexDemo: true, colors: colors, layout: props.layout, setItemPage: props.setItemPage })
 	        );
@@ -502,15 +493,6 @@
 	            layout = props.layout,
 	            marginWide = layout.marginWide,
 	            styleDiv = {},
-	            styleMap = {
-	            display: 'block',
-	            width: '100%',
-	            boxSizing: 'border-box',
-	            height: layout.heightCategoryList,
-	            borderColor: colors.colorMeta,
-	            borderWidth: '1px',
-	            borderBottomStyle: 'solid'
-	        },
 	            styleForm = {
 	            marginLeft: marginWide,
 	            marginRight: marginWide
@@ -606,15 +588,6 @@
 
 	        // TODO: align ContactList at bottom?
 	        styleDiv = {},
-	            styleMap = {
-	            display: 'block',
-	            width: '100%',
-	            boxSizing: 'border-box',
-	            height: layout.heightCategoryList,
-	            borderColor: colors.colorMeta,
-	            borderWidth: '1px',
-	            borderBottomStyle: 'solid'
-	        },
 	            styleDirectionsList = {
 	            display: 'flex',
 	            alignItems: 'flex-start',
@@ -750,7 +723,7 @@
 
 	'use strict';
 
-	var SymbolDiv = __webpack_require__(17);
+	var SymbolDiv = __webpack_require__(16);
 
 	module.exports = React.createClass({
 	    displayName: 'exports',
@@ -759,6 +732,7 @@
 	        colors: React.PropTypes.object,
 	        layout: React.PropTypes.object,
 	        linkLeft: React.PropTypes.object,
+	        categoryList: React.PropTypes.Object,
 	        linkRight: React.PropTypes.object
 	    },
 
@@ -782,10 +756,16 @@
 	            borderWidth: '2px',
 	            borderBottomStyle: 'solid'
 	        },
-	            styleHeading = {
-	            flexShrink: 1,
-	            fontSize: '1.25rem'
-	        },
+
+	        //styleHeading = {
+	        //    flexShrink: 1,
+	        //    fontSize: '1.25rem'
+	        //},
+	        elementCenter = props.categoryList || React.createElement(
+	            'span',
+	            null,
+	            ' '
+	        ),
 	            symbolDiv = function symbolDiv(link, alignment) {
 	            if (link) {
 	                return React.createElement(SymbolDiv, { layout: layout, srcImage: link.srcImage, alignment: alignment, onClick: link.setPage });
@@ -794,15 +774,12 @@
 	            symbolDivLeft = symbolDiv(linkLeft, 'left'),
 	            symbolDivRight = symbolDiv(linkRight, 'right');
 
+	        //<h1 style={styleHeading}>Dogs-in</h1>
 	        return React.createElement(
 	            'header',
 	            { style: styleHeader },
 	            symbolDivLeft,
-	            React.createElement(
-	                'h1',
-	                { style: styleHeading },
-	                'Dogs-in'
-	            ),
+	            elementCenter,
 	            symbolDivRight
 	        );
 	    }
@@ -814,7 +791,7 @@
 
 	'use strict';
 
-	var CategoryItem = __webpack_require__(16);
+	var CategoryItem = __webpack_require__(17);
 
 	module.exports = React.createClass({
 	    displayName: 'exports',
@@ -834,7 +811,9 @@
 	            colors = props.colors,
 	            layout = props.layout,
 	            style = {
-	            width: '100%',
+	            //width: '100%',
+	            flexShrink: 0,
+	            flexGrow: 1,
 	            display: 'flex',
 	            alignItems: 'flex-start',
 	            listStyle: 'none'
@@ -924,7 +903,7 @@
 
 	'use strict';
 
-	var SymbolDiv = __webpack_require__(17),
+	var SymbolDiv = __webpack_require__(16),
 	    MapIndex = __webpack_require__(18);
 
 	module.exports = React.createClass({
@@ -4707,73 +4686,6 @@
 
 	'use strict';
 
-	var SymbolDiv = __webpack_require__(17);
-
-	module.exports = React.createClass({
-	    displayName: 'exports',
-
-	    propTypes: {
-	        colors: React.PropTypes.object,
-	        layout: React.PropTypes.object,
-	        categoryDef: React.PropTypes.object,
-	        selected: React.PropTypes.bool,
-	        onCategorySelected: React.PropTypes.func
-	    },
-
-	    onClick: function onClick() {
-	        this.props.onCategorySelected(this.props.categoryDef);
-	    },
-
-	    render: function render() {
-	        var props = this.props,
-	            categoryDef = props.categoryDef,
-	            selected = props.selected,
-	            colors = props.colors,
-	            colorMeta = colors.colorMeta,
-	            colorBackground = colors.colorBackground,
-	            layout = props.layout,
-	            styleItem = {
-	            display: 'flex',
-	            alignItems: 'flex-start',
-	            flexGrow: 1,
-	            flexShrink: 1,
-	            width: '25%', // TODO: make dependent on data
-	            lineHeight: layout.lineHeightMeta,
-	            color: selected ? colorBackground : colorMeta,
-	            backgroundColor: selected ? colorMeta : colorBackground,
-	            borderWidth: '1px',
-	            borderBottomStyle: 'solid'
-	        },
-	            styleText = {
-	            flexShrink: 1,
-	            marginRight: layout.marginNarrow,
-	            whiteSpace: 'nowrap',
-	            overflow: 'hidden',
-	            textOverflow: 'ellipsis' };
-
-	        //if (/* TODO: media query? */) {
-	        //    styleText.display = 'none';
-	        //}
-
-	        return React.createElement(
-	            'li',
-	            { style: styleItem, 'aria-clicked': props.selected, onClick: this.onClick },
-	            React.createElement(SymbolDiv, { layout: layout, srcImage: categoryDef.srcImage, onClick: this.onClick }),
-	            React.createElement(
-	                'span',
-	                { style: styleText },
-	                categoryDef.text
-	            )
-	        );
-	    }
-	});
-
-/***/ },
-/* 17 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
 	module.exports = React.createClass({
 	    displayName: 'exports',
 
@@ -4858,6 +4770,77 @@
 	});
 
 /***/ },
+/* 17 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var SymbolDiv = __webpack_require__(16);
+
+	module.exports = React.createClass({
+	    displayName: 'exports',
+
+	    propTypes: {
+	        colors: React.PropTypes.object,
+	        layout: React.PropTypes.object,
+	        categoryDef: React.PropTypes.object,
+	        selected: React.PropTypes.bool,
+	        onCategorySelected: React.PropTypes.func
+	    },
+
+	    onClick: function onClick() {
+	        this.props.onCategorySelected(this.props.categoryDef);
+	    },
+
+	    render: function render() {
+	        var props = this.props,
+	            categoryDef = props.categoryDef,
+	            selected = props.selected,
+	            colors = props.colors,
+	            colorMeta = colors.colorMeta,
+	            colorBackground = colors.colorBackground,
+	            layout = props.layout,
+	            styleItem = {
+	            display: 'flex',
+	            alignItems: 'flex-start',
+	            flexGrow: 1,
+	            flexShrink: 1,
+	            boxSizing: 'border-box',
+	            width: '25%', // TODO: make dependent on data
+	            textAlign: 'center',
+	            lineHeight: layout.lineHeightMeta,
+	            color: selected ? colorBackground : colorMeta,
+	            backgroundColor: selected ? colorMeta : colorBackground,
+	            borderWidth: '1px',
+	            borderLeftStyle: 'solid',
+	            borderRightStyle: 'solid'
+	        },
+	            styleText = {
+	            display: 'none',
+	            flexShrink: 1,
+	            marginRight: layout.marginNarrow,
+	            whiteSpace: 'nowrap',
+	            overflow: 'hidden',
+	            textOverflow: 'ellipsis' };
+
+	        //if (/* TODO: media query? */) {
+	        //    styleText.display = 'none';
+	        //}
+
+	        return React.createElement(
+	            'li',
+	            { style: styleItem, 'aria-clicked': props.selected, onClick: this.onClick },
+	            React.createElement(SymbolDiv, { layout: layout, srcImage: categoryDef.srcImage, onClick: this.onClick }),
+	            React.createElement(
+	                'span',
+	                { style: styleText },
+	                categoryDef.text
+	            )
+	        );
+	    }
+	});
+
+/***/ },
 /* 18 */
 /***/ function(module, exports, __webpack_require__) {
 
@@ -4917,7 +4900,7 @@
 
 	'use strict';
 
-	var SymbolDiv = __webpack_require__(17);
+	var SymbolDiv = __webpack_require__(16);
 
 	module.exports = React.createClass({
 	    displayName: 'exports',

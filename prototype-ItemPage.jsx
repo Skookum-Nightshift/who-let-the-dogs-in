@@ -32,15 +32,6 @@ module.exports = React.createClass({
                     //flexWrap: 'wrap',
                     //overflow: 'hidden'
                 },
-                styleMap = {
-                    display: 'block',
-                    width: '100%',
-                    boxSizing: 'border-box',
-                    height: layout.heightCategoryList,
-                    borderColor: colors.colorMeta,
-                    borderWidth: '1px',
-                    borderBottomStyle: 'solid'
-                },
                 styleDirectionsList = {
                     display: 'flex',
                     alignItems: 'flex-start',

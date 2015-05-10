@@ -16,7 +16,9 @@ module.exports = React.createClass({
                 colors = props.colors,
                 layout = props.layout,
                 style = {
-                    width: '100%',
+                    //width: '100%',
+                    flexShrink: 0,
+                    flexGrow: 1,
                     display: 'flex',
                     alignItems: 'flex-start',
                     listStyle: 'none'

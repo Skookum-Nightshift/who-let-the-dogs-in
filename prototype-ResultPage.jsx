@@ -56,15 +56,7 @@ module.exports = React.createClass({
                 colors = props.colors,
                 layout = props.layout,
                 state = this.state,
-                styleMap = {
-                    display: 'block',
-                    width: '100%',
-                    boxSizing: 'border-box',
-                    height: layout.heightCategoryList,
-                    borderColor: colors.colorMeta,
-                    borderWidth: '1px',
-                    borderBottomStyle: 'solid'
-                },
+                categoryList= <CategoryList colors={colors} layout={layout} categoryDefs={props.categoryDefs} categoriesSelected={state.categoriesSelected} onCategorySelected={this.onCategorySelected} />,
                 linkRight = {
                     srcImage: 'search.svg',
                     setPage: props.setLocationPage
@@ -72,8 +64,7 @@ module.exports = React.createClass({
 
             return (
                 <div>
-                    <Header colors={colors} layout={layout} linkRight={linkRight} />
-                    <CategoryList colors={colors} layout={layout} categoryDefs={props.categoryDefs} categoriesSelected={state.categoriesSelected} onCategorySelected={this.onCategorySelected} />
+                    <Header colors={colors} layout={layout} categoryList={categoryList} linkRight={linkRight} />
                     <Map layout={layout} />
                     <ResultList items={state.itemsFiltered} mapIndexDemo={true} colors={colors} layout={props.layout} setItemPage={props.setItemPage} />
                 </div>

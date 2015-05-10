@@ -5,6 +5,7 @@ module.exports = React.createClass({
             colors: React.PropTypes.object,
             layout: React.PropTypes.object,
             linkLeft: React.PropTypes.object,
+            categoryList: React.PropTypes.Object,
             linkRight: React.PropTypes.object
         },
 
@@ -28,10 +29,11 @@ module.exports = React.createClass({
                     borderWidth: '2px',
                     borderBottomStyle: 'solid'
                 },
-                styleHeading = {
-                    flexShrink: 1,
-                    fontSize: '1.25rem'
-                },
+                //styleHeading = {
+                //    flexShrink: 1,
+                //    fontSize: '1.25rem'
+                //},
+                elementCenter = props.categoryList || <span>&#xA0;</span>,
                 symbolDiv = function(link, alignment) {
                     if (link) {
                         return (
@@ -42,10 +44,11 @@ module.exports = React.createClass({
                 symbolDivLeft = symbolDiv(linkLeft, 'left'),
                 symbolDivRight = symbolDiv(linkRight, 'right');
 
+                    //<h1 style={styleHeading}>Dogs-in</h1>
             return (
                 <header style={styleHeader}>
                     {symbolDivLeft}
-                    <h1 style={styleHeading}>Dogs-in</h1>
+                    {elementCenter}
                     {symbolDivRight}
                 </header>
             );

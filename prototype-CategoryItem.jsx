@@ -26,14 +26,18 @@ module.exports = React.createClass({
                     alignItems: 'flex-start',
                     flexGrow: 1,
                     flexShrink: 1,
+                    boxSizing: 'border-box',
                     width: '25%', // TODO: make dependent on data
+                    textAlign: 'center',
                     lineHeight: layout.lineHeightMeta,
                     color: selected ? colorBackground : colorMeta,
                     backgroundColor: selected ? colorMeta : colorBackground,
                     borderWidth: '1px',
-                    borderBottomStyle: 'solid'
+                    borderLeftStyle: 'solid',
+                    borderRightStyle: 'solid'
                 },
                 styleText = {
+                    display: 'none',
                     flexShrink: 1,
                     marginRight: layout.marginNarrow,
                     whiteSpace: 'nowrap',
