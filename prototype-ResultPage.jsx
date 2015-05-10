@@ -22,7 +22,6 @@ module.exports = React.createClass({
             });
 
             return {
-                initial: false,
                 categoriesSelected: categoriesSelected,
                 itemsFiltered: items.concat() // shallow copy
             };
@@ -74,8 +73,8 @@ module.exports = React.createClass({
                 <div>
                     <Header colors={colors} layout={layout} linkRight={linkRight} />
                     <CategoryList colors={colors} layout={layout} categoryDefs={props.categoryDefs} categoriesSelected={state.categoriesSelected} onCategorySelected={this.onCategorySelected} />
-                    <img style={styleMap} src='TODO.jpg' alt='Map' />;
-                    <ResultList items={state.itemsFiltered} mapIndexDemo={!initial} colors={colors} layout={props.layout} setItemPage={props.setItemPage} />
+                    <img style={styleMap} src='TODO.jpg' alt='Map' />
+                    <ResultList items={state.itemsFiltered} mapIndexDemo={true} colors={colors} layout={props.layout} setItemPage={props.setItemPage} />
                 </div>
             );
         }
