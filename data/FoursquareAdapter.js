@@ -7,7 +7,6 @@
 // For more information about Adapter pattern: pp. 139-150 in Design Patterns.
 
 var FoursquareAdapter = function (venueResponse) {
-console.log(venueResponse);
         this.venueResponse = venueResponse;
     },
     prototype = FoursquareAdapter.prototype; // for member functions below
@@ -17,8 +16,9 @@ prototype.getName = function () {
 };
 
 prototype.getAddress = function () {
-    // TODO: what about separate properties? city, state, postalCode
-    return this.venueResponse.location.address; // optional string
+    var location = this.venueResponse.location;
+
+    return location && location.address; // optional string
 };
 
 prototype.getID = function () {
@@ -26,21 +26,26 @@ prototype.getID = function () {
 };
 
 prototype.getPhoneNumber = function () {
-    return this.venueResponse.contact.formattedPhone; // TODO: compare to phone
+    var contact = this.venueResponse.contact;
+
+    return contact && contact.formattedPhone; // TODO: compare to phone
 };
 
 prototype.getWebsiteUri = function () {
-    return this.venueResponse.url;
+    //return this.venueResponse.url; // optional url for website of place
+    return this.venueResponse.canonicalUrl; // url for Foursquare page
 };
 
 // LatLng has properties latitude and longitude of type double
 prototype.getLatLng = function (){
-    var location = this.venueResponse.location; // TODO: verify type of lat and lng
+    var location = this.venueResponse.location,
+        latitude = location && location.lat,
+        longitude = location && location.long;
 
-    return {
-        latitude: location.lat,
-        longitude: location.lng
-    }; 
+    return location && typeof latitude === 'number' && typeof longitude === 'number' ? {
+            latitude: location.lat,
+            longitude: location.lng
+        } : null; 
 };
 
 // LatLngBounds has properties southwest and northeast of type LatLng
@@ -76,7 +81,6 @@ var categoryMap = {
 
 prototype.getCategory = function () {
     var category;
-console.log(this.venueResponse.categories);
     this.venueResponse.categories.forEach(function (category) {
         var value = categoryMap[category.name];
 
@@ -84,8 +88,43 @@ console.log(this.venueResponse.categories);
             category = value;
         }
     });
-console.log(category);
     return category;
+};
+
+prototype.getDistanceMeters = function () {
+    var location = this.venueResponse.location;
+
+    return location && location.distance;
+};
+
+prototype.getDistanceMiles = function () {
+    var location = this.venueResponse.location;
+
+    return Math.round(location.distance / 1609); // return miles instead of meters
+};
+
+prototype.getState = function () {
+    var location = this.venueResponse.location;
+
+    return location && location.state;
+};
+
+prototype.getPostalCode = function () {
+    var location = this.venueResponse.location;
+
+    return location && location.postalCode;
+};
+
+prototype.getCity = function () {
+    var location = this.venueResponse.location;
+
+    return location && location.city;
+};
+
+prototype.getNeighborhood = function () {
+    var location = this.venueResponse.location;
+
+    return location && location.neighborhood;
 };
 
 // getPriceLevel: the JavaScript object does not seem to have this property

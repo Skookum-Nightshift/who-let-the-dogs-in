@@ -51,7 +51,15 @@ var items = require('./prototype-data.js'),
                     latitude: 35.226074,
                     longitude: -80.844034
                 },
-                items = props.providers.map['Foursquare'].getItems(location),
+                comparison = function (itemA, itemB) {
+                    var distanceA = itemA.getDistanceMeters(),
+                        distanceB = itemB.getDistanceMeters();
+
+                    return distanceA === distanceB ? 0 :
+                        typeof distanceB !== 'number' || distanceA < distanceB ? -1 :
+                        1;
+                },
+                items = props.providers.map['Foursquare'].getItems(location).sort(comparison),
                 styleMap = {
                     display: 'block',
                     width: '100%',
@@ -68,10 +76,10 @@ var items = require('./prototype-data.js'),
                 categoryMap[categoryDef.key] = categoryDef;
             });
             items.forEach(function (item) {
-console.dir(items);
 console.log(item.getCategory());
                 // TODO: Ask Enrique if it is okay to add a property to a props object?
-                item.categoryDef = categoryMap[item.getCategory()];
+                //item.categoryDef = categoryMap[item.getCategory()];
+item.categoryDef = categoryMap.bar;
                 item.indexMap = ++indexMap; // demo
             });
 

@@ -21,14 +21,14 @@ module.exports = React.createClass({
         render: function () {
             var props = this.props,
                 layout = props.layout,
-                inResultPage = false, // TODO: !props.setItemPage,
+                inItemPage = !props.setItemPage,
                 styleItem = {
                     display: 'flex',
                     alignItems: 'flex-start',
                     paddingTop: layout.marginNarrow,
                     paddingBottom: layout.marginNarrow,
                     borderWidth: '1px',
-                    borderBottomStyle: inResultPage ? 'none' : 'solid'
+                    borderBottomStyle: inItemPage ? 'none' : 'solid'
                 },
                 styleDiv = {
                     flexShrink: 1
@@ -38,14 +38,21 @@ module.exports = React.createClass({
                     marginLeft: 'auto' // align right
                 },
                 item = props.item,
-                city = function () {
-                    if (inResultPage) {
+                neighborhood = function () {
+                    if (inItemPage && item.getNeighborhood()) {
                         return (
-                            <p>{item.city + ', ' + item.state + ' ' + item.postalCode}</p>
+                            <p>{item.getNeighborhood()}</p>
                         );
                     }
                 },
-                // distance = item.distance + 'mi',
+                city = function () {
+                    if (inItemPage) {
+                        return (
+                            <p>{item.getCity() + ', ' + item.getState() + ' ' + item.getPostalCode()}</p>
+                        );
+                    }
+                },
+                distance = item.getDistanceMiles() + 'mi', // TODO: Foursquare only?
                 index;
 
             if (props.mapIndexDemo) {
@@ -58,9 +65,10 @@ module.exports = React.createClass({
                     <div style={styleDiv}>
                         <p>{item.getName()}</p>
                         <p>{item.getAddress()}</p>
+                        {neighborhood()}
                         {city()}
                     </div>
-//                    <span style={styleDistance}>{distance}</span>
+                    <span style={styleDistance}>{distance}</span>
                     <MapIndex colors={props.colors} layout={layout} index={index} />
                 </li>
             );

@@ -21,9 +21,7 @@ module.exports = React.createClass({
                     display: 'flex',
                     alignItems: 'flex-start',
                     lineHeight: layout.lineHeightMeta,
-                    color: props.colors.colorLink,
-                    borderWidth: '1px',
-                    borderTopStyle: 'solid'
+                    color: props.colors.colorLink
                 },
                 styleValue = {
                     flexShrink: 1,

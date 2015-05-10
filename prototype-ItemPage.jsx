@@ -22,7 +22,8 @@ module.exports = React.createClass({
                 colors = props.colors,
                 layout = props.layout,
                 marginWide = layout.marginWide,
-                // TO DO: align ContactList at bottom?
+                marginNarrow = layout.marginNarrow,
+                // TODO: align ContactList at bottom?
                 styleDiv = {
                     //display: 'flex',
                     //alignItems: 'flex-start',
@@ -39,19 +40,19 @@ module.exports = React.createClass({
                     borderWidth: '1px',
                     borderBottomStyle: 'solid'
                 },
-                styleList = {
-                    listStyle: 'none',
-                    width: '100%'
-                },
-                stylePara = {
+                styleDirectionsList = {
                     display: 'flex',
-                    alignItems: 'baseline',
-                    marginLeft: marginWide
+                    alignItems: 'flex-start',
+                    marginTop: marginNarrow,
+                    marginLeft: marginWide,
+                    marginRight: marginWide,
+                    listStyle: 'none'
                 },
-                styleDirections = {
-                    color: colors.colorLink,
-                    marginLeft: 'auto',
-                    padding: layout.marginNarrow,
+                styleDirectionsItem = {
+                    flexGrow: 1,
+                    flexShrink: 1,
+                    textAlign: 'center',
+                    padding: marginNarrow,
                     borderWidth: '1px',
                     borderStyle: 'solid'
                 },
@@ -66,16 +67,13 @@ module.exports = React.createClass({
                 <div style={styleDiv}>
                     <Header colors={colors} layout={layout} linkLeft={linkLeft} />
                     <img style={styleMap} src='TODO.jpg' alt='Map' />
-                    <ul style={styleList}>
-                        <ResultItem colors={colors} layout={layout} item={item} />
-                        <li>
-                            <p style={stylePara}>
-                                <span>{item.neighborhood}</span>
-                                <span style={styleDirections} onClick={this.onClickDirections}>Directions</span>
-                            </p>
-                        </li>
+                    <ResultItem colors={colors} layout={layout} item={item} mapIndexDemo={true} />
+                    <ContactList colors={colors} layout={layout} contactDefs={props.contactDefs} item={item} />
+                    <ul style={styleDirectionsList}>
+                        <li style={styleDirectionsItem} onClick={this.onClickDirections}><span>Driving</span></li>
+                        <li style={styleDirectionsItem} onClick={this.onClickDirections}><span>Walking</span></li>
+                        <li style={styleDirectionsItem} onClick={this.onClickDirections}><span>Bicycling</span></li>
                     </ul>
-                    <ContactList colors={colors} layout={layout} contactDefs={props.contactDefs} contacts={item.contacts} />
                 </div>
             );
         }

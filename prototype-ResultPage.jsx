@@ -73,7 +73,6 @@ module.exports = React.createClass({
                 },
                 map;
 
-console.log(initial);
             if (!initial) {
                 map = <img style={styleMap} src='TODO.jpg' alt='Map' />;
             }
