@@ -46,7 +46,6 @@ module.exports = React.createClass({
             });
 
             this.setState({
-                initial: false,
                 categoriesSelected: categoriesSelected,
                 itemsFiltered: itemsFiltered
             });
@@ -66,22 +65,16 @@ module.exports = React.createClass({
                     borderWidth: '1px',
                     borderBottomStyle: 'solid'
                 },
-                initial = state.initial,
                 linkRight = {
                     srcImage: 'search.svg',
                     setPage: props.setLocationPage
-                },
-                map;
-
-            if (!initial) {
-                map = <img style={styleMap} src='TODO.jpg' alt='Map' />;
-            }
+                };
 
             return (
                 <div>
                     <Header colors={colors} layout={layout} linkRight={linkRight} />
-                    <CategoryList colors={colors} layout={layout} initial={state.initial} categoryDefs={props.categoryDefs} categoriesSelected={state.categoriesSelected} onCategorySelected={this.onCategorySelected} />
-                    {map}
+                    <CategoryList colors={colors} layout={layout} categoryDefs={props.categoryDefs} categoriesSelected={state.categoriesSelected} onCategorySelected={this.onCategorySelected} />
+                    <img style={styleMap} src='TODO.jpg' alt='Map' />;
                     <ResultList items={state.itemsFiltered} mapIndexDemo={!initial} colors={colors} layout={props.layout} setItemPage={props.setItemPage} />
                 </div>
             );
