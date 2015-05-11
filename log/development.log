@@ -665,3 +665,9 @@ Started GET "/api/yelp.json?ll=35.226074,-80.844034&query=dog%20friendly" for ::
 Processing by ApiController#yelp as JSON
   Parameters: {"ll"=>"35.226074,-80.844034", "query"=>"dog friendly"}
 Completed 200 OK in 666ms (Views: 1.4ms | ActiveRecord: 0.0ms)
+
+
+Started GET "/api/yelp.json?ll=35.226074,-80.844034&query=dog%20friendly" for ::1 at 2015-05-11 18:55:03 -0400
+Processing by ApiController#yelp as JSON
+  Parameters: {"ll"=>"35.226074,-80.844034", "query"=>"dog friendly"}
+Completed 200 OK in 701ms (Views: 1.4ms | ActiveRecord: 0.0ms)
