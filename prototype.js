@@ -942,6 +942,7 @@
 	        },
 	            styleDistance = {
 	            flexShrink: 0,
+	            whiteSpace: 'nowrap',
 	            marginLeft: 'auto' // align right
 	        },
 	            item = props.item,
@@ -963,7 +964,7 @@
 	                );
 	            }
 	        },
-	            distance = item.getDistanceMiles() + 'mi',
+	            distance = item.getDistanceMiles() + ' mi',
 	            // TODO: Foursquare only?
 	        index;
 
@@ -5054,7 +5055,7 @@
 	prototype.getDistanceMiles = function () {
 	    var location = this.venueResponse.location;
 
-	    return Math.round(location.distance / 1609); // return miles instead of meters
+	    return Math.round(location.distance / 160.9) / 10; // return tenths of miles instead of meters
 	};
 
 	prototype.getState = function () {

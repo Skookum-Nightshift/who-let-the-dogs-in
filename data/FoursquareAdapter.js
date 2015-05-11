@@ -100,7 +100,7 @@ prototype.getDistanceMeters = function () {
 prototype.getDistanceMiles = function () {
     var location = this.venueResponse.location;
 
-    return Math.round(location.distance / 1609); // return miles instead of meters
+    return Math.round(location.distance / 160.9) / 10; // return tenths of miles instead of meters
 };
 
 prototype.getState = function () {

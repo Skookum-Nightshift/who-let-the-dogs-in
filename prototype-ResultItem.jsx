@@ -35,6 +35,7 @@ module.exports = React.createClass({
                 },
                 styleDistance = {
                     flexShrink: 0,
+                    whiteSpace: 'nowrap',
                     marginLeft: 'auto' // align right
                 },
                 item = props.item,
@@ -52,7 +53,7 @@ module.exports = React.createClass({
                         );
                     }
                 },
-                distance = item.getDistanceMiles() + 'mi', // TODO: Foursquare only?
+                distance = item.getDistanceMiles() + ' mi', // TODO: Foursquare only?
                 index;
 
             if (props.mapIndexDemo) {
