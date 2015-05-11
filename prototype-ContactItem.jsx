@@ -1,4 +1,4 @@
-var SymbolDiv = require('./prototype-SymbolDiv.jsx');
+var Symbol = require('./prototype-Symbol.jsx');
 
 module.exports = React.createClass({
         propTypes: {
@@ -19,7 +19,7 @@ module.exports = React.createClass({
                 layout = props.layout,
                 styleItem = {
                     display: 'flex',
-                    alignItems: 'flex-start',
+                    alignItems: 'center',
                     lineHeight: layout.lineHeightMeta,
                     color: props.colors.colorLink
                 },
@@ -33,7 +33,7 @@ module.exports = React.createClass({
 
             return (
                 <li style={styleItem} onClick={this.onClick}>
-                    <SymbolDiv layout={layout} srcImage={props.contactDef.srcImage} />
+                    <Symbol layout={layout} srcImage={props.contactDef.srcImage} />
                     <span style={styleValue}>{props.value}</span>
                 </li>
             );

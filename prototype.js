@@ -80,11 +80,11 @@
 	                    colorBackground: '#ffffff' // white
 	                },
 	                layout: {
-	                    lineHeightMeta: '2.5rem',
-	                    heightCategoryList: '164px', // 4 * (2.5rem + 1px)
-	                    widthSymbol: '1rem',
-	                    marginNarrow: '0.5rem',
-	                    marginWide: '2.5rem' // marginNarrow + 2 * widthCategorySymbol
+	                    lineHeightMeta: '2rem', // 32px
+	                    heightCategoryList: '12rem', // 192px
+	                    widthSymbol: '1rem', // 16px
+	                    marginNarrow: '0.5rem', // 8px
+	                    marginWide: '2rem' // 2 * widthSymbol
 	                }
 	            };
 	        },
@@ -723,7 +723,7 @@
 
 	'use strict';
 
-	var SymbolDiv = __webpack_require__(16);
+	var Symbol = __webpack_require__(16);
 
 	module.exports = React.createClass({
 	    displayName: 'exports',
@@ -745,10 +745,10 @@
 	            marginWide = layout.marginWide,
 	            styleHeader = {
 	            display: 'flex',
-	            alignItems: 'flex-start',
+	            alignItems: 'center',
 	            boxSizing: 'border-box',
 	            lineHeight: layout.lineHeightMeta,
-	            width: '100%',
+	            //width: '100%',
 	            paddingLeft: linkLeft ? 0 : marginWide,
 	            paddingRight: linkRight ? 0 : marginWide,
 	            color: colors.colorMeta,
@@ -756,31 +756,25 @@
 	            borderWidth: '2px',
 	            borderBottomStyle: 'solid'
 	        },
-
-	        //styleHeading = {
-	        //    flexShrink: 1,
-	        //    fontSize: '1.25rem'
-	        //},
-	        elementCenter = props.categoryList || React.createElement(
+	            elementCenter = props.categoryList || React.createElement(
 	            'span',
 	            null,
 	            ' '
 	        ),
-	            symbolDiv = function symbolDiv(link, alignment) {
+	            symbol = function symbol(link, alignment) {
 	            if (link) {
-	                return React.createElement(SymbolDiv, { layout: layout, srcImage: link.srcImage, alignment: alignment, onClick: link.setPage });
+	                return React.createElement(Symbol, { layout: layout, srcImage: link.srcImage, alignment: alignment, onClick: link.setPage });
 	            }
 	        },
-	            symbolDivLeft = symbolDiv(linkLeft, 'left'),
-	            symbolDivRight = symbolDiv(linkRight, 'right');
+	            symbolLeft = symbol(linkLeft, 'left'),
+	            symbolRight = symbol(linkRight, 'right');
 
-	        //<h1 style={styleHeading}>Dogs-in</h1>
 	        return React.createElement(
 	            'header',
 	            { style: styleHeader },
-	            symbolDivLeft,
+	            symbolLeft,
 	            elementCenter,
-	            symbolDivRight
+	            symbolRight
 	        );
 	    }
 	});
@@ -811,7 +805,6 @@
 	            colors = props.colors,
 	            layout = props.layout,
 	            style = {
-	            //width: '100%',
 	            flexShrink: 0,
 	            flexGrow: 1,
 	            display: 'flex',
@@ -903,7 +896,7 @@
 
 	'use strict';
 
-	var SymbolDiv = __webpack_require__(16),
+	var Symbol = __webpack_require__(16),
 	    MapIndex = __webpack_require__(18);
 
 	module.exports = React.createClass({
@@ -975,7 +968,7 @@
 	        return React.createElement(
 	            'li',
 	            { style: styleItem, onClick: this.onClick },
-	            React.createElement(SymbolDiv, { layout: layout, srcImage: item.categoryDef.srcImage }),
+	            React.createElement(Symbol, { layout: layout, srcImage: item.categoryDef.srcImage }),
 	            React.createElement(
 	                'div',
 	                { style: styleDiv },
@@ -4685,88 +4678,30 @@
 /* 16 */
 /***/ function(module, exports, __webpack_require__) {
 
-	'use strict';
+	"use strict";
 
 	module.exports = React.createClass({
-	    displayName: 'exports',
+	    displayName: "exports",
 
 	    propTypes: {
 	        layout: React.PropTypes.object,
 	        srcImage: React.PropTypes.string,
-	        srcImageOptional: React.PropTypes.string,
-	        alignment: React.PropTypes.string,
 	        onClick: React.PropTypes.func
-	    },
-
-	    getDefaultProps: function getDefaultProps() {
-	        return {
-	            alignment: 'left'
-	        };
 	    },
 
 	    render: function render() {
 	        var props = this.props,
 	            layout = props.layout,
+	            margin = layout.marginNarrow,
 	            width = layout.widthSymbol,
-	            marginNarrow = layout.marginNarrow,
-	            left = props.alignment === 'left',
-	            styleDiv = {
-	            flexShrink: 0,
-	            display: 'flex',
-	            alignItems: 'flex-start',
-	            marginLeft: left ? 0 : 'auto',
-	            paddingLeft: left ? 0 : marginNarrow,
-	            paddingRight: left ? marginNarrow : 0
-	        },
-	            styleSpan = {
-	            flexShrink: 0,
-	            width: width,
-	            textAlign: 'center'
-	        },
 	            styleImage = {
+	            marginLeft: margin,
+	            width: width,
+	            marginRight: margin,
 	            height: width
-	        },
-	            img = (function (_img) {
-	            function img(_x) {
-	                return _img.apply(this, arguments);
-	            }
+	        };
 
-	            img.toString = function () {
-	                return _img.toString();
-	            };
-
-	            return img;
-	        })(function (srcImage) {
-	            if (srcImage) {
-	                return React.createElement('img', { style: styleImage, src: srcImage });
-	            }
-	        }),
-	            span = (function (_span) {
-	            function span(_x2) {
-	                return _span.apply(this, arguments);
-	            }
-
-	            span.toString = function () {
-	                return _span.toString();
-	            };
-
-	            return span;
-	        })(function (srcImage) {
-	            return React.createElement(
-	                'span',
-	                { style: styleSpan },
-	                img(srcImage)
-	            );
-	        }),
-	            spanImage = span(props.srcImage),
-	            spanImageOptional = span(props.srcImageOptional);
-
-	        return React.createElement(
-	            'div',
-	            { style: styleDiv, onClick: props.onClick },
-	            left ? spanImageOptional : spanImage,
-	            left ? spanImage : spanImageOptional
-	        );
+	        return React.createElement("img", { style: styleImage, src: props.srcImage, onClick: props.onClick });
 	    }
 	});
 
@@ -4776,7 +4711,7 @@
 
 	'use strict';
 
-	var SymbolDiv = __webpack_require__(16);
+	var Symbol = __webpack_require__(16);
 
 	module.exports = React.createClass({
 	    displayName: 'exports',
@@ -4802,12 +4737,7 @@
 	            colorBackground = colors.colorBackground,
 	            layout = props.layout,
 	            styleItem = {
-	            display: 'flex',
-	            alignItems: 'flex-start',
 	            flexGrow: 1,
-	            flexShrink: 1,
-	            boxSizing: 'border-box',
-	            width: '25%', // TODO: make dependent on data
 	            textAlign: 'center',
 	            lineHeight: layout.lineHeightMeta,
 	            color: selected ? colorBackground : colorMeta,
@@ -4815,28 +4745,12 @@
 	            borderWidth: '1px',
 	            borderLeftStyle: 'solid',
 	            borderRightStyle: 'solid'
-	        },
-	            styleText = {
-	            display: 'none',
-	            flexShrink: 1,
-	            marginRight: layout.marginNarrow,
-	            whiteSpace: 'nowrap',
-	            overflow: 'hidden',
-	            textOverflow: 'ellipsis' };
-
-	        //if (/* TODO: media query? */) {
-	        //    styleText.display = 'none';
-	        //}
+	        };
 
 	        return React.createElement(
 	            'li',
 	            { style: styleItem, 'aria-clicked': props.selected, onClick: this.onClick },
-	            React.createElement(SymbolDiv, { layout: layout, srcImage: categoryDef.srcImage, onClick: this.onClick }),
-	            React.createElement(
-	                'span',
-	                { style: styleText },
-	                categoryDef.text
-	            )
+	            React.createElement(Symbol, { layout: layout, srcImage: categoryDef.srcImage })
 	        );
 	    }
 	});
@@ -4901,7 +4815,7 @@
 
 	'use strict';
 
-	var SymbolDiv = __webpack_require__(16);
+	var Symbol = __webpack_require__(16);
 
 	module.exports = React.createClass({
 	    displayName: 'exports',
@@ -4924,7 +4838,7 @@
 	            layout = props.layout,
 	            styleItem = {
 	            display: 'flex',
-	            alignItems: 'flex-start',
+	            alignItems: 'center',
 	            lineHeight: layout.lineHeightMeta,
 	            color: props.colors.colorLink
 	        },
@@ -4939,7 +4853,7 @@
 	        return React.createElement(
 	            'li',
 	            { style: styleItem, onClick: this.onClick },
-	            React.createElement(SymbolDiv, { layout: layout, srcImage: props.contactDef.srcImage }),
+	            React.createElement(Symbol, { layout: layout, srcImage: props.contactDef.srcImage }),
 	            React.createElement(
 	                'span',
 	                { style: styleValue },

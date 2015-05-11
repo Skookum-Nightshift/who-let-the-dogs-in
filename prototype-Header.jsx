@@ -1,4 +1,4 @@
-var SymbolDiv = require('./prototype-SymbolDiv.jsx');
+var Symbol = require('./prototype-Symbol.jsx');
 
 module.exports = React.createClass({
         propTypes: {
@@ -18,10 +18,10 @@ module.exports = React.createClass({
                 marginWide = layout.marginWide,
                 styleHeader = {
                     display: 'flex',
-                    alignItems: 'flex-start',
+                    alignItems: 'center',
                     boxSizing: 'border-box',
                     lineHeight: layout.lineHeightMeta,
-                    width: '100%',
+                    //width: '100%',
                     paddingLeft: linkLeft ? 0 : marginWide,
                     paddingRight: linkRight ? 0 : marginWide,
                     color: colors.colorMeta,
@@ -29,27 +29,22 @@ module.exports = React.createClass({
                     borderWidth: '2px',
                     borderBottomStyle: 'solid'
                 },
-                //styleHeading = {
-                //    flexShrink: 1,
-                //    fontSize: '1.25rem'
-                //},
                 elementCenter = props.categoryList || <span>&#xA0;</span>,
-                symbolDiv = function(link, alignment) {
+                symbol = function(link, alignment) {
                     if (link) {
                         return (
-                            <SymbolDiv layout={layout} srcImage={link.srcImage} alignment={alignment} onClick={link.setPage} />
+                            <Symbol layout={layout} srcImage={link.srcImage} alignment={alignment} onClick={link.setPage} />
                         );
                     }
                 },
-                symbolDivLeft = symbolDiv(linkLeft, 'left'),
-                symbolDivRight = symbolDiv(linkRight, 'right');
+                symbolLeft = symbol(linkLeft, 'left'),
+                symbolRight = symbol(linkRight, 'right');
 
-                    //<h1 style={styleHeading}>Dogs-in</h1>
             return (
                 <header style={styleHeader}>
-                    {symbolDivLeft}
+                    {symbolLeft}
                     {elementCenter}
-                    {symbolDivRight}
+                    {symbolRight}
                 </header>
             );
         }

@@ -1,4 +1,4 @@
-var SymbolDiv = require('./prototype-SymbolDiv.jsx'),
+var Symbol = require('./prototype-Symbol.jsx'),
     MapIndex = require('./prototype-MapIndex.jsx');
 
 module.exports = React.createClass({
@@ -62,7 +62,7 @@ module.exports = React.createClass({
 
             return (
                 <li style={styleItem} onClick={this.onClick}>
-                    <SymbolDiv layout={layout} srcImage={item.categoryDef.srcImage} />
+                    <Symbol layout={layout} srcImage={item.categoryDef.srcImage} />
                     <div style={styleDiv}>
                         <p>{item.getName()}</p>
                         <p>{item.getAddress()}</p>

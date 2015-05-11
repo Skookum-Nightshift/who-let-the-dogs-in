@@ -1,4 +1,4 @@
-var SymbolDiv = require('./prototype-SymbolDiv.jsx');
+var Symbol = require('./prototype-Symbol.jsx');
 
 module.exports = React.createClass({
         propTypes: {
@@ -22,12 +22,7 @@ module.exports = React.createClass({
                 colorBackground = colors.colorBackground,
                 layout = props.layout,
                 styleItem = {
-                    display: 'flex',
-                    alignItems: 'flex-start',
                     flexGrow: 1,
-                    flexShrink: 1,
-                    boxSizing: 'border-box',
-                    width: '25%', // TODO: make dependent on data
                     textAlign: 'center',
                     lineHeight: layout.lineHeightMeta,
                     color: selected ? colorBackground : colorMeta,
@@ -35,24 +30,11 @@ module.exports = React.createClass({
                     borderWidth: '1px',
                     borderLeftStyle: 'solid',
                     borderRightStyle: 'solid'
-                },
-                styleText = {
-                    display: 'none',
-                    flexShrink: 1,
-                    marginRight: layout.marginNarrow,
-                    whiteSpace: 'nowrap',
-                    overflow: 'hidden',
-                    textOverflow: 'ellipsis',
                 };
-
-            //if (/* TODO: media query? */) {
-            //    styleText.display = 'none';
-            //}
 
             return (
                 <li style={styleItem} aria-clicked={props.selected} onClick={this.onClick}>
-                    <SymbolDiv layout={layout} srcImage={categoryDef.srcImage} onClick={this.onClick} />
-                    <span style={styleText}>{categoryDef.text}</span>
+                    <Symbol layout={layout} srcImage={categoryDef.srcImage} />
                 </li>
             );
         }

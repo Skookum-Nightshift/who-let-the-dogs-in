@@ -33,11 +33,11 @@ var items = require('./prototype-data.js'),
                     colorBackground: '#ffffff' // white
                 },
                 layout: {
-                    lineHeightMeta: '2.5rem',
-                    heightCategoryList: '164px', // 4 * (2.5rem + 1px)
-                    widthSymbol: '1rem',
-                    marginNarrow: '0.5rem',
-                    marginWide: '2.5rem' // marginNarrow + 2 * widthCategorySymbol
+                    lineHeightMeta: '2rem', // 32px
+                    heightCategoryList: '12rem', // 192px
+                    widthSymbol: '1rem', // 16px
+                    marginNarrow: '0.5rem', // 8px
+                    marginWide: '2rem' // 2 * widthSymbol
                 }
             };
         },
