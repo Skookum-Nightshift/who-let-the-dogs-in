@@ -23,16 +23,22 @@ module.exports = React.createClass({
                 colors = props.colors,
                 layout = props.layout,
                 marginWide = layout.marginWide,
+                lineHeight = layout.lineHeightMeta,
                 styleDiv = {
                 },
                 styleForm = {
-                    marginLeft: marginWide,
-                    marginRight: marginWide
+                    boxSizing: 'border-box',
+                    width: '100%',
+                    paddingLeft: marginWide,
+                    paddingRight: marginWide
                 },
                 styleFieldsetInput = {
-                    marginTop: '1rem'
+                    marginTop: '1rem',
                 },
                 styleInput = {
+                    boxSizing: 'border-box',
+                    width: '100%',
+                    lineHeight: lineHeight,
                     borderColor: colors.colorItem,
                     borderWidth: '1px',
                     borderStyle: 'solid'
@@ -40,30 +46,33 @@ module.exports = React.createClass({
                 styleFieldsetButtons = {
                     display: 'flex',
                     alignItems: 'flex-start',
+                    justifyContent: 'space-between',
                     marginTop: '1rem'
                 },
                 styleButton = {
+                    width: '45%',
                     backgroundColor: colors.colorBackground,
                     borderColor: colors.colorItem,
                     borderWidth: '1px',
                     borderStyle: 'solid',
-                    padding: layout.marginNarrow,
-                    marginLeft: marginWide
+                    paddingLeft: layout.marginNarrow,
+                    paddingRight: layout.marginNarrow,
+                    lineHeight: lineHeight
                 };
 
             return (
                 <div style={styleDiv}>
                     <Header colors={colors} layout={layout} />
                     <Map layout={layout} />
-                    <form style={styleForm}>
-                        <fieldset style={styleFieldsetInput}>
+                    <div style={styleForm}>
+                        <div style={styleFieldsetInput}>
                             <input type='text' style={styleInput} />
-                        </fieldset>
-                        <fieldset style={styleFieldsetButtons}>
+                        </div>
+                        <div style={styleFieldsetButtons}>
                             <button style={styleButton} onClick={this.onClickOK}>OK</button>
                             <button style={styleButton} onclick={this.onClickCancel}>Cancel</button>
-                        </fieldset>
-                    </form>
+                        </div>
+                    </div>
                 </div>
             );
         }
