@@ -10,6 +10,7 @@ var {
   StyleSheet,
   Text,
   View,
+  MapView,
 } = React;
 
 var Utils =  require('./lib/utils');
@@ -35,7 +36,7 @@ var wltdi = React.createClass({
   },
 
   errorHandler(error) {
-    
+
   },
 
   getYelpData() {
@@ -50,12 +51,27 @@ var wltdi = React.createClass({
     });
   },
 
+
+
   render: function() {
+
+    var annotations=[];
+    if (Object.keys(this.state.json).length > 0){
+      var businesses = this.state.json.businesses;
+      for (var i=0; i<businesses.length; i++){
+        var business = businesses[i];
+        annotations.push({ 
+          latitude: parseFloat(business.location.coordinate.latitude, 10), 
+          longitude: parseFloat(business.location.coordinate.longitude, 10),
+          title: business.name,
+          subtitle: "",
+        });
+      }
+    }
+
     return (
       <View style={styles.container}>
-        <Text style={styles.welcome}>
-          
-        </Text>
+        <MapView annotations={annotations} style={{flex: 1, height: 150, width: 300, flexDirection: 'row'}} region={null} />
       </View>
     );
   }
