@@ -12,19 +12,49 @@ var {
   View,
 } = React;
 
-var WLTDI = React.createClass({
+var Utils =  require('./lib/utils');
+
+var wltdi = React.createClass({
+
+  getInitialState() {
+    return {
+      json: {},
+      initialPosition: 'unknown',
+    };
+  },
+
+  componentDidMount() {
+    navigator.geolocation.getCurrentPosition(
+      this.gotData,
+      this.errorHandler
+    );
+  },
+
+  gotData(initialPosition) {
+    this.setState({ initialPosition }, this.getYelpData);
+  },
+
+  errorHandler(error) {
+    
+  },
+
+  getYelpData() {
+    var last = this.state.initialPosition;
+    var ll = `${last.coords.latitude},${last.coords.longitude}`;
+    Utils.getRequest('yelp', { 'll': ll, 'query': 'dog friendly' }, (error, data) => {
+      var state = {json: error};
+      if (!error) {
+        state.json = JSON.parse(data.text);
+      }
+      this.setState(state);
+    });
+  },
+
   render: function() {
     return (
       <View style={styles.container}>
         <Text style={styles.welcome}>
-          Welcome to React Native!
-        </Text>
-        <Text style={styles.instructions}>
-          To get started, edit index.ios.js
-        </Text>
-        <Text style={styles.instructions}>
-          Press Cmd+R to reload,{'\n'}
-          Cmd+Control+Z for dev menu
+          
         </Text>
       </View>
     );
@@ -50,4 +80,4 @@ var styles = StyleSheet.create({
   },
 });
 
-AppRegistry.registerComponent('WLTDI', () => WLTDI);
+AppRegistry.registerComponent('wltdi', () => wltdi);

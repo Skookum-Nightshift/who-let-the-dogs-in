@@ -17,11 +17,11 @@
 #define TIMEOUT_SECONDS 240
 #define TEXT_TO_LOOK_FOR @"Welcome to React Native!"
 
-@interface WLTDITests : XCTestCase
+@interface wltdiTests : XCTestCase
 
 @end
 
-@implementation WLTDITests
+@implementation wltdiTests
 
 
 - (BOOL)findSubviewInView:(UIView *)view matching:(BOOL(^)(UIView *view))test
@@ -44,8 +44,8 @@
   NSString *redboxError = nil;
 
   while ([date timeIntervalSinceNow] > 0 && !foundElement && !redboxError) {
-    [[NSRunLoop mainRunLoop] runMode:NSDefaultRunLoopMode beforeDate:date];
-    [[NSRunLoop mainRunLoop] runMode:NSRunLoopCommonModes beforeDate:date];
+    [[NSRunLoop mainRunLoop] runMode:NSDefaultRunLoopMode beforeDate:[NSDate dateWithTimeIntervalSinceNow:0.1]];
+    [[NSRunLoop mainRunLoop] runMode:NSRunLoopCommonModes beforeDate:[NSDate dateWithTimeIntervalSinceNow:0.1]];
 
     redboxError = [[RCTRedBox sharedInstance] currentErrorMessage];
 
