@@ -4,7 +4,8 @@ var Adapter = require('./FoursquareAdapter.js'),
     // https://developer.foursquare.com/docs/venues/search
     // https://api.foursquare.com/v2/venues/search
 
-    urlRoot = 'https://api.foursquare.com/v2/venues/search',
+    //urlRoot = 'https://api.foursquare.com/v2/venues/search',
+    urlRoot = 'https://wltdi.herokuapp.com/api/foursquare.json',
 
     joinKeyValue = function (key, value) {
         return [key, value].join('=');
@@ -22,6 +23,10 @@ var Adapter = require('./FoursquareAdapter.js'),
         return joinKeyValue('ll', [location.latitude, location.longitude].join(',')); // 35.226074,-80.844034
     },
 
+    querySuffix = function (query) {
+        return joinKeyValue('query', query); // TODO: url-encode?
+    },
+
     // radius 
     // Limit results to venues within this many meters of the specified location.
     // Defaults to a city-wide area.
@@ -31,9 +36,10 @@ var Adapter = require('./FoursquareAdapter.js'),
     // Example location = { latitude: 35.226074, longitude: -80.844034 }
     // Argument of callback is list of adapted item objects (or null if search fails)
     // TODO: what about a recommended region for map, like Yelp?
-    search = function (clientID, clientSecret, location, callback) {
-//        var url = [urlRoot, [joinKeyValue('client_id', clientID), joinKeyValue('client_secret', clientSecret), categorySuffix, limitSuffix, llSuffix(location)].join('&')].join('?');
-console.log(url);
+    search = function (location, callback) {
+        //var url = [urlRoot, [joinKeyValue('client_id', clientID), joinKeyValue('client_secret', clientSecret), categorySuffix, limitSuffix, llSuffix(location)].join('&')].join('?');
+        var url = [urlRoot, [llSuffix(location), querySuffix('dog+friendly')].join('&')].join('?');
+console.log(url);i
 
         $.get({
             url: url,
