@@ -31,10 +31,11 @@ prototype.getName = function () {
 };
 
 prototype.getAddress = function () {
-    // TODO: what about address list?
     // TODO: what about separate string properties? city, state_code, postal_code
     // list: Address for this business formatted for display. Includes all address fields, cross streets and city, state_code, etc.
-    return this.business.location.display_address.join(' '); // TODO: separator?
+    var location = this.business.location;
+
+    return location && location.address.join(' ');
 };
 
 prototype.getID = function () {
@@ -54,7 +55,7 @@ prototype.getWebsiteUri = function () {
 
 // LatLng has properties latitude and longitude of type double
 prototype.getLatLng = function (){
-    return null;
+    return this.business.coordinate;
 };
 
 // LatLngBounds has properties southwest and northeast of type LatLng
@@ -101,6 +102,41 @@ prototype.getCategory = function () {
     });
     return category;
 };
+
+prototype.getDistanceMeters = function () {
+
+    return this.business.distance;
+};
+
+prototype.getDistanceMiles = function () {
+
+    return Math.round(this.getDistanceMeters() / 160.9) / 10; // return tenths of miles instead of meters
+};
+
+prototype.getState = function () {
+    var location = this.business.location;
+
+    return location && location.state_code;
+};
+
+prototype.getPostalCode = function () {
+    var location = this.business.location;
+
+    return location && location.postal_code;
+};
+
+prototype.getCity = function () {
+    var location = this.business.location;
+
+    return location && location.city;
+};
+
+prototype.getNeighborhoods = function () {
+    var location = this.business.location;
+
+    return location && location.neighborhoods;
+};
+
 
 // getPriceLevel: the JavaScript object does not seem to have this property
 // An object containing the price tier from 1 (least pricey) - 4 (most pricey) and a message describing the price tier.
