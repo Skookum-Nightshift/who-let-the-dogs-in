@@ -9,8 +9,8 @@
 var providers = {
         map: {},
         array: [
-            require('./FoursquareOnline.js'),
-            require('./YelpOnline.js')
+            //require('./YelpOnline.js'),
+            require('./FoursquareOnline.js')
         ]
     },
     map = providers.map;

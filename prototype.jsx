@@ -1,10 +1,9 @@
 document.addEventListener('DOMContentLoaded', function () {
 
-var items = require('./prototype-data.js'),
-    categoryDefs = require('./prototype-CategoryDefs.js'),
+var categoryDefs = require('./prototype-CategoryDefs.js'),
     contactDefs = require('./prototype-ContactDefs.js'),
 
-    providers = require('./../lib/api/providersOffline.js'),
+    providers = require('./data/providersOnline.js'),
 
     ResultPage = require('./prototype-ResultPage.jsx'),
     LocationPage = require('./prototype-LocationPage.jsx'),
@@ -17,7 +16,6 @@ var items = require('./prototype-data.js'),
             layout: React.PropTypes.object,
             categoryDefs: React.PropTypes.array,
             contactDefs: React.PropTypes.array,
-            items: React.PropTypes.array, // TODO: superseded by providers
             providers: React.PropTypes.object
         },
 
@@ -46,51 +44,18 @@ var items = require('./prototype-data.js'),
             var props = this.props,
                 layout = props.layout,
                 colors = props.colors,
+                provider = props.providers.map['Foursquare'],
                 // Skookum in Charlotte, NC
                 location = {
                     latitude: 35.226074,
                     longitude: -80.844034
-                },
-                comparison = function (itemA, itemB) {
-                    var distanceA = itemA.getDistanceMeters(),
-                        distanceB = itemB.getDistanceMeters();
-
-                    return distanceA === distanceB ? 0 :
-                        typeof distanceB !== 'number' || distanceA < distanceB ? -1 :
-                        1;
-                },
-                items = props.providers.map['Foursquare'].getItems(location).sort(comparison),
-                styleMap = {
-                    display: 'block',
-                    width: '100%',
-                    boxSizing: 'border-box',
-                    height: layout.heightCategoryList,
-                    borderColor: colors.colorMeta,
-                    borderWidth: '1px',
-                    borderBottomStyle: 'solid'
-                },
-                categoryMap = {},
-                indexMap = 0;
-
-            props.categoryDefs.forEach(function (categoryDef) {
-                categoryMap[categoryDef.key] = categoryDef;
-            });
-            items.forEach(function (item) {
-console.log(item.getCategory());
-                // TODO: Ask Enrique if it is okay to add a property to a props object?
-                //item.categoryDef = categoryMap[item.getCategory()];
-item.categoryDef = categoryMap.bar;
-                item.indexMap = ++indexMap; // demo
-            });
+                };
 
             return {
+                provider: provider,
                 location: location,
-                page: <ResultPage colors={props.colors} layout={props.layout} categoryDefs={props.categoryDefs} items={items} setItemPage={this.setItemPage} setLocationPage={this.setLocationPage} />
+                page: <ResultPage colors={props.colors} layout={props.layout} categoryDefs={props.categoryDefs} provider={provider} location={location} setItemPage={this.setItemPage} setLocationPage={this.setLocationPage} />
             };
-        },
-
-        componentWillMount: function () {
-            // TODO: search for items
         },
 
         setPage: function (page) {
@@ -99,17 +64,11 @@ item.categoryDef = categoryMap.bar;
             });
         },
 
-        setItems: function (items) {
-            var props = this.props;
-
-            this.setState({
-                page: <ResultPage colors={props.colors} layout={props.layout} categoryDefs={props.categoryDefs} items={items} setItemPage={this.setItemPage} />
-            });
-        },
-
         setLocation: function (location) {
-            // TODO: get items for new location
-            this.setItems(items);
+            this.setState({
+                location: location,
+                page: <ResultPage colors={props.colors} layout={props.layout} categoryDefs={props.categoryDefs} provider={provider} location={location} setItemPage={this.setItemPage} />
+            });
         },
 
         setLocationPage: function () {
@@ -145,6 +104,6 @@ item.categoryDef = categoryMap.bar;
     });
 
 // TODO: property will become the data API object
-React.render(<DogsApp items={items} providers={providers} />, document.getElementsByTagName('body')[0]);
+React.render(<DogsApp providers={providers} />, document.getElementsByTagName('body')[0]);
 
 });

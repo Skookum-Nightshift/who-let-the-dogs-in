@@ -8,14 +8,14 @@ module.exports = React.createClass({
             colors: React.PropTypes.object,
             layout: React.PropTypes.object,
             categoryDefs: React.PropTypes.array,
-            items: React.PropTypes.array,
+            provider: React.PropTypes.object,
+            location: React.PropTypes.object,
             setItemPage: React.PropTypes.func,
             setLocationPage: React.PropTypes.func
         },
 
         getInitialState: function () {
-            var items = this.props.items,
-                categoriesSelected = {},
+            var categoriesSelected = {},
                 props = this.props;
 
             props.categoryDefs.forEach(function (categoryDef) {
@@ -24,8 +24,45 @@ module.exports = React.createClass({
 
             return {
                 categoriesSelected: categoriesSelected,
-                itemsFiltered: items.concat() // shallow copy
+                itemsSorted: [],
+                itemsFiltered: []
             };
+        },
+
+        componentWillMount: function () {
+            var props = this.props;
+
+            props.provider.search(props.location, this.setItems);
+        },
+
+        setItems: function (items) {
+            var comparison = function (itemA, itemB) {
+                    var distanceA = itemA.getDistanceMeters(),
+                        distanceB = itemB.getDistanceMeters();
+
+                    return distanceA === distanceB ? 0 :
+                        typeof distanceB !== 'number' || distanceA < distanceB ? -1 :
+                        1;
+                },
+                itemsSorted = items.sort(comparison),
+                categoryMap = {},
+                indexMap = 0;
+
+            this.props.categoryDefs.forEach(function (categoryDef) {
+                categoryMap[categoryDef.key] = categoryDef;
+            });
+
+            itemsSorted.forEach(function (item) {
+console.log(item.getCategory());
+                // TODO: Ask Enrique if it is okay to add a property to a props object?
+                item.categoryDef = categoryMap[item.getCategory()];
+                item.indexMap = ++indexMap; // demo
+            });
+
+            this.setState({
+                itemsSorted: itemsSorted,
+                itemsFiltered: itemsSorted // TODO
+            });
         },
 
         onCategorySelected: function (categoryDef) {
@@ -39,7 +76,7 @@ module.exports = React.createClass({
                 noneSelected = noneSelected && !categoriesSelected[categoryDef.key];
             });
 
-            this.props.items.forEach(function (item) {
+            this.state.itemsSorted.forEach(function (item) {
                 if (noneSelected || categoriesSelected[item.getCategory()] === true) {
                     itemsFiltered.push(item);
                 }

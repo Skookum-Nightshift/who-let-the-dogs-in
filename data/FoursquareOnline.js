@@ -1,4 +1,5 @@
 var Adapter = require('./FoursquareAdapter.js'),
+    jQuery = require('../../lib/jQuery.js'),
 
     // https://developer.foursquare.com/start/search
     // https://developer.foursquare.com/docs/venues/search
@@ -39,9 +40,9 @@ var Adapter = require('./FoursquareAdapter.js'),
     search = function (location, callback) {
         //var url = [urlRoot, [joinKeyValue('client_id', clientID), joinKeyValue('client_secret', clientSecret), categorySuffix, limitSuffix, llSuffix(location)].join('&')].join('?');
         var url = [urlRoot, [llSuffix(location), querySuffix('dog+friendly')].join('&')].join('?');
-console.log(url);i
+console.log(url);
 
-        $.get({
+        jQuery.get({
             url: url,
             dataType: 'json',
             success: function (data) {
@@ -51,7 +52,7 @@ console.log(data);
                     return new Adapter(item);
                 }));
             }
-        }).fail(callback(null));
+        }).fail(callback([]));
     };
 
 module.exports = {
