@@ -4,7 +4,6 @@ var Symbol = require('./prototype-Symbol.jsx'),
 module.exports = React.createClass({
         propTypes: {
             item: React.PropTypes.object,
-            mapIndexDemo: React.PropTypes.bool,
             layout: React.PropTypes.object,
             setItemPage: React.PropTypes.func
         },
@@ -54,11 +53,7 @@ module.exports = React.createClass({
                     }
                 },
                 distance = item.getDistanceMiles() + ' mi', // TODO: Foursquare only?
-                index;
-
-            if (props.mapIndexDemo) {
                 index = item.indexMap;
-            }
 
             return (
                 <li style={styleItem} onClick={this.onClick}>

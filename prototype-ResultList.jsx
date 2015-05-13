@@ -3,7 +3,6 @@ var ResultItem = require('./prototype-ResultItem.jsx');
 module.exports = React.createClass({
         propTypes: {
             items: React.PropTypes.array,
-            mapIndexDemo: React.PropTypes.bool,
             colors: React.PropTypes.object,
             layout: React.PropTypes.object,
             setItemPage: React.PropTypes.func
@@ -17,7 +16,7 @@ module.exports = React.createClass({
                 layout = props.layout,
                 resultItems = props.items.map(function (item) {
                         return (
-                            <ResultItem item={item} mapIndexDemo={props.mapIndexDemo} colors={colors} layout={layout} setItemPage={props.setItemPage} />
+                            <ResultItem item={item} colors={colors} layout={layout} setItemPage={props.setItemPage} />
                         );
                     });
 

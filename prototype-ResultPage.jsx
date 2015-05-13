@@ -103,7 +103,7 @@ console.log(item.getCategory());
                 <div>
                     <Header colors={colors} layout={layout} categoryList={categoryList} linkRight={linkRight} />
                     <Map layout={layout} />
-                    <ResultList items={state.itemsFiltered} mapIndexDemo={true} colors={colors} layout={props.layout} setItemPage={props.setItemPage} />
+                    <ResultList items={state.itemsFiltered} colors={colors} layout={props.layout} setItemPage={props.setItemPage} />
                 </div>
             );
         }
