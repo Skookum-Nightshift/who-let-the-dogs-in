@@ -52,7 +52,6 @@ var wltdi = React.createClass({
   },
 
 
-
   render: function() {
 
     var annotations=[];
@@ -71,7 +70,7 @@ var wltdi = React.createClass({
 
     return (
       <View style={styles.container}>
-        <MapView annotations={annotations} style={{flex: 1, height: 150, width: 300, flexDirection: 'row'}} region={null} />
+        <MapView annotations={annotations} style={{flex: 1, height: 150, width: 375, flexDirection: 'row'}} region={null} />
       </View>
     );
   }
