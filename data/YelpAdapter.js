@@ -135,7 +135,7 @@ prototype.getCity = function () {
 prototype.getNeighborhoods = function () {
     var location = this.business.location;
 
-    return location && location.neighborhoods;
+    return (location && location.neighborhoods) || [];
 };
 
 

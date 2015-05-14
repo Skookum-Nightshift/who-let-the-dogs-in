@@ -122,10 +122,8 @@ prototype.getCity = function () {
     return location && location.city;
 };
 
-prototype.getNeighborhood = function () {
-    var location = this.venueResponse.location;
-
-    return location && location.neighborhood;
+prototype.getNeighborhoods = function () {
+    return [];
 };
 
 // getPriceLevel: the JavaScript object does not seem to have this property

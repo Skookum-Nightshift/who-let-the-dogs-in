@@ -39,9 +39,9 @@ module.exports = React.createClass({
                 },
                 item = props.item,
                 neighborhood = function () {
-                    if (inItemPage && item.getNeighborhood()) {
+                    if (inItemPage && item.getNeighborhoods()) {
                         return (
-                            <p>{item.getNeighborhood()}</p>
+                            <p>{item.getNeighborhoods().join(' ')}</p>
                         );
                     }
                 },
