@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head xmlns='http://www.w3.org/1999/xhtml'>
+<meta charset='utf-8'/>
+<title>Dogs-in</title>
+<!-- The following global style probably unnecessary for React Native: -->
+<style>
+*
+{
+    font-size: 100%;
+    margin: 0;
+    border: 0;
+    padding: 0;
+}
+
+body > div
+{
+    font-family: 'Arial', sans-serif;
+/* comment out the following property to test responsive styles for phone versus tablet */
+    width: 360px; /* simulate width of iPhone 6 on MacBook without resizing browser window */
+    height: 480px;
+/*  background-color to test vertical alignment and overflow */
+/*
+    background-color: yellow;
+*/
+}
+</style>
+<!-- React is an external dependency in a sibling folder: -->
+<script src='../lib/react.js'></script>
+<!-- Run webpack to create the output .js file from the source .jsx files. -->
+<!-- For more information: webpack.github.io -->
+<!-- One-time prerequisites: -->
+<!-- npm install webpack-g  -->
+<!-- The following might be unnecessary if you have already done: npm install -g react-tools -->
+<!-- npm install babel-loader --save-dev -->
+<!-- npm install babel-runtime --save-dev -->
+<!-- Each time you edit a .jsx file: -->
+<!-- If the current directory contains the .jsx files: webpack -->
+<script src='prototype.js'></script>
+</head>
+<body>
+</body>
+</html>
