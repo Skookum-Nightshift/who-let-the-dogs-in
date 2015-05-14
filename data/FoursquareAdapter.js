@@ -73,22 +73,23 @@ prototype.getPlaceTypes = function () {
 // return a standard string for the category that matters
 
 var categoryMap = {
-        'Bar': 'Bars',
-        'Food': 'Restaurants',
-        'Hotel': 'Hotels',
-        'Dog Run': 'Dog Parks'
+        'Bar': 'bar',
+        'Food': 'restaurant',
+        'Hotel': 'lodging',
+        'Dog Run': 'park'
     };
 
 prototype.getCategory = function () {
-    var category;
+    var gotCategory;
+
     this.venueResponse.categories.forEach(function (category) {
         var value = categoryMap[category.name];
 
         if (value) {
-            category = value;
+            gotCategory = value;
         }
     });
-    return category;
+    return gotCategory || 'restaurant';
 };
 
 prototype.getDistanceMeters = function () {

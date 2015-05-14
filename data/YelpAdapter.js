@@ -84,23 +84,24 @@ prototype.getPlaceTypes = function () {
 // return a standard string for the category that matters
 
 var categoryMap = {
-        'bars': 'Bars',
-        'restaurants': 'Restaurants',
-        'hotels': 'Hotels',
-        'dog_parks': 'Dog Parks'
+        'bars': 'bar',
+        'beergardens': 'bar',
+        'restaurants': 'restaurant',
+        'hotels': 'lodging',
+        'dog_parks': 'park'
     };
 
 prototype.getCategory = function () {
-    var category;
+    var gotCategory;
 
-    this.venueResponse.forEach(function (category) {
-        var value = categoryMap[category.name];
-
+    this.business.categories.forEach(function (category) {
+        var value = categoryMap[category[1]];
+console.log(category[1]);
         if (value) {
-            category = value;
+            gotCategory = value;
         }
     });
-    return category;
+    return gotCategory || 'restaurant';
 };
 
 prototype.getDistanceMeters = function () {

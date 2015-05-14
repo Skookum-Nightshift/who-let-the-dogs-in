@@ -3,7 +3,10 @@ document.addEventListener('DOMContentLoaded', function () {
 var categoryDefs = require('./prototype-CategoryDefs.js'),
     contactDefs = require('./prototype-ContactDefs.js'),
 
-    providers = require('./data/providersOnline.js'),
+    //providers = require('./data/providersOnline.js'),
+    providers = require('../lib/api/providersOffline.js'),
+    // providerKey = 'Yelp',
+    providerKey = 'Foursquare',
 
     ResultPage = require('./prototype-ResultPage.jsx'),
     LocationPage = require('./prototype-LocationPage.jsx'),
@@ -44,7 +47,7 @@ var categoryDefs = require('./prototype-CategoryDefs.js'),
             var props = this.props,
                 layout = props.layout,
                 colors = props.colors,
-                provider = props.providers.map['Foursquare'],
+                provider = props.providers.map[providerKey],
                 // Skookum in Charlotte, NC
                 location = {
                     latitude: 35.226074,
