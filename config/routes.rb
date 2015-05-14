@@ -5,6 +5,7 @@ Rails.application.routes.draw do
     get 'yelp', to: 'api#yelp'
   end
 
+  get '/terms', to: 'pages#terms'
   get '*any', to: 'pages#not_found'
   root 'pages#index'
 end

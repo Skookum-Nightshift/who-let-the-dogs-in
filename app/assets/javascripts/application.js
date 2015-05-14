@@ -9,3 +9,7 @@
 //= require react_ujs
 //= require components
 //= require pages
+//= require cbpAnimatedHeader
+//= require classie
+//= require contact_me
+//= require jqBootstrapValidation
